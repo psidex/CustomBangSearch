@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "CustomBangSearch",
+  "version": "0.1",
+  "description": "Allows you to use custom bangs inside the search bar",
+  "icons": {
+    "48": "icons/icon_48.png"
+  },
+  "permissions": [
+    "*://*.google.com/*",
+    "*://*.bing.com/*",
+    "*://*.duckduckgo.com/*",
+    "webRequest",
+    "webRequestBlocking",
+    "storage"
+  ],
+  "background": {
+    "scripts": [
+      "main.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options/options.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{b67c3a9a-b2a2-4fca-af95-7e7a38f3822e}"
+    }
+  }
+}
