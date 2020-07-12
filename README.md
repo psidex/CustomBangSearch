@@ -13,7 +13,7 @@ Currently only works if you have Google, Bing, or DuckDuckGo set as your browser
 ## How it works
 
 When you type a query in the search bar, your browser makes a request to your browsers set search engine. This extension
-intercepts that request, and if the query matches a bang (e.g. !m new york) it will tell the browser to go the url set
+intercepts that request, and if the query matches a bang (e.g. `!m new york`) it will tell the browser to go the url set
 to that bang with the given query.
 
 ## Credit
