@@ -1,5 +1,7 @@
 # CustomBangSearch
 
+[Install from the add-on page](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/) (waiting for approval)
+
 A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amazon) inside the search bar 
 
 [Demo video](https://youtu.be/q41XyWYLEUM)
