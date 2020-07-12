@@ -7,11 +7,6 @@ const defaultBangs = {
     w: 'https://www.wolframalpha.com/input/?i=',
 };
 
-// true if object has no keys else false.
-function isEmptyObj(obj) {
-    return Object.keys(obj).length === 0;
-}
-
 // Returns the search query from the given Google search url.
 // If there is no query, returns an empty string.
 // Also changes all occurrences of '+' with ' '.
@@ -38,7 +33,7 @@ async function processRequest(r) {
 
     if (query !== '' && query.startsWith('!')) {
         let { bangs } = await browser.storage.sync.get("bangs");
-        if (isEmptyObj(bangs)) {
+        if (bangs === undefined) {
             bangs = defaultBangs;
         }
 

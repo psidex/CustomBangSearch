@@ -1,4 +1,4 @@
-// ToDo: Is it possible to do imports in add-ons so that this isn't duplicate code?
+// ToDo: Is it possible to do imports in add-ons so that defaultBangs isn't duplicate code?
 const defaultBangs = {
     a: 'https://smile.amazon.co.uk/s?k=',
     m: 'https://www.google.com/maps/search/',
@@ -7,11 +7,6 @@ const defaultBangs = {
     g: 'https://www.google.com/search?q=',
     w: 'https://www.wolframalpha.com/input/?i=',
 };
-
-// true if object has no keys else false.
-function isEmptyObj(obj) {
-    return Object.keys(obj).length === 0;
-}
 
 function addRow(tableElem, c1Text, c2Text) {
     const row = document.createElement('tr');
@@ -59,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     let { bangs } = await browser.storage.sync.get('bangs');
-    if (isEmptyObj(bangs)) {
+    if (bangs === undefined) {
         bangs = defaultBangs;
     }
 
