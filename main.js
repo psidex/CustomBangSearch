@@ -37,7 +37,7 @@ async function processRequest(r) {
     let query = queryFromGoogleUrl(decodeURI(r.url));
 
     if (query !== '' && query.startsWith('!')) {
-        let bangs = await browser.storage.sync.get("bangs");
+        let { bangs } = await browser.storage.sync.get("bangs");
         if (isEmptyObj(bangs)) {
             bangs = defaultBangs;
         }
