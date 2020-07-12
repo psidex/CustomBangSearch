@@ -3,12 +3,19 @@
 
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
     <link rel="stylesheet" href="options.css">
 </head>
 
 <body>
     <div>
-        <button id="addRowBtn" type="button">Add row</button>
+        <p>Click on any cell to edit. The bang is what goes after the ! (e.g. !m) and the url is where it takes you.</p>
+        <p>Use %s to show where the search query should be inserted (see the defaults for example).</p>
+        <p>Cells with no text in will be highlighted red and will be removed upon save.</p>
+    </div>
+
+    <div>
+        <button id="addRowBtn" type="button">Add new</button>
         <button id="saveBtn" type="button">Save</button>
     </div>
 

@@ -1,35 +1,13 @@
-/* Edited from https://divtable.com/table-styler/ */
-table {
-    border: 4px solid #555555;
-    background-color: #555555;
-    color: #FFFFFF;
-    width: 400px;
+table td:nth-child(1) {
     text-align: center;
-    border-collapse: collapse;
-}
-table td, table th {
-    border: 1px solid #555555;
-    padding: 5px 10px;
-}
-table td:nth-child(even) {
-    background: #398AA4;
-}
-table td:nth-child(odd) {
-    text-align: center;
-}
-table thead {
-    background: #398AA4;
-    border-bottom: 10px solid #398AA4;
-}
-table thead th {
-    border-left: 2px solid #398AA4;
-}
-table thead th:first-child {
-    border-left: none;
 }
 
-button {
+table th:nth-child(1) {
     text-align: center;
-    width: 6em;
-    display: inline-block;
+}
+
+.trashBinSvg {
+    /* https://stackoverflow.com/a/53336754/6396652 */
+    height: 1.5em;
+    filter: invert(50%);
 }

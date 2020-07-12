@@ -1,6 +1,9 @@
-# CustomBangSearch
+# Custom Bang Search
 
-[Install from the add-on page](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/) (waiting for approval)
+[![Mozilla Add-on](https://img.shields.io/amo/v/custombangsearch)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
+[![Mozilla Add-on](https://img.shields.io/amo/users/custombangsearch)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
+
+[Install from the add-on page](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 
 A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amazon) inside the search bar 
 
@@ -18,6 +21,6 @@ to that bang with the given query.
 
 ## Credit
 
-- [duckduckgo bangs](https://duckduckgo.com/bang)
-- [bang-quick-search](https://addons.mozilla.org/en-US/firefox/addon/bang-quick-search/)
-- Options table css edited from [divtable](https://divtable.com/table-styler/)
+- [DuckDuckGo bangs](https://duckduckgo.com/bang)
+- [!Bang Quick Search](https://addons.mozilla.org/en-US/firefox/addon/bang-quick-search/)
+- [Water.css](https://github.com/kognise/water.css)

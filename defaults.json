@@ -1,0 +1,8 @@
+{
+  "a": "https://smile.amazon.co.uk/s?k=%s",
+  "m": "https://www.google.com/maps/search/%s",
+  "t": "https://www.twitch.tv/search?term=%s",
+  "y": "https://www.youtube.com/results?search_query=%s",
+  "g": "https://www.google.com/search?q=%s",
+  "w": "https://www.wolframalpha.com/input/?i=%s"
+}

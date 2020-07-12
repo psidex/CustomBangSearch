@@ -1,63 +1,74 @@
-// ToDo: Is it possible to do imports in add-ons so that defaultBangs isn't duplicate code?
-const defaultBangs = {
-    a: 'https://smile.amazon.co.uk/s?k=',
-    m: 'https://www.google.com/maps/search/',
-    t: 'https://www.twitch.tv/search?term=',
-    y: 'https://www.youtube.com/results?search_query=',
-    g: 'https://www.google.com/search?q=',
-    w: 'https://www.wolframalpha.com/input/?i=',
-};
+function onCellEdit(e) {
+    if (e.target.textContent === '') {
+        e.target.style.backgroundColor = '#FF6961';
+    } else {
+        e.target.style.backgroundColor = '';
+    }
+}
 
-function addRow(tableElem, c1Text, c2Text) {
+function deleteRowClicked(e) {
+    e.target.parentElement.parentElement.remove();
+}
+
+function addRow(tableElem, bangText, urlText) {
     const row = document.createElement('tr');
-    const c1 = document.createElement('td');
-    const c2 = document.createElement('td');
-    c1.textContent = c1Text;
-    c2.textContent = c2Text;
-    row.appendChild(c1);
-    row.appendChild(c2);
-    row.setAttribute('contenteditable', true);
+
+    const bangCol = document.createElement('td');
+    bangCol.textContent = bangText;
+    bangCol.addEventListener('input', onCellEdit);
+    bangCol.setAttribute('contenteditable', 'true');
+    row.appendChild(bangCol);
+
+    const urlCol = document.createElement('td');
+    urlCol.textContent = urlText;
+    urlCol.addEventListener('input', onCellEdit);
+    urlCol.setAttribute('contenteditable', 'true');
+    row.appendChild(urlCol);
+
+    const trashImgTd = document.createElement('td');
+    const trashImg = document.createElement('img');
+    trashImg.src = 'trash.svg';
+    trashImg.className = 'trashBinSvg';
+    trashImg.addEventListener('click', deleteRowClicked);
+    trashImgTd.appendChild(trashImg);
+    row.appendChild(trashImgTd);
+
     tableElem.appendChild(row);
 }
 
-function save(table) {
+async function save(table) {
     const bangs = {};
 
     // Start from 1 to ignore headers.
     for (let i = 1; i < table.rows.length; i++) {
         const row = table.rows[i];
 
-        let c1Text = row.cells[0].textContent.trim();
-        let c2Text = row.cells[1].textContent.trim();
+        const bangText = row.cells[0].textContent.trim();
+        const urlText = row.cells[1].textContent.trim();
 
-        if (c1Text !== '' && c2Text !== '') {
-            // ToDo: Only set if c2Text is a valid URL.
-            bangs[c1Text] = c2Text;
-        } else if (c1Text === '' && c2Text === '') {
-            // ToDo: Remove this row.
+        if (bangText !== '' && urlText !== '') {
+            bangs[bangText] = urlText;
+        } else {
+            row.remove();
         }
     }
 
-    browser.storage.sync.set({'bangs': bangs});
+    await browser.storage.sync.set({ bangs });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     const table = document.querySelector('#bangsTable');
 
-    document.querySelector('#addRowBtn').addEventListener('click', () => {
-        addRow(table, 'e', 'https://example.com?q=');
-        save(table);
+    document.querySelector('#addRowBtn').addEventListener('click', async () => {
+        addRow(table, 'e', 'https://example.com?q=%s');
     });
 
-    document.querySelector('#saveBtn').addEventListener('click', () => {
-        save(table);
+    document.querySelector('#saveBtn').addEventListener('click', async () => {
+        await save(table);
     });
 
-    let { bangs } = await browser.storage.sync.get('bangs');
-    if (bangs === undefined) {
-        bangs = defaultBangs;
-    }
-
+    // It is assumed bangs != undefined as we set it in main.js.
+    const { bangs } = await browser.storage.sync.get('bangs');
     for (const [k, v] of Object.entries(bangs)) {
         addRow(table, k, v);
     }
