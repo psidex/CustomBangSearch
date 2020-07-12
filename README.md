@@ -2,7 +2,7 @@
 
 A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amazon) inside the search bar 
 
-[Demo video](https://youtu.be/McMjwhMmCsQ)
+[Demo video](https://youtu.be/q41XyWYLEUM)
 
 Go to the extensions options page to change the bangs and where they go (the query is appended to the given url).
 

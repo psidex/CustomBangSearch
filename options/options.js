@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const table = document.querySelector('#bangsTable');
 
     document.querySelector('#addRowBtn').addEventListener('click', () => {
-        addRow(table, 'e', 'example.com?q=');
+        addRow(table, 'e', 'https://example.com?q=');
         save(table);
     });
 
