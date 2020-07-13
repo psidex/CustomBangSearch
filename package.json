@@ -1,6 +1,6 @@
 {
   "name": "custombangsearch",
-  "version": "0.3",
+  "version": "0.4",
   "description": "A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amazon) inside the search bar",
   "main": "main.js",
   "scripts": {
