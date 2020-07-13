@@ -9,23 +9,27 @@ A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amaz
 
 [Demo video](https://youtu.be/q41XyWYLEUM)
 
-Go to the extensions options page to change the bangs and where they go (the query is appended to the given url).
-
 Currently only works if you have Google, Bing, or DuckDuckGo set as your browsers search engine.
+
+## Options page
+
+Go to the extensions options page to change the bangs and where they go.
+
+Click on any cell to edit it; the bang is what goes after the ! (e.g. !m) and the url is where it takes you.
+
+Use '%s' to show where the search query should be inserted (see the defaults for example).
+
+Cells with no text in will be highlighted red and will be removed upon saving.
+
+No changes will be made unless you click the save button, this includes importing and resetting to defaults.
 
 ## How it works
 
 When you type a query in the search bar, your browser makes a request to your browsers set search engine. This extension
 intercepts that request, and if the query matches a bang (e.g. `!m new york`) it will tell the browser to go the url set
-to that bang with the given query.
+to that bang with the given query, instead of your original search.
 
-## Options page
-
-Click on any cell to edit. The bang is what goes after the ! (e.g. !m) and the url is where it takes you.
-
-Use %s to show where the search query should be inserted (see the defaults for example).
-
-Cells with no text in will be highlighted red and will be removed upon save.
+This has the side effect of working if you type a bang into the actual search engine as well.
 
 ## Credit
 

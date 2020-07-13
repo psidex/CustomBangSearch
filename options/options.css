@@ -15,3 +15,7 @@ table th:nth-child(1) {
 #importFileInput {
     display: none;
 }
+
+#textDiv {
+    line-height: 0.75em;
+}
