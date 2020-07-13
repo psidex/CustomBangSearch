@@ -17,5 +17,37 @@ table th:nth-child(1) {
 }
 
 #textDiv {
+    /* Water.css line height is a little too much. */
     line-height: 0.75em;
+}
+
+/* Heavily edited from https://www.w3schools.com/howto/howto_js_snackbar.asp.
+   Should probably not use px but whatever. */
+#errorToast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #c11c1c;
+    color: #fff;
+    text-align: center;
+    border-radius: 0.5em;
+    padding: 16px;
+    position: fixed;
+    left: 50%;
+    top: 30px;
+}
+
+#errorToast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 3.5s;
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {top: 30px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }

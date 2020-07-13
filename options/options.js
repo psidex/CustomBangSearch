@@ -98,12 +98,35 @@ async function renderTable(bangsToUse = null) {
     }
 }
 
+// Attempts to load a valid & importable JSON object from the file, otherwise returns null.
+async function tryFileToObj(file) {
+    if (file.type !== 'application/json') {
+        return null;
+    }
+
+    const obj = JSON.parse(await file.text());
+    for (const [key, value] of Object.entries(obj)) {
+        if (typeof key !== 'string' || typeof value !== 'string') {
+            return null;
+        }
+    }
+
+    return obj;
+}
+
 // Imports bangs from a given file, saves them to the storage and then renders the table.
-// ToDo: Input validation!
 async function importBangs(fileInput) {
     const file = fileInput.files[0];
-    const newBangs = JSON.parse(await file.text());
-    await renderTable(newBangs);
+    const newBangs = await tryFileToObj(file);
+
+    if (newBangs !== null) {
+        await renderTable(newBangs);
+    } else {
+        // Show and then hide error toast.
+        const toast = document.querySelector('#errorToast');
+        toast.className = 'show';
+        setTimeout(() => { toast.className = ''; }, 4000);
+    }
 }
 
 // Exports the currently saved bangs (not the bangs currently in the table).
@@ -156,5 +179,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // It is assumed bangs wont ever be undefined here as we set it in main.js.
     await renderTable();
     // renderTable will cause the save button to highlight.
+    // We're rendering what is already saved so don't do that.
     unHighlightSaveBtn();
 });

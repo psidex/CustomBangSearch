@@ -13,15 +13,11 @@ Currently only works if you have Google, Bing, or DuckDuckGo set as your browser
 
 ## Options page
 
-Go to the extensions options page to change the bangs and where they go.
-
-Click on any cell to edit it; the bang is what goes after the ! (e.g. !m) and the url is where it takes you.
-
-Use '%s' to show where the search query should be inserted (see the defaults for example).
-
-Cells with no text in will be highlighted red and will be removed upon saving.
-
-No changes will be made unless you click the save button, this includes importing and resetting to defaults.
+- Go to the extensions options page to change the bangs and where they go.
+- Click on any cell to edit it; the bang is what goes after the ! (e.g. !m) and the url is where it takes you.
+- Use '%s' to show where the search query should be inserted (see the defaults for example).
+- Cells with no text in will be highlighted red and will be removed upon saving.
+- No changes will be made unless you click the save button, this includes importing and resetting to defaults.
 
 ## How it works
 
@@ -37,3 +33,4 @@ This has the side effect of working if you type a bang into the actual search en
 - [!Bang Quick Search](https://addons.mozilla.org/en-US/firefox/addon/bang-quick-search/)
 - [Water.css](https://github.com/kognise/water.css)
 - [Feather Icons](https://github.com/feathericons/feather)
+- [W3Schools How To Snackbar / Toast](https://www.w3schools.com/howto/howto_js_snackbar.asp)

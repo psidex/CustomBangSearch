@@ -17,10 +17,10 @@
 
     <div>
         <button id="saveBtn" type="button">Save</button>
-        <button id="addRowBtn" type="button">Add New</button>
+        <button id="addRowBtn" type="button" title="Add a new row to the table.">Add New</button>
         <button id="importBtn" type="button">Import</button>
         <input id="importFileInput" type="file"/>
-        <button id="exportBtn" type="button">Export</button>
+        <button id="exportBtn" type="button" title="Exports what is saved, not what you see.">Export</button>
         <button id="setDefaultBtn" type="button">Reset to Defaults</button>
     </div>
 
@@ -32,6 +32,7 @@
         </tr>
     </table>
 
+    <div id="errorToast">Selected file is invalid</div>
     <script src="options.js"></script>
 </body>
 
