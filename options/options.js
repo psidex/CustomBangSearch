@@ -75,7 +75,7 @@ async function saveFromTable() {
     unHighlightSaveBtn();
 }
 
-// Remove all <td> from the table and add new ones either the bangsToUse param or browser storage.
+// Remove all <td> from the table & add new ones from either bangsToUse or browser storage.
 async function renderTable(bangsToUse = null) {
     const table = document.querySelector('#bangsTable');
 
@@ -114,13 +114,15 @@ async function tryFileToObj(file) {
     return obj;
 }
 
-// Imports bangs from a given file, saves them to the storage and then renders the table.
+// Imports bangs from a given file by appending them to the current bangs.
 async function importBangs(fileInput) {
     const file = fileInput.files[0];
     const newBangs = await tryFileToObj(file);
 
     if (newBangs !== null) {
-        await renderTable(newBangs);
+        const { bangs: currentBangs } = await browser.storage.sync.get('bangs');
+        const combined = { ...currentBangs, ...newBangs };
+        await renderTable(combined);
     } else {
         // Show and then hide error toast.
         const toast = document.querySelector('#errorToast');
@@ -174,6 +176,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelector('#setDefaultBtn').addEventListener('click', async () => {
         await setDefaults();
+    });
+
+    document.querySelector('#helpBtn').addEventListener('click', async () => {
+        window.open('https://github.com/psidex/CustomBangSearch#options-page');
     });
 
     // It is assumed bangs wont ever be undefined here as we set it in main.js.

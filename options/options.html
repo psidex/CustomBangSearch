@@ -8,20 +8,14 @@
 </head>
 
 <body>
-    <div id="textDiv">
-        <p>Click on any cell in the table to edit it; the bang is what goes after the ! (e.g. !m) and the url is where it takes you.</p>
-        <p>Use '%s' to show where the search query should be inserted (see the defaults for example).</p>
-        <p>Cells with no text in will be highlighted red and will be removed upon saving.</p>
-        <p>No changes will be made unless you click the save button, this includes importing and resetting to defaults.</p>
-    </div>
-
     <div>
-        <button id="saveBtn" type="button">Save</button>
-        <button id="addRowBtn" type="button" title="Add a new row to the table.">Add New</button>
-        <button id="importBtn" type="button">Import</button>
+        <button id="saveBtn" type="button" title="Save the current table">Save</button>
+        <button id="addRowBtn" type="button" title="Add a new row to the table">Add New</button>
+        <button id="importBtn" type="button" title="Import bangs from a file">Import</button>
         <input id="importFileInput" type="file"/>
-        <button id="exportBtn" type="button" title="Exports what is saved, not what you see.">Export</button>
-        <button id="setDefaultBtn" type="button">Reset to Defaults</button>
+        <button id="exportBtn" type="button" title="Export what is saved, not what's currently in the table">Export</button>
+        <button id="setDefaultBtn" type="button" title="Reset to the default values">Reset to Default</button>
+        <button id="helpBtn" type="button" title="Show help page">Help</button>
     </div>
 
     <table id="bangsTable">

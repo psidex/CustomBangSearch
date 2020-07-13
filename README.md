@@ -13,11 +13,12 @@ Currently only works if you have Google, Bing, or DuckDuckGo set as your browser
 
 ## Options page
 
-- Go to the extensions options page to change the bangs and where they go.
-- Click on any cell in the table to edit it; the bang is what goes after the ! (e.g. !m) and the url is where it takes you.
-- Use '%s' to show where the search query should be inserted (see the defaults for example).
-- Cells with no text in will be highlighted red and will be removed upon saving.
-- No changes will be made unless you click the save button, this includes importing and resetting to defaults.
+- Go to the extensions options page to change the bangs and where they go
+- Click on any cell in the table to edit it; the bang is what goes after the ! (e.g. !m) and the url is where it takes you
+- Use '%s' to show where the search query should be inserted (see the defaults for example)
+- Cells with no text in will be highlighted red and will be removed upon saving
+- No changes will be made unless you click the save button, this includes importing and resetting to defaults
+- Bangs are case-sensitive, so you can have 'm' and 'M'
 
 ## How it works
 
