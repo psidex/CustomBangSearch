@@ -6,8 +6,12 @@ table th:nth-child(1) {
     text-align: center;
 }
 
-.trashBinSvg {
+.trashSvg {
     /* https://stackoverflow.com/a/53336754/6396652 */
     height: 1.5em;
     filter: invert(50%);
+}
+
+#importFileInput {
+    display: none;
 }
