@@ -79,10 +79,12 @@ async function saveFromTable() {
 async function renderTable(bangsToUse = null) {
     const table = document.querySelector('#bangsTable');
 
-    table.querySelectorAll('td').forEach((e) => {
-        // Remove every row (this will happen for each column in the row but that's fine).
-        e.parentElement.remove();
-    });
+    // Set to a const as table.rows.length will change as we remove things.
+    const lastRowIndex = table.rows.length - 1;
+    // i > 0 means that we will stop before removing the 0th element, the header row.
+    for (let i = lastRowIndex; i > 0; i--) {
+        table.rows[i].remove();
+    }
 
     let bangs = bangsToUse;
     if (bangs === null) {
