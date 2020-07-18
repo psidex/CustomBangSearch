@@ -59,6 +59,7 @@ browser.webRequest.onBeforeRequest.addListener(
             '*://*.google.com/*',
             '*://*.bing.com/*',
             '*://*.duckduckgo.com/*',
+            '*://*.qwant.com/*',
         ],
     },
     ['blocking'],
