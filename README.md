@@ -9,7 +9,7 @@ A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amaz
 
 [Demo video](https://youtu.be/q41XyWYLEUM)
 
-Currently only works if you have Google, Bing, or DuckDuckGo set as your browsers search engine.
+Currently only works if you have Google, Bing, DuckDuckGo, or Qwant set as your browsers search engine.
 
 ## Options page
 
