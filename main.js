@@ -1,6 +1,6 @@
 // Returns the search query from the given Google search url. If there is no query, returns an
 // empty string. Also changes all occurrences of '+' with ' '.
-function queryFromGoogleUrl(url) {
+function queryFromSearchUrl(url) {
     if (url.indexOf('&q=') === -1) {
         return '';
     }
@@ -18,7 +18,7 @@ function queryFromGoogleUrl(url) {
 
 // Processes a request event from onBeforeRequest.
 async function processRequest(r) {
-    let query = queryFromGoogleUrl(decodeURI(r.url));
+    let query = queryFromSearchUrl(decodeURI(r.url));
 
     if (query !== '' && query.startsWith('!')) {
         query = query.substr(1); // Removes the first character (the !).
@@ -59,6 +59,7 @@ browser.webRequest.onBeforeRequest.addListener(
             '*://*.google.com/*',
             '*://*.bing.com/*',
             '*://*.duckduckgo.com/*',
+            '*://*.qwant.com/*',
         ],
     },
     ['blocking'],

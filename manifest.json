@@ -10,6 +10,7 @@
     "*://*.google.com/*",
     "*://*.bing.com/*",
     "*://*.duckduckgo.com/*",
+    "*://*.qwant.com/*",
     "webRequest",
     "webRequestBlocking",
     "storage"
