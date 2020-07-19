@@ -1,40 +1,35 @@
-// Returns the search query from the given Google search url. If there is no query, returns an
-// empty string. Also changes all occurrences of '+' with ' '.
-function queryFromSearchUrl(url) {
-    if (url.indexOf('&q=') === -1) {
+// Returns the search query from the given search url (search must use the q param).
+// If there is no query, returns an empty string. Also changes all occurrences of '+' to ' '.
+function queryFromSearchUrl(urlString) {
+    const params = new URLSearchParams(urlString);
+    const query = params.get('q');
+    if (query === null) {
         return '';
     }
-    // Removes the &q= from the string.
-    let query = url.substr(url.indexOf('&q=') + 3);
-    // Google uses '+' to separate words, replace with ' '.
-    query = query.replace(/\+/g, ' ');
-
-    if (query.indexOf('&') !== -1) {
-        // Remove any extra params after the query.
-        return query.substr(0, query.indexOf('&'));
-    }
-    return query;
+    // Some search engines use '+' to separate words, replace with ' '.
+    return query.replace(/\+/g, ' ');
 }
 
 // Processes a request event from onBeforeRequest.
 async function processRequest(r) {
-    let query = queryFromSearchUrl(decodeURI(r.url));
+    let query = queryFromSearchUrl(r.url);
 
-    if (query !== '' && query.startsWith('!')) {
-        query = query.substr(1); // Removes the first character (the !).
-        const spaceIndex = query.indexOf(' ');
-        const key = query.substring(0, spaceIndex);
+    if (query.startsWith('!')) {
+        // Remove the first character (the !).
+        query = query.substr(1);
+
+        const firstSpaceIndex = query.indexOf(' ');
+        const key = query.substring(0, firstSpaceIndex);
+
         const { bangs } = await browser.storage.sync.get('bangs');
-
-        // If there is no query or wrong key nothing happens e.g. '!m' or '!not-a-key'.
-        if (!(key in bangs)) {
+        const bang = bangs[key];
+        if (bang === undefined) {
             return {};
         }
 
-        // For '!m test', this would give you 'test'.
-        query = query.substr(spaceIndex + 1);
+        query = query.substr(firstSpaceIndex + 1);
         return {
-            redirectUrl: bangs[key].replace(/%s/g, query),
+            redirectUrl: bang.replace(/%s/g, query),
         };
     }
 
@@ -43,12 +38,10 @@ async function processRequest(r) {
 
 // Checks for saved data and if not found, sets it to the defaults.
 async function setDefaultsIfNoneSaved() {
-    // Test if we have saved settings, if not, save the default ones.
-    let { bangs } = await browser.storage.sync.get('bangs');
+    const { bangs } = await browser.storage.sync.get('bangs');
     if (bangs === undefined) {
-        const r = await fetch('defaults.json');
-        bangs = await r.json();
-        await browser.storage.sync.set({ bangs });
+        const defaultBangs = await (await fetch('defaults.json')).json();
+        await browser.storage.sync.set({ bangs: defaultBangs });
     }
 }
 
