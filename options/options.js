@@ -1,8 +1,20 @@
-const saveBtnHighlightBgColour = 'darkblue';
-const emptyCellBgColour = '#FF6961';
-const defaultJsonFilePath = '../default.json';
-const exportFileName = 'custombangs.json';
-const helpUrl = 'https://github.com/psidex/CustomBangSearch#options-page';
+// Options that can/may need to be changed in the future.
+const optSaveBtnHighlightBgColour = 'darkblue';
+const optEmptyCellBgColour = '#FF6961';
+const optDefaultJsonFilePath = '../defaults.json';
+const optExportFileName = 'custombangs.json';
+const optHelpUrl = 'https://github.com/psidex/CustomBangSearch#options-page';
+
+// This script is loaded using the `defer` attribute so the DOM is guaranteed to be parsed.
+const elemBangsTable = document.getElementById('bangsTable');
+const elemImportFileInput = document.getElementById('importFileInput');
+const elemSaveBtn = document.getElementById('saveBtn');
+const elemAddRowBtn = document.getElementById('addRowBtn');
+const elemImportBtn = document.getElementById('importBtn');
+const elemExportBtn = document.getElementById('exportBtn');
+const elemSetDefaultBtn = document.getElementById('setDefaultBtn');
+const elemHelpBtn = document.getElementById('helpBtn');
+const elemErrorToast = document.getElementById('errorToast');
 
 // Makes calls to setSaveBtnHighlight easier to read.
 const ON = true;
@@ -11,16 +23,16 @@ const OFF = false;
 // Highlights the save button to show something has changed and needs saving.
 function setSaveBtnHighlight(onOff) {
     if (onOff === ON) {
-        document.getElementById('saveBtn').style.backgroundColor = saveBtnHighlightBgColour;
+        elemSaveBtn.style.backgroundColor = optSaveBtnHighlightBgColour;
     } else {
-        document.getElementById('saveBtn').style.backgroundColor = '';
+        elemSaveBtn.style.backgroundColor = '';
     }
 }
 
 // Is called whenever a cell is edited, performs conditional highlights and save btn highlights.
 function onCellEdit(e) {
     if (e.target.textContent === '') {
-        e.target.style.backgroundColor = emptyCellBgColour;
+        e.target.style.backgroundColor = optEmptyCellBgColour;
     } else {
         e.target.style.backgroundColor = '';
     }
@@ -34,8 +46,8 @@ function deleteRowClicked(e) {
     setSaveBtnHighlight(ON);
 }
 
-// Adds a row to the given tableElem with the given texts and a trash icon.
-function addRow(tableElem, bangText, urlText) {
+// Adds a row to the bangs table with the given texts and a trash icon.
+function addRow(bangText, urlText) {
     const row = document.createElement('tr');
 
     const bangCol = document.createElement('td');
@@ -58,21 +70,19 @@ function addRow(tableElem, bangText, urlText) {
     trashImgTd.appendChild(trashImg);
     row.appendChild(trashImgTd);
 
-    tableElem.appendChild(row);
+    elemBangsTable.appendChild(row);
     setSaveBtnHighlight(ON);
 }
 
 // Remove all <td> from the table & add new ones from either bangsToUse or browser storage.
 async function renderTable(bangsToUse = null) {
-    const table = document.querySelector('#bangsTable');
-
-    // Set to a const as table.rows.length will change as we remove things.
-    const lastRowIndex = table.rows.length - 1;
+    // Set to a const as elemBangsTable.rows.length will change as we remove things.
+    const lastRowIndex = elemBangsTable.rows.length - 1;
     // Counting down from the last index means we don't have to worry about the fact that the amount
     // of rows is changing when we remove one. i > 0 means that we will stop before removing the 0th
     // element, the header row.
     for (let i = lastRowIndex; i > 0; i--) {
-        table.rows[i].remove();
+        elemBangsTable.rows[i].remove();
     }
 
     let bangs = bangsToUse;
@@ -81,18 +91,17 @@ async function renderTable(bangsToUse = null) {
     }
 
     for (const [k, v] of Object.entries(bangs)) {
-        addRow(table, k, v);
+        addRow(k, v);
     }
 }
 
 // Takes the rows in the table and saves the given parameters to storage.
 async function saveFromTable() {
-    const table = document.querySelector('#bangsTable');
     const bangs = {};
 
-    // Start from 1 to ignore headers.
-    for (let i = 1; i < table.rows.length; i++) {
-        const row = table.rows[i];
+    // Starting from 1 ignores the headers.
+    for (let i = 1; i < elemBangsTable.rows.length; i++) {
+        const row = elemBangsTable.rows[i];
 
         const bangText = row.cells[0].textContent.trim();
         const urlText = row.cells[1].textContent.trim();
@@ -105,7 +114,7 @@ async function saveFromTable() {
     }
 
     await browser.storage.sync.set({ bangs });
-    // Will remove duplicate bangs.
+    // Re-rendering will visually remove duplicate bangs.
     await renderTable(bangs);
     setSaveBtnHighlight(OFF);
 }
@@ -133,8 +142,8 @@ async function tryFileToObj(file) {
 }
 
 // Imports bangs from a given file by appending them to the current bangs.
-async function importBangs(fileInput) {
-    const file = fileInput.files[0];
+async function importBangs() {
+    const file = elemImportFileInput.files[0];
     const newBangs = await tryFileToObj(file);
 
     if (newBangs !== null) {
@@ -142,11 +151,12 @@ async function importBangs(fileInput) {
         const combined = { ...currentBangs, ...newBangs };
         await renderTable(combined);
     } else {
-        // Show and then hide error toast.
-        const toast = document.querySelector('#errorToast');
-        toast.className = 'show';
-        // Timeout is linked to time in CSS.
-        setTimeout(() => { toast.className = ''; }, 4000);
+        // Show then hide error toast, timeout ms should be the same as the time in the CSS.
+        elemErrorToast.setAttribute('class', 'show');
+        setTimeout(
+            () => { elemErrorToast.setAttribute('class', ''); },
+            4000,
+        );
     }
 }
 
@@ -156,49 +166,40 @@ async function exportBangs() {
     const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(bangs))}`;
     const a = document.createElement('a');
     a.setAttribute('href', dataStr);
-    a.setAttribute('download', exportFileName);
+    a.setAttribute('download', optExportFileName);
     a.click();
     a.remove();
 }
 
 // Sets the storage to the defaults and re-renders the table.
 async function setDefaults() {
-    const r = await fetch(defaultJsonFilePath);
+    const r = await fetch(optDefaultJsonFilePath);
     const bangs = await r.json();
     await renderTable(bangs);
 }
 
 // Sets up event listeners and calls renderTable.
 document.addEventListener('DOMContentLoaded', async () => {
-    const table = document.querySelector('#bangsTable');
-    const fileInput = document.querySelector('#importFileInput');
-
-    document.querySelector('#saveBtn').addEventListener('click', async () => {
+    elemSaveBtn.addEventListener('click', async () => {
         await saveFromTable();
     });
-
-    document.querySelector('#addRowBtn').addEventListener('click', () => {
-        addRow(table, 'e', 'https://example.com?q=%s');
+    elemAddRowBtn.addEventListener('click', () => {
+        addRow('e', 'https://example.com?q=%s');
     });
-
-    document.querySelector('#importBtn').addEventListener('click', () => {
-        fileInput.click();
+    elemImportBtn.addEventListener('click', () => {
+        elemImportFileInput.click();
     });
-
-    fileInput.addEventListener('change', async () => {
-        await importBangs(fileInput);
+    elemImportFileInput.addEventListener('change', async () => {
+        await importBangs();
     });
-
-    document.querySelector('#exportBtn').addEventListener('click', async () => {
+    elemExportBtn.addEventListener('click', async () => {
         await exportBangs();
     });
-
-    document.querySelector('#setDefaultBtn').addEventListener('click', async () => {
+    elemSetDefaultBtn.addEventListener('click', async () => {
         await setDefaults();
     });
-
-    document.querySelector('#helpBtn').addEventListener('click', async () => {
-        window.open(helpUrl);
+    elemHelpBtn.addEventListener('click', async () => {
+        window.open(optHelpUrl);
     });
 
     // It is assumed bangs wont ever be undefined here as we set it in main.js.
