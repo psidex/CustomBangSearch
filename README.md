@@ -1,7 +1,9 @@
 # Custom Bang Search
 
-[![Mozilla Add-on](https://img.shields.io/amo/v/custombangsearch)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Mozilla Add-on](https://img.shields.io/amo/users/custombangsearch)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
+[![add-on version](https://img.shields.io/amo/v/custombangsearch)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
+[![add-on users](https://img.shields.io/amo/users/custombangsearch)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
+[![license](https://img.shields.io/github/license/psidex/CustomBangSearch.svg)](./LICENSE)
+[![Ko-fi donate link](https://img.shields.io/badge/Support%20Me-Ko--fi-orange.svg?style=flat&colorA=35383d)](https://ko-fi.com/M4M18XB1)
 
 [Install from the add-on page](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 
