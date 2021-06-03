@@ -1,0 +1,45 @@
+@import url("https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css");
+/* TODO: Load water.css locally */
+
+tbody tr:nth-child(2n) {
+  /* water.css alternates bg colour which messes with this CSS */
+  background-color: transparent;
+}
+
+#importFileInput { display: none; }
+
+input {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.unsavedBtn {
+  /* https://stackoverflow.com/a/13517809/6396652 */
+  -webkit-box-shadow:inset 0 0 0 0.2em #f00;
+  -moz-box-shadow:inset 0 0 0 0.2em #f00;
+  box-shadow:inset 0 0 0 0.2em #f00;
+}
+
+.bangInputCol {
+  /* *Col widths should add up to 100% */
+  width: 10%;
+  /*padding-right: 5%;*/
+}
+
+.urlInputCol {
+  width: 85%;
+  /*padding-right: 5%;*/
+}
+
+.trashBtnCol { width: 5%; }
+.trashBtn {
+  margin: 0;
+  padding: 0;
+}
+.trashSvg {
+  /* https://stackoverflow.com/a/53336754/6396652 */
+  filter: invert(50%);
+}

@@ -1,24 +1,39 @@
 {
-  "name": "custombangsearch",
-  "version": "0.6",
-  "description": "A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amazon) inside the search bar",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/psidex/CustomBangSearch.git"
-  },
-  "author": "",
+  "name": "options",
+  "version": "0.7",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/psidex/CustomBangSearch/issues"
-  },
-  "homepage": "https://github.com/psidex/CustomBangSearch#readme",
+  "homepage": ".",
   "dependencies": {
-    "eslint": "^7.4.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.0"
+    "cross-env": "^7.0.3",
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-react": "7.21.5",
+    "eslint-plugin-react-hooks": "1.7.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "short-uuid": "^4.2.0",
+    "web-ext": "^6.1.0"
+  },
+  "scripts": {
+    "start": "npx react-scripts start",
+    "webext": "npx web-ext run --verbose --browser-console -s build --start-url about:addons",
+    "build": "npx cross-env INLINE_RUNTIME_CHUNK=false npx react-scripts build",
+    "test": "npx react-scripts test",
+    "eject": "npx react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

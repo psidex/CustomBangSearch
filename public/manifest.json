@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Custom Bang Search",
-  "version": "0.6",
+  "version": "0.7",
   "description": "Allows you to use custom bangs inside the search bar",
   "icons": {
     "48": "icons/icon_48.png"
@@ -17,11 +17,11 @@
   ],
   "background": {
     "scripts": [
-      "main.js"
+      "background.js"
     ]
   },
   "options_ui": {
-    "page": "options/options.html"
+    "page": "index.html"
   },
   "browser_specific_settings": {
     "gecko": {
