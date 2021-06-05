@@ -8,7 +8,7 @@ export default function Buttons(props) {
   };
 
   return (
-    <div>
+    <div id="buttons">
       <button
         id="saveBtn"
         className={unsaved ? 'unsavedBtn' : ''}

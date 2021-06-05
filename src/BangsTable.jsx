@@ -12,7 +12,6 @@ export default function BangsTable(props) {
   };
 
   const bangChanged = (id, newBang) => {
-    console.log(`bangChanged = (${id}, ${newBang})`);
     const { url } = bangs[id];
     const bangsClone = { ...bangs };
     bangsClone[id] = { bang: newBang, url };

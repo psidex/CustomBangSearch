@@ -1,19 +1,29 @@
-@import url("https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css");
-/* TODO: Load water.css locally */
+/*
+ * This CSS behaves differently when actually run in the extension because of the browser_style option.
+ * See https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/options_ui
+ */
 
-tbody tr:nth-child(2n) {
-  /* water.css alternates bg colour which messes with this CSS */
-  background-color: transparent;
+/* Overwrite water.css and browser_style defaults */
+body {
+  max-width: available;
+  margin: 1em 0 0;
 }
+table { table-layout: auto;  }
+tbody tr:nth-child(2n) {  background-color: transparent; }
 
 #importFileInput { display: none; }
-
 input {
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   margin: 0;
   height: 100%;
   width: 100%;
+}
+
+#buttons > button {
+  font-size: 1.25em;
+  padding-right: 1.25em;
+  padding-left: 1.25em;
 }
 
 .unsavedBtn {
@@ -34,7 +44,10 @@ input {
   /*padding-right: 5%;*/
 }
 
-.trashBtnCol { width: 5%; }
+.trashBtnCol {
+  width: 5%;
+  vertical-align: middle; /* Overwrite water */
+}
 .trashBtn {
   margin: 0;
   padding: 0;
