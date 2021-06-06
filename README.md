@@ -3,7 +3,7 @@
 [![add-on version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![add-on users](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![Ko-fi donate link](https://img.shields.io/badge/Donate-Coffee-orange.svg?style=flat&colorA=35383d)](https://ko-fi.com/M4M18XB1)
-[![Ethereum donate link](https://img.shields.io/badge/Donate-Ether-5965a2.svg?style=flat&colorA=35383d)](https://etherscan.io/address/0x54A8Fe0C28B9DD4940266A78d70f11B621735A97)
+[![Ethereum donate link](https://img.shields.io/badge/Donate-Ether-5965a2.svg?style=flat&colorA=35383d)](https://en.cryptobadges.io/donate/0x54A8Fe0C28B9DD4940266A78d70f11B621735A97)
 
 [Install from the add-on page](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 
