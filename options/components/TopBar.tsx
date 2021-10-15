@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TopBar() {
+export default function TopBar(): React.ReactElement {
   // How to use these buttons to interact with table?
   return (
     <div>

@@ -1,7 +1,7 @@
 import browser, { WebRequest } from 'webextension-polyfill';
 
 // Cleans query string to be used in a redirection.
-function cleanQuery(query: string) {
+function cleanQuery(query: string): string {
   // Remove the first character (the !).
   const q = query.substr(1);
   // Change all occurrences of '+' to ' ' as some search engines use '+' to separate
@@ -13,14 +13,14 @@ function cleanQuery(query: string) {
 
 // Returns the search query from the given search url (must use the q param).
 // If there is no query, returns an empty string.
-function queryFromSearchUrl(urlString: string) {
+function queryFromSearchUrl(urlString: string): string {
   const query = (new URLSearchParams(urlString)).get('q');
   if (query === null) { return ''; }
   return query;
 }
 
 // Takes request details from an onBeforeRequest event and send user to chosen bang.
-async function processRequest(r: WebRequest.OnBeforeRequestDetailsType) {
+async function processRequest(r: WebRequest.OnBeforeRequestDetailsType): Promise<WebRequest.BlockingResponse> {
   let query = queryFromSearchUrl(r.url);
 
   if (query.startsWith('!')) {
@@ -51,7 +51,7 @@ async function processRequest(r: WebRequest.OnBeforeRequestDetailsType) {
 }
 
 // Checks for saved data and if not found, sets it to the defaults.
-async function setDefaultsIfNoneSaved() {
+async function setDefaultsIfNoneSaved(): Promise<void> {
   const { bangs } = await browser.storage.sync.get('bangs');
   if (bangs === undefined) {
     const defaultBangs = await (await fetch('defaults.json')).json();
@@ -59,7 +59,7 @@ async function setDefaultsIfNoneSaved() {
   }
 }
 
-function main() {
+function main(): void {
   browser.webRequest.onBeforeRequest.addListener(
     processRequest,
     {

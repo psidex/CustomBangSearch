@@ -1,5 +1,7 @@
 # Custom Bang Search
 
+TODO: Update this README.
+
 [![add-on version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![add-on users](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![buymeacoffee donate link](https://img.shields.io/badge/Donate-Beer-FFDD00.svg?style=flat&colorA=35383d)](https://www.buymeacoffee.com/psidex)
@@ -45,6 +47,17 @@ yarn install
 yarn buildall
 # You should now have a directory called "web-ext-artifacts" that contains the built extension
 ```
+
+### Details
+
+The only things actually required to build are `react`, `react-dom`, and
+`esbuild`.
+
+`web-ext` is used to generate the extension build but it _can_ be done by hand.
+
+Everything in `devDependencies` is purely for linting, and `typescript` and
+`webextension-polyfill` are purely used for type checking, they aren't required
+by `esbuild`.
 
 ## Credit
 
