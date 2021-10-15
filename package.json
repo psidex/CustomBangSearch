@@ -4,7 +4,14 @@
   "description": "A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amazon) inside the search bar",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "TODO": "make each tsc -noEmit call specific to thing built, not just everything",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildoptions": "tsc -noEmit && npx esbuild ./options/options.tsx --bundle --outfile=./options/build.js",
+    "buildmain": "tsc -noEmit && npx esbuild ./main.ts --bundle --outfile=./main_build.js",
+    "buildcode": "yarn buildoptions && yarn buildmain",
+    "buildext": "npx web-ext build --overwrite-dest",
+    "buildall": "yarn buildcode && yarn buildext",
+    "runext": "npx web-ext run"
   },
   "repository": {
     "type": "git",
@@ -17,8 +24,45 @@
   },
   "homepage": "https://github.com/psidex/CustomBangSearch#readme",
   "dependencies": {
-    "eslint": "^7.4.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.0"
+    "esbuild": "^0.13.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.4.4",
+    "web-ext": "^6.5.0",
+    "webextension-polyfill": "^0.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.30",
+    "@types/react-dom": "^17.0.9",
+    "@types/webextension-polyfill": "^0.8.0",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
+    "eslint": "7.2.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.1",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-react": "7.21.5",
+    "eslint-plugin-react-hooks": "1.7.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "webextensions": true
+    },
+    "extends": [
+      "airbnb",
+      "airbnb-typescript",
+      "airbnb/hooks"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "rules": {
+      "no-restricted-syntax": "off",
+      "no-plusplus": "off",
+      "@typescript-eslint/type-annotation-spacing": "error",
+      "max-len": "off"
+    }
   }
 }
