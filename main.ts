@@ -1,4 +1,5 @@
 import browser, { WebRequest } from 'webextension-polyfill';
+import { saveBangs, getBangs, getDefaultBangs } from './options/lib/bangs';
 
 /**
  * Returns the search query from the given search url (must use the q param).
@@ -33,19 +34,32 @@ async function processRequest(r: WebRequest.OnBeforeRequestDetailsType): Promise
     const firstSpaceIndex = query.indexOf(' ');
 
     // Get everything before the first space, which should be our bang.
-    const key = query.substring(0, firstSpaceIndex);
+    const bang = query.substring(0, firstSpaceIndex);
 
-    const { bangs } = await browser.storage.sync.get('bangs');
-    const bangUrl = bangs[key];
-    if (bangUrl === undefined) {
+    const bangs = await getBangs();
+    const bangObj = bangs[bang];
+    if (bangObj === undefined) {
       return {};
     }
 
     // Get everything after the first space, i.e. our search.
     query = query.substr(firstSpaceIndex + 1);
 
+    // Users can use a " :: " to chain URLs.
+    if (bangObj.url.includes(' :: ')) {
+      const bangUrls = bangObj.url.split(' :: ');
+      // Open all URLs in new tab and then redirect the current tab to the first in the array.
+      for (let i = 1; i < bangUrls.length; i++) {
+        browser.tabs.create({ url: constructRedirect(bangUrls[i], query) });
+      }
+      return {
+        redirectUrl: constructRedirect(bangUrls[0], query),
+      };
+    }
+
+    // Otherwise it's just one URL so redirect there.
     return {
-      redirectUrl: constructRedirect(bangUrl, query),
+      redirectUrl: constructRedirect(bangObj.url, query),
     };
   }
 
@@ -59,8 +73,8 @@ async function processRequest(r: WebRequest.OnBeforeRequestDetailsType): Promise
 async function setDefaultsIfNoneSaved(): Promise<void> {
   const { bangs } = await browser.storage.sync.get('bangs');
   if (bangs === undefined) {
-    const defaultBangs = await (await fetch('defaults.json')).json();
-    await browser.storage.sync.set({ bangs: defaultBangs });
+    const defaultBangs = await getDefaultBangs();
+    saveBangs(defaultBangs);
   }
 }
 

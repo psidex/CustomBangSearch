@@ -1,21 +1,82 @@
 {
-  "a": "https://smile.amazon.co.uk/s?k=%s",
-  "e": "https://www.ebay.co.uk/sch/i.html?_nkw=%s",
-  "et": "https://www.etsy.com/uk/search?q=%s",
-  "t": "https://www.twitch.tv/search?term=%s",
-  "y": "https://www.youtube.com/results?search_query=%s",
-  "av": "https://smile.amazon.co.uk/s?k=%s&i=instant-video",
-  "n": "https://www.netflix.com/search?q=%s",
-  "g": "https://www.google.com/search?q=%s",
-  "b": "https://www.bing.com/search?q=%s",
-  "d": "https://duckduckgo.com/?q=%s",
-  "q": "https://www.qwant.com/?q=%s",
-  "m": "https://www.google.com/maps/search/%s",
-  "r": "https://www.google.com/search?q=site%3Areddit.com+%s",
-  "git": "https://github.com/search?q=%s",
-  "mdn": "https://developer.mozilla.org/en-US/search?q=%s",
-  "pypi": "https://pypi.org/search/?q=%s",
-  "npm": "https://www.npmjs.com/search?q=%s",
-  "so": "https://stackoverflow.com/search?q=%s",
-  "w": "https://www.wolframalpha.com/input/?i=%s"
+  "a": {
+    "id": "BOqjlStMAY",
+    "url": "https://smile.amazon.co.uk/s?k=%s"
+  },
+  "e": {
+    "id": "Xyah8ow_xk",
+    "url": "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
+  },
+  "ea": {
+    "id": "furHsQ2Cno",
+    "url": "https://smile.amazon.co.uk/s?k=%s :: https://www.ebay.co.uk/sch/i.html?_nkw=%s"
+  },
+  "et": {
+    "id": "zHOxFihYCp",
+    "url": "https://www.etsy.com/uk/search?q=%s"
+  },
+  "t": {
+    "id": "QUcvOPSv0U",
+    "url": "https://www.twitch.tv/search?term=%s"
+  },
+  "y": {
+    "id": "zt4gi0nqf7",
+    "url": "https://www.youtube.com/results?search_query=%s"
+  },
+  "av": {
+    "id": "YlW5FLqoB6",
+    "url": "https://smile.amazon.co.uk/s?k=%s&i=instant-video"
+  },
+  "n": {
+    "id": "q6sgismS9d",
+    "url": "https://www.netflix.com/search?q=%s"
+  },
+  "g": {
+    "id": "JZfK3m9wXb",
+    "url": "https://www.google.com/search?q=%s"
+  },
+  "b": {
+    "id": "yX2I2AnXmY",
+    "url": "https://www.bing.com/search?q=%s"
+  },
+  "d": {
+    "id": "K8ClOmmiks",
+    "url": "https://duckduckgo.com/?q=%s"
+  },
+  "q": {
+    "id": "lJyx2PCqyL",
+    "url": "https://www.qwant.com/?q=%s"
+  },
+  "m": {
+    "id": "HtE81Lta0f",
+    "url": "https://www.google.com/maps/search/%s"
+  },
+  "r": {
+    "id": "l-k8nW4Ru4",
+    "url": "https://www.google.com/search?q=site%3Areddit.com+%s"
+  },
+  "git": {
+    "id": "CW4_IfmPTH",
+    "url": "https://github.com/search?q=%s"
+  },
+  "mdn": {
+    "id": "k0IBikr_9J",
+    "url": "https://developer.mozilla.org/en-US/search?q=%s"
+  },
+  "pypi": {
+    "id": "u9z3ChHj2u",
+    "url": "https://pypi.org/search/?q=%s"
+  },
+  "npm": {
+    "id": "BUY4AjgGLI",
+    "url": "https://www.npmjs.com/search?q=%s"
+  },
+  "so": {
+    "id": "cl4itqctVJ",
+    "url": "https://stackoverflow.com/search?q=%s"
+  },
+  "w": {
+    "id": "NsN0i8fnZI",
+    "url": "https://www.wolframalpha.com/input/?i=%s"
+  }
 }

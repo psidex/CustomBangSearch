@@ -2,6 +2,13 @@
 
 TODO: Update this README.
 
+TODO: In packagejson make each tsc -noEmit call specific to thing built, not
+just everything
+
+TODO: Does web-ext build add defaults.json and other surplus files to the zip?
+
+TODO: Close Issue and add to README / help about using " :: " to sep multi urls
+
 [![add-on version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![add-on users](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![buymeacoffee donate link](https://img.shields.io/badge/Donate-Beer-FFDD00.svg?style=flat&colorA=35383d)](https://www.buymeacoffee.com/psidex)
@@ -17,6 +24,9 @@ Currently only works if you have Google, Bing, DuckDuckGo, or Qwant set as your
 browsers search engine.
 
 ## Options page
+
+_The Amazon, Ebay, and Etsy defaults are UK URLs so change those if you need
+to!_
 
 - Go to the extensions options page to change the bangs and where they go
 - Click on any cell in the table to edit it; the bang is what goes after the !
@@ -50,14 +60,20 @@ yarn buildall
 
 ### Details
 
-The only things actually required to build are `react`, `react-dom`, and
-`esbuild`.
+The only things actually required to build this extension from source to
+something that is installable in your browser are `react`, `react-dom`,
+`nanoid`, and `esbuild`.
 
-`web-ext` is used to generate the extension build but it _can_ be done by hand.
+`web-ext` is used to generate the extension package but it _can_ be done by
+hand.
 
 Everything in `devDependencies` is purely for linting, and `typescript` and
 `webextension-polyfill` are purely used for type checking, they aren't required
 by `esbuild`.
+
+`manifest.json` links to the compiled build made by `esbuild.config.js`, not the
+TS file. In a similar fashion, `options.html` links to the build not the TSX
+files, so make sure they are built before you build the extension package.
 
 ## Credit
 
