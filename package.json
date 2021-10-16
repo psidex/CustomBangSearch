@@ -6,9 +6,9 @@
   "scripts": {
     "TODO": "make each tsc -noEmit call specific to thing built, not just everything",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "buildoptions": "tsc -noEmit && npx esbuild ./options/options.tsx --bundle --outfile=./options/build.js",
-    "buildmain": "tsc -noEmit && npx esbuild ./main.ts --bundle --outfile=./main_build.js",
-    "buildcode": "yarn buildoptions && yarn buildmain",
+    "buildoptions": "tsc -noEmit && node ./esbuild.config.js -o",
+    "buildmain": "tsc -noEmit && node ./esbuild.config.js -m",
+    "buildcode": "tsc -noEmit && node ./esbuild.config.js -o -m",
     "buildext": "npx web-ext build --overwrite-dest",
     "buildall": "yarn buildcode && yarn buildext",
     "runext": "npx web-ext run"
