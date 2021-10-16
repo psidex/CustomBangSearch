@@ -17,11 +17,11 @@
   ],
   "background": {
     "scripts": [
-      "main_build.js"
+      "src/scripts/main.js"
     ]
   },
   "options_ui": {
-    "page": "options/options.html"
+    "page": "src/options/options.html"
   },
   "browser_specific_settings": {
     "gecko": {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import TopBar from './components/TopBar';
-import { getBangs, getDefaultBangs, BangsType } from './lib/bangs';
+import { getBangs, getDefaultBangs, BangsType } from '../lib/bangs';
 import BangsTable from './components/BangsTable';
 
 function objectIsEmpty(obj: object): Boolean {

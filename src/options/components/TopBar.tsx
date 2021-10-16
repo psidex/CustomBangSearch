@@ -1,5 +1,5 @@
 import React from 'react';
-import { BangsType, getDefaultBangs, SetBangsType } from '../lib/bangs';
+import { BangsType, getDefaultBangs, SetBangsType } from '../../lib/bangs';
 
 interface PropsType {
   bangs: BangsType

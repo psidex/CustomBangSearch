@@ -1,5 +1,5 @@
 import browser, { WebRequest } from 'webextension-polyfill';
-import { saveBangs, getBangs, getDefaultBangs } from './options/lib/bangs';
+import { saveBangs, getBangs, getDefaultBangs } from '../lib/bangs';
 
 /**
  * Returns the search query from the given search url (must use the q param).

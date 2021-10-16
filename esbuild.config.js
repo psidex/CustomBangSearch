@@ -17,8 +17,8 @@ console.log('Building...');
 
 if (process.argv.includes('-o')) {
   esbuild.buildSync({
-    entryPoints: ['./options/options.tsx'],
-    outfile: './options/build.js',
+    entryPoints: ['./src/options/options.tsx'],
+    outfile: './src/options/options.js',
     bundle: true,
     minify: true,
     logLevel: 'info',
@@ -28,8 +28,8 @@ if (process.argv.includes('-o')) {
 
 if (process.argv.includes('-m')) {
   esbuild.buildSync({
-    entryPoints: ['./main.ts'],
-    outfile: './main_build.js',
+    entryPoints: ['./src/scripts/main.ts'],
+    outfile: './src/scripts/main.js',
     bundle: true,
     minify: true,
     logLevel: 'info',

@@ -1,5 +1,5 @@
-options/build.js
-main_build.js
+src/options/options.js
+src/scripts/main.js
 web-ext-artifacts
 
 # Created by https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,yarn,react

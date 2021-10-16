@@ -1,5 +1,5 @@
 import React from 'react';
-import { BangsType, SetBangsType } from '../lib/bangs';
+import { BangsType, SetBangsType } from '../../lib/bangs';
 import BangsTableRow from './BangsTableRow';
 
 interface PropsType {
