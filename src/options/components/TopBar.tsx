@@ -1,5 +1,7 @@
 import React from 'react';
-import { BangsType, SetBangsType, getDefaultBangs } from '../../lib/bangs';
+import {
+  BangsType, SetBangsType, getDefaultBangs, newBangId,
+} from '../../lib/bangs';
 
 interface PropsType {
   bangs: BangsType
@@ -11,7 +13,22 @@ export default function TopBar(props: PropsType): React.ReactElement {
   const { bangs, setBangs } = props;
 
   const addNew = (): void => {
-    // TODO: Open a popup that allows user to input, then write method in bangs to gen new bang.
+    // TODO: These 2 variables should be user inputs using a popup or something.
+    const newBang = 'newbang';
+    const newUrl = 'https://example.com?q=%s';
+
+    const newId = newBangId();
+
+    let largestPost = 1;
+    for (const [, bangObj] of Object.entries(bangs)) {
+      if (bangObj.pos > largestPost) {
+        largestPost = bangObj.pos;
+      }
+    }
+
+    const newBangs = { ...bangs };
+    newBangs[newBang] = { id: newId, url: newUrl, pos: largestPost + 1 };
+    setBangs(newBangs);
   };
 
   const setDefaults = async (): Promise<void> => {
