@@ -1,30 +1,34 @@
 import browser, { WebRequest } from 'webextension-polyfill';
 
-// Cleans query string to be used in a redirection.
-function cleanQuery(query: string): string {
-  // Remove the first character (the !).
-  const q = query.substr(1);
-  // Change all occurrences of '+' to ' ' as some search engines use '+' to separate
-  // words and where we're redirecting might not like that, but should support ' '.
-  // FIXME: This does mean if someone wants to search for something with '+' in it then
-  // we end up replacing it.
-  return q.replace(/\+/g, ' ');
-}
-
-// Returns the search query from the given search url (must use the q param).
-// If there is no query, returns an empty string.
+/**
+ * Returns the search query from the given search url (must use the q param).
+ * If there is no query, returns an empty string.
+ */
 function queryFromSearchUrl(urlString: string): string {
   const query = (new URLSearchParams(urlString)).get('q');
   if (query === null) { return ''; }
   return query;
 }
 
-// Takes request details from an onBeforeRequest event and send user to chosen bang.
+/**
+ * Construct a URL to send the user to given the user written bang URL and query.
+ */
+function constructRedirect(bangUrl: string, query: string): string {
+  // Encodes the query and then replace all "%s" in the bang with the query.
+  // encodeURIComponent ensures that symbols (e.g. +:/) get encoded (so when the user
+  // goes to where they're going the symbols aren't treated as part of the actual URL)
+  return bangUrl.replace(/%s/g, encodeURIComponent(query));
+}
+
+/**
+ * Takes request details from an onBeforeRequest event and send user to chosen bang.
+ */
 async function processRequest(r: WebRequest.OnBeforeRequestDetailsType): Promise<WebRequest.BlockingResponse> {
   let query = queryFromSearchUrl(r.url);
 
-  if (query.startsWith('!')) {
-    query = cleanQuery(query);
+  if (query !== '' && query.startsWith('!')) {
+    // Remove the first character (the !).
+    query = query.substr(1);
 
     const firstSpaceIndex = query.indexOf(' ');
 
@@ -32,17 +36,16 @@ async function processRequest(r: WebRequest.OnBeforeRequestDetailsType): Promise
     const key = query.substring(0, firstSpaceIndex);
 
     const { bangs } = await browser.storage.sync.get('bangs');
-    const bang = bangs[key];
-    if (bang === undefined) {
+    const bangUrl = bangs[key];
+    if (bangUrl === undefined) {
       return {};
     }
 
     // Get everything after the first space, i.e. our search.
     query = query.substr(firstSpaceIndex + 1);
 
-    // Replace all "%s" with the found query.
     return {
-      redirectUrl: encodeURI(bang.replace(/%s/g, query)),
+      redirectUrl: constructRedirect(bangUrl, query),
     };
   }
 
@@ -50,7 +53,9 @@ async function processRequest(r: WebRequest.OnBeforeRequestDetailsType): Promise
   return {};
 }
 
-// Checks for saved data and if not found, sets it to the defaults.
+/**
+ * Checks for saved data and if not found, sets it to the defaults.
+ */
 async function setDefaultsIfNoneSaved(): Promise<void> {
   const { bangs } = await browser.storage.sync.get('bangs');
   if (bangs === undefined) {
