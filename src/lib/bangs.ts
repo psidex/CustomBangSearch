@@ -4,8 +4,14 @@ import { nanoid } from 'nanoid';
 
 const defaultJsonFilePath = '../../defaults.json';
 
+export interface BangInfoType {
+  id: string;
+  url: string;
+  pos: number;
+}
+
 export interface BangsType {
-  [key: string]: { id: string, url: string };
+  [key: string]: BangInfoType;
 }
 
 export interface BangsTypeOld {
@@ -15,15 +21,25 @@ export interface BangsTypeOld {
 export type SetBangsType = React.Dispatch<React.SetStateAction<BangsType>>;
 
 /**
+ * Generates a new uniqe bang ID.
+ */
+export function newBangId(): string {
+  return nanoid(10);
+}
+
+/**
  * Convert old bangs to new bangs.
  */
 export function convertLegacyBangs(oldBangs: BangsTypeOld): BangsType {
   const newBangs: BangsType = {};
+  let i = 1;
   for (const [bang, url] of Object.entries(oldBangs)) {
     newBangs[bang] = {
-      id: nanoid(10),
+      id: newBangId(),
       url,
+      pos: i,
     };
+    i++;
   }
   return newBangs;
 }

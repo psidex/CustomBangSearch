@@ -1,26 +1,24 @@
 import React from 'react';
-import { BangsType, SetBangsType } from '../../lib/bangs';
+import { BangInfoType, BangsType, SetBangsType } from '../../lib/bangs';
 
 interface PropsType {
   bangs: BangsType
   setBangs: SetBangsType
   // Specific to this row:
-  id: string
   bang: string
-  url: string
+  bangInfo: BangInfoType
 }
 
 export default function BangsTableRow(props: PropsType): React.ReactElement {
   const {
-    bangs, setBangs, id, bang, url,
+    bangs, setBangs, bang, bangInfo,
   } = props;
 
-  // FIXME: When bang is changed it gets put at bottom of list for some reason.
   const bangChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const newBang = e.target.value;
+    const newBang = e.target.value.trim();
 
-    if (newBang in bangs) {
-      // TODO: Alert user they can't rename to a currently used bang.
+    if (newBang in bangs || newBang === '') {
+      // TODO: Alert user they can't rename to a currently used bang or nothing.
       return;
     }
 
@@ -35,7 +33,7 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
 
   const urlChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newBangs = { ...bangs };
-    newBangs[bang] = { id, url: e.target.value };
+    newBangs[bang] = { id: bangInfo.id, url: e.target.value, pos: bangInfo.pos };
     setBangs(newBangs);
   };
 
@@ -49,7 +47,7 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
   return (
     <tr>
       <td><input type="text" value={bang} onChange={bangChanged} /></td>
-      <td><input type="text" value={url} onChange={urlChanged} /></td>
+      <td><input type="text" value={bangInfo.url} onChange={urlChanged} /></td>
       <td><button type="button" title="Trash" onClick={trashBtnlicked}>Trash</button></td>
     </tr>
   );
