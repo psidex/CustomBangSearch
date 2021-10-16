@@ -76,17 +76,3 @@ export async function getBangs(): Promise<BangsType> {
 
   return bangs;
 }
-
-/**
- * Creates native pop-up for user to download their bangs as a JSON file.
- */
-export async function exportBangs(): Promise<void> {
-  const bangs = await getBangs();
-  const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(bangs))}`;
-  // React probably doesn't like this 😬
-  const a = document.createElement('a');
-  a.setAttribute('href', dataStr);
-  a.setAttribute('download', 'custombangs.json');
-  a.click(); // Blocks until user performs action.
-  a.remove();
-}

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  BangsType, SetBangsType, getDefaultBangs, newBangId,
+  BangsType, SetBangsType, getDefaultBangs, newBangId, saveBangs,
 } from '../../lib/bangs';
 
 interface PropsType {
@@ -9,8 +9,12 @@ interface PropsType {
 }
 
 export default function TopBar(props: PropsType): React.ReactElement {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { bangs, setBangs } = props;
+
+  const save = async (): Promise<void> => {
+    // TODO: Un-highlight save button when this happens.
+    await saveBangs(bangs);
+  };
 
   const addNew = (): void => {
     // TODO: These 2 variables should be user inputs using a popup or something.
@@ -31,6 +35,20 @@ export default function TopBar(props: PropsType): React.ReactElement {
     setBangs(newBangs);
   };
 
+  const importBangs = (): void => {
+    // TODO:
+  };
+
+  const exportBangs = (): void => {
+    const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(bangs))}`;
+    // React probably doesn't like this 😬
+    const a = document.createElement('a');
+    a.setAttribute('href', dataStr);
+    a.setAttribute('download', 'custombangs.json');
+    a.click(); // Blocks until user performs action.
+    a.remove();
+  };
+
   const setDefaults = async (): Promise<void> => {
     const defaultBangs = await getDefaultBangs();
     setBangs(defaultBangs);
@@ -42,10 +60,16 @@ export default function TopBar(props: PropsType): React.ReactElement {
 
   return (
     <div>
-      <button type="button" title="Save the current table">Save</button>
+      <button type="button" title="Save the current table" onClick={save}>Save</button>
       <button type="button" title="Add a new row to the table" onClick={addNew}>Add New</button>
-      <button type="button" title="Import bangs from a file">Import</button>
-      <button type="button" title="Export what is saved, not what's currently in the table">Export</button>
+      <button type="button" title="Import bangs from a file" onClick={importBangs}>Import</button>
+      <button
+        type="button"
+        title="Export what is saved, not what's currently in the table"
+        onClick={exportBangs}
+      >
+        Export
+      </button>
       <button type="button" title="Reset to the default values" onClick={setDefaults}>Reset to Default</button>
       <button type="button" title="Show help page" onClick={openHelp}>Help</button>
     </div>
