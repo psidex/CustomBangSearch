@@ -23,6 +23,20 @@ export default function BangsTable(props: PropsType): React.ReactElement {
     />);
   }
 
+  // We want the render order to be the same every time no matter the changes, so we
+  // sort based on the array key which is also the bang ID.
+  // FIXME: The only downside to this is that new bangs will be randomly placed.
+  // TODO: Maybe store the order and use that instead of sorting on ID.
+  rows.sort((x, y) => {
+    if (x.key === null || y.key === null) {
+      return 0;
+    }
+    if (x.key > y.key) {
+      return 1;
+    }
+    return -1;
+  });
+
   return (
     <table>
       <tr>

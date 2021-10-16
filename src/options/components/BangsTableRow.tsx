@@ -18,6 +18,12 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
   // FIXME: When bang is changed it gets put at bottom of list for some reason.
   const bangChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newBang = e.target.value;
+
+    if (newBang in bangs) {
+      // TODO: Alert user they can't rename to a currently used bang.
+      return;
+    }
+
     const newBangs = { ...bangs };
 
     const oldObj = bangs[bang];

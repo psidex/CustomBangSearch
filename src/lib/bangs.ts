@@ -2,7 +2,7 @@ import browser from 'webextension-polyfill';
 import React from 'react';
 import { nanoid } from 'nanoid';
 
-const defaultJsonFilePath = '../defaults.json';
+const defaultJsonFilePath = '../../defaults.json';
 
 export interface BangsType {
   [key: string]: { id: string, url: string };
