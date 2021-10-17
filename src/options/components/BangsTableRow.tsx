@@ -1,4 +1,5 @@
 import React from 'react';
+import toast from 'react-hot-toast';
 import { BangInfoType, BangsType, SetBangsType } from '../../lib/bangs';
 
 interface PropsType {
@@ -19,7 +20,7 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     const newBang = e.target.value.trim();
 
     if (newBang in bangs || newBang === '') {
-      // TODO: Alert user they can't rename to a currently used bang or nothing.
+      toast.error('Can\'t rename bang to a currently used bang or nothing');
       return;
     }
 

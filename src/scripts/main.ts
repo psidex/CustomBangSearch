@@ -38,7 +38,7 @@ async function processRequest(r: WebRequest.OnBeforeRequestDetailsType): Promise
 
     const bangs = await getBangs();
     const bangObj = bangs[bang];
-    if (bangObj === undefined) {
+    if (bangObj === undefined || bangObj.url.trim() === '') {
       return {};
     }
 

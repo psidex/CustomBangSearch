@@ -61,7 +61,7 @@ yarn buildall
 
 The only things actually required to build this extension from source to
 something that is installable in your browser are `react`, `react-dom`,
-`nanoid`, and `esbuild`.
+`nanoid`, `react-hot-toast`, and `esbuild`.
 
 `web-ext` is used to generate the extension package but it _can_ be done by
 hand.

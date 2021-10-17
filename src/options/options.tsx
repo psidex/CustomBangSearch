@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import { Toaster } from 'react-hot-toast';
 import TopBar from './components/TopBar';
 import { getBangs, getDefaultBangs, BangsType } from '../lib/bangs';
 import BangsTable from './components/BangsTable';
@@ -30,6 +31,7 @@ function App(): React.ReactElement {
     <>
       <TopBar bangs={bangs} setBangs={setBangs} unsavedChanges={unsavedChanges} setUnsavedChanges={setUnsavedChanges} />
       <BangsTable bangs={bangs} setBangs={setBangs} setUnsavedChanges={setUnsavedChanges} />
+      <Toaster />
     </>
   );
 }

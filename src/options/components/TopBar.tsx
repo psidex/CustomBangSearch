@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import toast from 'react-hot-toast';
 import {
   BangsType, SetBangsType, getDefaultBangs, newBangId, saveBangs, tryFileToBangs,
 } from '../../lib/bangs';
@@ -19,6 +20,7 @@ export default function TopBar(props: PropsType): React.ReactElement {
   const save = async (): Promise<void> => {
     await saveBangs(bangs);
     setUnsavedChanges(false);
+    toast.success('Saved bangs');
   };
 
   const addNew = (): void => {
@@ -59,7 +61,7 @@ export default function TopBar(props: PropsType): React.ReactElement {
       setBangs(combined);
       setUnsavedChanges(true);
     } else {
-      // TODO: Alert user of invalid import.
+      toast.error('Invalid file, unable to import');
     }
   };
 
