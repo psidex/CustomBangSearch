@@ -38,8 +38,20 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
   };
 
   const trashBtnlicked = (): void => {
-    const newBangs = { ...bangs };
-    delete newBangs[bang];
+    const newBangs: BangsType = {};
+
+    const bangsWithRemoved = { ...bangs };
+    delete bangsWithRemoved[bang];
+
+    // pos-1 for every pos above deleted's pos
+    for (const [bangName, bangObj] of Object.entries(bangsWithRemoved)) {
+      newBangs[bangName] = {
+        id: bangObj.id,
+        url: bangObj.url,
+        pos: bangObj.pos > bangInfo.pos ? bangObj.pos - 1 : bangObj.pos,
+      };
+    }
+
     setBangs(newBangs);
   };
 

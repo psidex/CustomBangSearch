@@ -20,6 +20,53 @@ export interface BangsTypeOld {
 
 export type SetBangsType = React.Dispatch<React.SetStateAction<BangsType>>;
 
+function isKeyedObj(arg: any): arg is object {
+  return arg !== undefined && arg !== null && typeof arg === 'object' && Object.keys(arg).length > 0;
+}
+
+/**
+ * A user-defined type guard that tries to determine if arg is of BangsType.
+ */
+export function isBangsType(arg: any): arg is BangsType {
+  if (!isKeyedObj(arg)) {
+    return false;
+  }
+  for (const [key, value] of Object.entries(arg)) {
+    if (typeof key !== 'string') {
+      return false;
+    }
+    if (isKeyedObj(value)) {
+      if (!('id' in value) || !('url' in value) || !('pos' in value)) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Converts a file (from an input element) to a BangsType, or null.
+ */
+export async function tryFileToBangs(file: File): Promise<BangsType | null> {
+  if (file.type !== 'application/json') {
+    return null;
+  }
+
+  let obj = {};
+  try {
+    obj = JSON.parse(await file.text());
+  } catch (e) {
+    return null;
+  }
+
+  if (!isBangsType(obj)) {
+    return null;
+  }
+  return obj;
+}
+
 /**
  * Generates a new uniqe bang ID.
  */

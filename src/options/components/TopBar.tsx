@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
-  BangsType, SetBangsType, getDefaultBangs, newBangId, saveBangs,
+  BangsType, SetBangsType, getDefaultBangs, newBangId, saveBangs, tryFileToBangs,
 } from '../../lib/bangs';
 
 interface PropsType {
@@ -10,6 +10,7 @@ interface PropsType {
 
 export default function TopBar(props: PropsType): React.ReactElement {
   const { bangs, setBangs } = props;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const save = async (): Promise<void> => {
     // TODO: Un-highlight save button when this happens.
@@ -36,7 +37,24 @@ export default function TopBar(props: PropsType): React.ReactElement {
   };
 
   const importBangs = (): void => {
-    // TODO:
+    if (fileInputRef.current !== null) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const fileUpload = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    if (e.target.files === null) {
+      return;
+    }
+
+    const newBangs = await tryFileToBangs(e.target.files[0]);
+    if (newBangs !== null) {
+      // TODO: Perhaps in the future we let user choose if they want to combine or overwrite?
+      const combined = { ...bangs, ...newBangs };
+      setBangs(combined);
+    } else {
+      // TODO: Alert user of invalid import.
+    }
   };
 
   const exportBangs = (): void => {
@@ -63,11 +81,16 @@ export default function TopBar(props: PropsType): React.ReactElement {
       <button type="button" title="Save the current table" onClick={save}>Save</button>
       <button type="button" title="Add a new row to the table" onClick={addNew}>Add New</button>
       <button type="button" title="Import bangs from a file" onClick={importBangs}>Import</button>
-      <button
-        type="button"
-        title="Export what is saved, not what's currently in the table"
-        onClick={exportBangs}
-      >
+      <input
+        // TODO: Write some comments about using useRef and ref= to get element reference.
+        ref={fileInputRef}
+        id="importFileInput"
+        type="file"
+        accept="application/json"
+        style={{ display: 'none' }}
+        onChange={fileUpload}
+      />
+      <button type="button" title="Export bangs to a file" onClick={exportBangs}>
         Export
       </button>
       <button type="button" title="Reset to the default values" onClick={setDefaults}>Reset to Default</button>
