@@ -8,7 +8,7 @@
     "buildoptions": "tsc -noEmit && node ./esbuild.config.js -o",
     "buildmain": "tsc -noEmit && node ./esbuild.config.js -m",
     "buildcode": "tsc -noEmit && node ./esbuild.config.js -o -m",
-    "buildext": "npx web-ext build --overwrite-dest",
+    "buildext": "npx web-ext build --overwrite-dest --ignore-files ./*.lock ./src/lib ./src/scripts/*.ts ./src/options/*.tsx ./src/options/components",
     "buildall": "yarn buildcode && yarn buildext",
     "runext": "npx web-ext run --browser-console --start-url about:addons"
   },

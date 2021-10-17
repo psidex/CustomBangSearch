@@ -1,13 +1,5 @@
 # Custom Bang Search
 
-TODO: Update this README. TODO: Close Issue and add to README / help about using
-" :: " to sep multi urls
-
-TODO: In packagejson make each tsc -noEmit call specific to thing built, not
-just everything
-
-TODO: Does web-ext build add defaults.json and other surplus files to the zip?
-
 [![add-on version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![add-on users](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![buymeacoffee donate link](https://img.shields.io/badge/Donate-Beer-FFDD00.svg?style=flat&colorA=35383d)](https://www.buymeacoffee.com/psidex)
@@ -30,12 +22,13 @@ to!_
 - Go to the extensions options page to change the bangs and where they go
 - Click on any cell in the table to edit it; the bang is what goes after the !
   (e.g. !m) and the url is where it takes you
-- Use '%s' to show where the search query should be inserted (see the defaults
+- Use `%s` to show where the search query should be inserted (see the defaults
   for example)
-- Cells with no text in will be highlighted red and will be removed upon saving
 - No changes will be made unless you click the save button, this includes
   importing and resetting to defaults
 - Bangs are case-sensitive, so you can have 'm' and 'M'
+- **You can open multiple URLs with one bang by using `" :: "` (space, double
+  colon, space) to separate them (see `ea` in the default bangs)**
 
 ## How it works
 
@@ -44,8 +37,8 @@ browsers set search engine. This extension intercepts that request, and if the
 query matches a bang (e.g. `!m new york`) it will tell the browser to go the url
 set to that bang with the given query, instead of your original search.
 
-This has the side effect of working if you type a bang into the actual search
-engine as well.
+This has the side effect of (sometimes) working if you type a bang into the
+actual search engine as well.
 
 ## Development
 
@@ -53,7 +46,8 @@ engine as well.
 git clone https://github.com/psidex/CustomBangSearch.git
 cd CustomBangSearch
 yarn install
-yarn buildall
+yarn buildcode
+yarn buildext
 # You should now have a directory called "web-ext-artifacts" that contains the built extension
 ```
 
