@@ -4,6 +4,7 @@ import { BangInfoType, BangsType, SetBangsType } from '../../lib/bangs';
 interface PropsType {
   bangs: BangsType
   setBangs: SetBangsType
+  setUnsavedChanges: React.Dispatch<React.SetStateAction<boolean>>
   // Specific to this row:
   bang: string
   bangInfo: BangInfoType
@@ -11,7 +12,7 @@ interface PropsType {
 
 export default function BangsTableRow(props: PropsType): React.ReactElement {
   const {
-    bangs, setBangs, bang, bangInfo,
+    bangs, setBangs, setUnsavedChanges, bang, bangInfo,
   } = props;
 
   const bangChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -29,12 +30,14 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     delete newBangs[bang];
     newBangs[newBang] = oldObj;
     setBangs(newBangs);
+    setUnsavedChanges(true);
   };
 
   const urlChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newBangs = { ...bangs };
     newBangs[bang] = { id: bangInfo.id, url: e.target.value, pos: bangInfo.pos };
     setBangs(newBangs);
+    setUnsavedChanges(true);
   };
 
   const trashBtnlicked = (): void => {
@@ -53,6 +56,7 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     }
 
     setBangs(newBangs);
+    setUnsavedChanges(true);
   };
 
   // TODO: Update CSS to support new usage of text inputs.

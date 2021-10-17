@@ -5,10 +5,13 @@ import BangsTableRow from './BangsTableRow';
 interface PropsType {
   bangs: BangsType
   setBangs: SetBangsType
+  setUnsavedChanges: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function BangsTable(props: PropsType): React.ReactElement {
-  const { bangs, setBangs } = props;
+  const {
+    bangs, setBangs, setUnsavedChanges,
+  } = props;
 
   const rows = [];
 
@@ -19,6 +22,7 @@ export default function BangsTable(props: PropsType): React.ReactElement {
       setBangs={setBangs}
       bangInfo={bangObj}
       bang={bang}
+      setUnsavedChanges={setUnsavedChanges}
     />);
   }
 

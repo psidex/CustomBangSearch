@@ -10,8 +10,7 @@ function objectIsEmpty(obj: object): Boolean {
 
 function App(): React.ReactElement {
   const [bangs, setBangs] = useState<BangsType>({});
-
-  // TODO: When setBangs is used, highlight save button somehow.
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   useEffect(() => {
     // Async useEffect: https://stackoverflow.com/a/53572588/6396652
@@ -29,8 +28,8 @@ function App(): React.ReactElement {
 
   return (
     <>
-      <TopBar bangs={bangs} setBangs={setBangs} />
-      <BangsTable bangs={bangs} setBangs={setBangs} />
+      <TopBar bangs={bangs} setBangs={setBangs} unsavedChanges={unsavedChanges} setUnsavedChanges={setUnsavedChanges} />
+      <BangsTable bangs={bangs} setBangs={setBangs} setUnsavedChanges={setUnsavedChanges} />
     </>
   );
 }
