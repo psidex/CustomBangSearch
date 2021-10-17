@@ -28,15 +28,15 @@ export default function TopBar(props: PropsType): React.ReactElement {
 
     const newId = newBangId();
 
-    let largestPost = 1;
+    let largestPos = 1;
     for (const [, bangObj] of Object.entries(bangs)) {
-      if (bangObj.pos > largestPost) {
-        largestPost = bangObj.pos;
+      if (bangObj.pos > largestPos) {
+        largestPos = bangObj.pos;
       }
     }
 
     const newBangs = { ...bangs };
-    newBangs[newBang] = { id: newId, url: newUrl, pos: largestPost + 1 };
+    newBangs[newBang] = { id: newId, url: newUrl, pos: largestPos + 1 };
     setBangs(newBangs);
     setUnsavedChanges(true);
   };

@@ -59,12 +59,11 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     setUnsavedChanges(true);
   };
 
-  // TODO: Update CSS to support new usage of text inputs.
   return (
     <tr>
       <td><input type="text" value={bang} onChange={bangChanged} /></td>
       <td><input type="text" value={bangInfo.url} onChange={urlChanged} /></td>
-      <td><button type="button" title="Trash" onClick={trashBtnlicked}>Trash</button></td>
+      <td><button type="button" title="Trash" onClick={trashBtnlicked}>🗑</button></td>
     </tr>
   );
 }

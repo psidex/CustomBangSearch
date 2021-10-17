@@ -1,13 +1,12 @@
 # Custom Bang Search
 
-TODO: Update this README.
+TODO: Update this README. TODO: Close Issue and add to README / help about using
+" :: " to sep multi urls
 
 TODO: In packagejson make each tsc -noEmit call specific to thing built, not
 just everything
 
 TODO: Does web-ext build add defaults.json and other surplus files to the zip?
-
-TODO: Close Issue and add to README / help about using " :: " to sep multi urls
 
 [![add-on version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![add-on users](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)

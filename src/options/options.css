@@ -1,9 +1,14 @@
-table td:nth-child(1) {
-    text-align: center;
+table td:nth-child(1) > input {
+    width: 4em;
 }
 
-table th:nth-child(1) {
-    text-align: center;
+table td:nth-child(2) > input {
+    width: 34em;
+}
+
+table td:nth-child(3) > button {
+    padding-left: 0.75em;
+    padding-right: 0.75em;
 }
 
 button {
