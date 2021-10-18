@@ -4,31 +4,42 @@
 [![add-on users](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![buymeacoffee donate link](https://img.shields.io/badge/Donate-Beer-FFDD00.svg?style=flat&colorA=35383d)](https://www.buymeacoffee.com/psidex)
 
-[Install from the add-on page](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
+[![Firefox Add-On link](./images/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
+[![Chrome Web Store link](./images/chrome.png)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 
-A Firefox add-on that allows you to use custom bangs (e.g. !a for searching
-Amazon) inside the search bar
+A web extension that allows you to use DuckDuckGo-like custom bangs directly
+from the address bar.
+
+This currently only works if you have Google, Bing, DuckDuckGo, or Qwant set as
+your browsers search engine.
+
+## Demo
+
+![search demo](./images/demo_search.png)
+
+![result of search demo](./images/demo_result.png)
 
 [Demo video](https://youtu.be/q41XyWYLEUM)
 
-Currently only works if you have Google, Bing, DuckDuckGo, or Qwant set as your
-browsers search engine.
-
 ## Options page
-
-_The Amazon, Ebay, and Etsy defaults are UK URLs so change those if you need
-to!_
 
 - Go to the extensions options page to change the bangs and where they go
 - Click on any cell in the table to edit it; the bang is what goes after the !
   (e.g. !m) and the url is where it takes you
-- Use `%s` to show where the search query should be inserted (see the defaults
-  for example)
+- Use `%s` in the URL to show where the search query should be inserted
 - No changes will be made unless you click the save button, this includes
   importing and resetting to defaults
 - Bangs are case-sensitive, so you can have 'm' and 'M'
 - **You can open multiple URLs with one bang by using `" :: "` (space, double
   colon, space) to separate them (see `ea` in the default bangs)**
+
+### Defaults
+
+Take a look at the default bangs if you need some help understanding how to
+write the URLs.
+
+_The Amazon, Ebay, and Etsy defaults are UK URLs so change those if you need
+to!_
 
 ## How it works
 
@@ -42,12 +53,14 @@ actual search engine as well.
 
 ## Development
 
+### Building
+
 ```bash
 git clone https://github.com/psidex/CustomBangSearch.git
 cd CustomBangSearch
 yarn install
-yarn buildcode
-yarn buildext
+yarn buildcode # .ts, tsx -> .js
+yarn buildext # creates extension .zip file
 # You should now have a directory called "web-ext-artifacts" that contains the built extension
 ```
 
@@ -73,5 +86,3 @@ files, so make sure they are built before you build the extension package.
 - [DuckDuckGo bangs](https://duckduckgo.com/bang)
 - [!Bang Quick Search](https://addons.mozilla.org/en-US/firefox/addon/bang-quick-search/)
 - [Water.css](https://github.com/kognise/water.css)
-- [Feather Icons](https://github.com/feathericons/feather)
-- [W3Schools How To Snackbar / Toast](https://www.w3schools.com/howto/howto_js_snackbar.asp)
