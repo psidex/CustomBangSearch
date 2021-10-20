@@ -1,84 +1,109 @@
 import browser, { WebRequest } from 'webextension-polyfill';
-import { saveBangs, getBangs, getDefaultBangs } from '../lib/bangs';
+import {
+  saveBangs, getBangs, getDefaultBangs, BangsType, isBangsType,
+} from '../lib/bangs';
+
+// NOTE: Chrome doesn't allow us to use an async function for an onBeforeRequest
+//  which means we cant call getBangs during. To solve this we save a cache here and
+//  then occasionally update it.
+let bangsCached: BangsType = {};
 
 /**
- * Returns the search query from the given search url (must use the q param).
- * If there is no query, returns an empty string.
+ * Returns the search query text from the given search url, remove the '!'.
+ * The passed URL must use the q param.
+ * If there is no query or it is invalid, returns an empty string.
+ * e.g. ('!m new york') => {'m new york'}
  */
 function queryFromSearchUrl(urlString: string): string {
-  const query = (new URLSearchParams(urlString)).get('q');
-  if (query === null) { return ''; }
-  return query;
+  const query = (new URL(urlString)).searchParams.get('q')?.trim();
+  if (query === undefined || query === null || !query.startsWith('!')) {
+    return '';
+  }
+  // substr(1) removes the first character, the '!'.
+  return query.substr(1);
 }
 
 /**
- * Construct a URL to send the user to given the user written bang URL and query.
+ * Construct a URL to send the user to given the bang URL and query text.
  */
-function constructRedirect(bangUrl: string, query: string): string {
-  // Encodes the query and then replace all "%s" in the bang with the query.
-  // encodeURIComponent ensures that symbols (e.g. +:/) get encoded (so when the user
-  // goes to where they're going the symbols aren't treated as part of the actual URL)
-  return bangUrl.replace(/%s/g, encodeURIComponent(query));
+function constructRedirect(bangUrl: string, queryText: string): string {
+  if (queryText === '') {
+    return bangUrl;
+  }
+  return bangUrl.replace(/%s/g, encodeURIComponent(queryText));
 }
 
 /**
  * Takes request details from an onBeforeRequest event and send user to chosen bang.
  */
-async function processRequest(r: WebRequest.OnBeforeRequestDetailsType): Promise<WebRequest.BlockingResponse> {
-  let query = queryFromSearchUrl(r.url);
+function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.BlockingResponse {
+  const query = queryFromSearchUrl(r.url);
 
-  if (query !== '' && query.startsWith('!')) {
-    // Remove the first character (the !).
-    query = query.substr(1);
+  if (query === '') {
+    // Do nothing.
+    return {};
+  }
 
+  let bang: string;
+  let queryText: string;
+
+  if (query.includes(' ')) {
     const firstSpaceIndex = query.indexOf(' ');
+    bang = query.substring(0, firstSpaceIndex);
+    queryText = query.substr(firstSpaceIndex + 1).trim();
+  } else {
+    bang = query;
+    queryText = '';
+  }
 
-    // Get everything before the first space, which should be our bang.
-    const bang = query.substring(0, firstSpaceIndex);
+  const bangObj = bangsCached[bang];
+  if (bangObj === undefined || bangObj.url.trim() === '') {
+    return {};
+  }
 
-    const bangs = await getBangs();
-    const bangObj = bangs[bang];
-    if (bangObj === undefined || bangObj.url.trim() === '') {
-      return {};
+  // Users can use a " :: " to chain URLs.
+  if (bangObj.url.includes(' :: ')) {
+    const bangUrls = bangObj.url.split(' :: ');
+    // Open all URLs in new tab and then redirect the current tab to the first in the array.
+    for (let i = 1; i < bangUrls.length; i++) {
+      browser.tabs.create({ url: constructRedirect(bangUrls[i], queryText) });
     }
-
-    // Get everything after the first space, i.e. our search.
-    query = query.substr(firstSpaceIndex + 1);
-
-    // Users can use a " :: " to chain URLs.
-    if (bangObj.url.includes(' :: ')) {
-      const bangUrls = bangObj.url.split(' :: ');
-      // Open all URLs in new tab and then redirect the current tab to the first in the array.
-      for (let i = 1; i < bangUrls.length; i++) {
-        browser.tabs.create({ url: constructRedirect(bangUrls[i], query) });
-      }
-      return {
-        redirectUrl: constructRedirect(bangUrls[0], query),
-      };
-    }
-
-    // Otherwise it's just one URL so redirect there.
     return {
-      redirectUrl: constructRedirect(bangObj.url, query),
+      redirectUrl: constructRedirect(bangUrls[0], queryText),
     };
   }
 
-  // Do nothing.
-  return {};
+  // Otherwise it's just one URL so redirect there.
+  return {
+    redirectUrl: constructRedirect(bangObj.url, queryText),
+  };
 }
 
 /**
- * Checks for saved data and if not found, sets it to the defaults.
+ * Sets our cached data.
  */
-async function setDefaultsIfNoneSaved(): Promise<void> {
-  const { bangs } = await browser.storage.sync.get('bangs');
+function updateCache(newBangs: BangsType): void {
+  bangsCached = newBangs;
+}
+
+/**
+ * Sets our cached data, also checks for saved data and, if not found, sets it to the defaults.
+ */
+async function updateCacheFromSync(): Promise<void> {
+  let bangs = await getBangs();
   if (bangs === undefined) {
-    const defaultBangs = await getDefaultBangs();
-    saveBangs(defaultBangs);
+    bangs = await getDefaultBangs();
+    saveBangs(bangs);
   }
+  updateCache(bangs);
 }
 
 function main(): void {
+  // Make sure we have some save data.
+  updateCacheFromSync();
+  browser.runtime.onInstalled.addListener(updateCacheFromSync);
+  browser.runtime.onStartup.addListener(updateCacheFromSync);
+
   browser.webRequest.onBeforeRequest.addListener(
     processRequest,
     {
@@ -92,9 +117,17 @@ function main(): void {
     ['blocking'],
   );
 
-  // Make sure we have some save data.
-  browser.runtime.onInstalled.addListener(setDefaultsIfNoneSaved);
-  browser.runtime.onStartup.addListener(setDefaultsIfNoneSaved);
+  // Receive bang updates from the options page.
+  browser.runtime.onMessage.addListener(async (request): Promise<void> => {
+    const { bangs } = request;
+    if (isBangsType(bangs)) {
+      // Update browser storage and our cache.
+      await saveBangs(bangs);
+      updateCache(bangs);
+      return Promise.resolve();
+    }
+    return Promise.reject();
+  });
 }
 
 main();

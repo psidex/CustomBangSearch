@@ -1,13 +1,14 @@
 import React, { useRef } from 'react';
 import toast from 'react-hot-toast';
+import browser from 'webextension-polyfill';
 import {
-  BangsType, SetBangsType, getDefaultBangs, newBangId, saveBangs, tryFileToBangs,
+  BangsType, SetBangsType, getDefaultBangs, newBangId, tryFileToBangs,
 } from '../../lib/bangs';
 
 interface PropsType {
   bangs: BangsType
   setBangs: SetBangsType
-  unsavedChanges: Boolean
+  unsavedChanges: boolean
   setUnsavedChanges: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -18,14 +19,22 @@ export default function TopBar(props: PropsType): React.ReactElement {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const save = async (): Promise<void> => {
-    await saveBangs(bangs);
-    setUnsavedChanges(false);
-    toast.success('Saved bangs');
+    // We don't actually save the bangs here, we just pass them to the bg script which will call saveBangs.
+    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage#examples
+    browser.runtime.sendMessage({ bangs }).then(
+      () => {
+        toast.success('Saved bangs');
+        setUnsavedChanges(false);
+      },
+      () => {
+        toast.error('Failed to save bangs');
+      },
+    );
   };
 
   const addNew = (): void => {
     // TODO: These 2 variables should be user inputs using a popup or something.
-    const newBang = 'newbang';
+    const newBang = 'new';
     const newUrl = 'https://example.com?q=%s';
 
     const newId = newBangId();

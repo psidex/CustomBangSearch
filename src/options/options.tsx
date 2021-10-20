@@ -5,13 +5,13 @@ import TopBar from './components/TopBar';
 import { getBangs, getDefaultBangs, BangsType } from '../lib/bangs';
 import BangsTable from './components/BangsTable';
 
-function objectIsEmpty(obj: object): Boolean {
+function objectIsEmpty(obj: object): boolean {
   return Object.keys(obj).length === 0;
 }
 
 function App(): React.ReactElement {
   const [bangs, setBangs] = useState<BangsType>({});
-  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
 
   useEffect(() => {
     // Async useEffect: https://stackoverflow.com/a/53572588/6396652

@@ -1,7 +1,7 @@
 {
   "name": "custombangsearch",
-  "version": "0.7",
-  "description": "A Firefox add-on that allows you to use custom bangs (e.g. !a for searching Amazon) inside the search bar",
+  "version": "0.8",
+  "description": "A web extension that allows you to use DuckDuckGo-like custom bangs directly from the address bar",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -15,11 +15,14 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
   const {
     bangs, setBangs, setUnsavedChanges, bang, bangInfo,
   } = props;
+  // const { bangCss, setBangCss } = useState<object>({});
 
   const bangChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newBang = e.target.value.trim();
 
     if (newBang in bangs || newBang === '') {
+      // Don't do this now, instead highlight the cell red and then when user tried to save,
+      // tell them that its illegal.
       toast.error('Can\'t rename bang to a currently used bang or nothing');
       return;
     }
