@@ -19,6 +19,13 @@ export default function TopBar(props: PropsType): React.ReactElement {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const save = async (): Promise<void> => {
+    for (const [bang] of Object.entries(bangs)) {
+      if (bang.trim() === '') {
+        toast.error('Cannot save empty bang');
+        return;
+      }
+    }
+
     // We don't actually save the bangs here, we just pass them to the bg script which will call saveBangs.
     // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage#examples
     browser.runtime.sendMessage({ bangs }).then(
@@ -94,7 +101,7 @@ export default function TopBar(props: PropsType): React.ReactElement {
     window.open('https://github.com/psidex/CustomBangSearch#options-page');
   };
 
-  const css = unsavedChanges ? { backgroundColor: 'red' } : {};
+  const css = unsavedChanges ? { backgroundColor: 'darkblue' } : {};
 
   return (
     <div>

@@ -63,7 +63,7 @@ actual search engine as well.
 git clone https://github.com/psidex/CustomBangSearch.git
 cd CustomBangSearch
 yarn install
-yarn buildcode # .ts, tsx -> .js
+yarn buildcode # .ts, .tsx -> .js
 yarn buildext # creates extension .zip file
 # You should now have a directory called "web-ext-artifacts" that contains the built extension
 ```

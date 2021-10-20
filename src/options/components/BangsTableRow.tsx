@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { BangInfoType, BangsType, SetBangsType } from '../../lib/bangs';
 
@@ -15,16 +15,20 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
   const {
     bangs, setBangs, setUnsavedChanges, bang, bangInfo,
   } = props;
-  // const { bangCss, setBangCss } = useState<object>({});
+  const [bangCss, setBangCss] = useState<object>({});
 
   const bangChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newBang = e.target.value.trim();
 
-    if (newBang in bangs || newBang === '') {
-      // Don't do this now, instead highlight the cell red and then when user tried to save,
-      // tell them that its illegal.
-      toast.error('Can\'t rename bang to a currently used bang or nothing');
+    if (newBang in bangs) {
+      toast.error('Can\'t rename bang to a currently used bang');
       return;
+    }
+
+    if (newBang in bangs || newBang === '') {
+      setBangCss({ backgroundColor: 'red' });
+    } else {
+      setBangCss({});
     }
 
     const newBangs = { ...bangs };
@@ -65,7 +69,7 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
 
   return (
     <tr>
-      <td><input type="text" value={bang} onChange={bangChanged} /></td>
+      <td><input type="text" value={bang} onChange={bangChanged} style={bangCss} /></td>
       <td><input type="text" value={bangInfo.url} onChange={urlChanged} /></td>
       <td><button type="button" title="Trash" onClick={trashBtnlicked}>🗑</button></td>
     </tr>
