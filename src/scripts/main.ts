@@ -9,21 +9,6 @@ import {
 let bangsCached: BangsType = {};
 
 /**
- * Returns the search query text from the given search url, remove the '!'.
- * The passed URL must use the q param.
- * If there is no query or it is invalid, returns an empty string.
- * e.g. ('!m new york') => {'m new york'}
- */
-function queryFromSearchUrl(urlString: string): string {
-  const query = (new URL(urlString)).searchParams.get('q')?.trim();
-  if (query === undefined || query === null || !query.startsWith('!')) {
-    return '';
-  }
-  // substr(1) removes the first character, the '!'.
-  return query.substr(1);
-}
-
-/**
  * Construct a URL to send the user to given the bang URL and query text.
  */
 function constructRedirect(bangUrl: string, queryText: string): string {
@@ -37,24 +22,17 @@ function constructRedirect(bangUrl: string, queryText: string): string {
  * Takes request details from an onBeforeRequest event and send user to chosen bang.
  */
 function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.BlockingResponse {
-  const query = queryFromSearchUrl(r.url);
+  // Get query text or empty string
+  let queryText = (new URL(r.url)).searchParams.get('q')?.trim() ?? '';
+  if (!queryText) { return {}; }
 
-  if (query === '') {
-    // Do nothing.
-    return {};
-  }
-
-  let bang: string;
-  let queryText: string;
-
-  if (query.includes(' ')) {
-    const firstSpaceIndex = query.indexOf(' ');
-    bang = query.substring(0, firstSpaceIndex);
-    queryText = query.substr(firstSpaceIndex + 1).trim();
-  } else {
-    bang = query;
-    queryText = '';
-  }
+  // Cut first bang from query text
+  let bang = '';
+  queryText = queryText.replace(/!\w+/, (substr) => {
+    bang = substr.substring(1);
+    return '';
+  });
+  if (!bang) { return {}; }
 
   const bangObj = bangsCached[bang];
   if (bangObj === undefined || bangObj.url.trim() === '') {
@@ -62,20 +40,13 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
   }
 
   // Users can use a " :: " to chain URLs.
-  if (bangObj.url.includes(' :: ')) {
-    const bangUrls = bangObj.url.split(' :: ');
-    // Open all URLs in new tab and then redirect the current tab to the first in the array.
-    for (let i = 1; i < bangUrls.length; i++) {
-      browser.tabs.create({ url: constructRedirect(bangUrls[i], queryText) });
-    }
-    return {
-      redirectUrl: constructRedirect(bangUrls[0], queryText),
-    };
+  const bangUrls = bangObj.url.split(' :: ');
+  // Open following URLs in new tabs and then redirect the current tab to the first in the array.
+  for (let i = 1; i < bangUrls.length; i++) {
+    browser.tabs.create({ url: constructRedirect(bangUrls[i], queryText) });
   }
-
-  // Otherwise it's just one URL so redirect there.
   return {
-    redirectUrl: constructRedirect(bangObj.url, queryText),
+    redirectUrl: constructRedirect(bangUrls[0], queryText),
   };
 }
 
