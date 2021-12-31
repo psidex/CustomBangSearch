@@ -13,7 +13,7 @@ let bangsCached: BangsType = {};
  */
 function constructRedirect(bangUrl: string, queryText: string): string {
   if (queryText === '') {
-    return bangUrl;
+    return (new URL(bangUrl)).origin;
   }
   return bangUrl.replace(/%s/g, encodeURIComponent(queryText));
 }
