@@ -28,9 +28,11 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
 
   // Cut first bang from query text
   let bang = '';
-  queryText = queryText.replace(/!\w+/, (substr) => {
-    bang = substr.substring(1);
-    return '';
+  queryText = queryText.replace(/(?:^\s*|(\b)\s+)!(\w+)(?:\s+(\b)|\s*$)/, (_, leftBoundary, gBang, rightBoundary): string => {
+    bang = gBang;
+    const wordToLeft = leftBoundary !== undefined;
+    const wordToRight = rightBoundary !== undefined;
+    return wordToRight && wordToLeft ? ' ' : '';
   });
   if (!bang) { return {}; }
 
