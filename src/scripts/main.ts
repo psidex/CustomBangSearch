@@ -22,8 +22,22 @@ function constructRedirect(bangUrl: string, queryText: string): string {
  * Takes request details from an onBeforeRequest event and send user to chosen bang.
  */
 function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.BlockingResponse {
+  if (r.type !== 'main_frame') {
+    return {};
+  }
+
   // Get query text or empty string
-  let queryText = (new URL(r.url)).searchParams.get('q')?.trim() ?? '';
+  const url = new URL(r.url);
+  let queryText = url.searchParams.get('q')?.trim() ?? '';
+
+  if (url.hostname.match(/^(.*\.)?startpage.com/gi)) {
+    if (r.method === 'POST') {
+      queryText = r.requestBody?.formData?.query?.[0].trim() ?? '';
+    } else if (r.method === 'GET') {
+      queryText = url.searchParams.get('query')?.trim() ?? '';
+    }
+  }
+
   if (!queryText) { return {}; }
 
   // Cut first bang from query text
@@ -47,9 +61,17 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
   for (let i = 1; i < bangUrls.length; i++) {
     browser.tabs.create({ url: constructRedirect(bangUrls[i], queryText) });
   }
-  return {
-    redirectUrl: constructRedirect(bangUrls[0], queryText),
-  };
+
+  let res: WebRequest.BlockingResponse;
+
+  if (r.method === 'GET') {
+    res = { redirectUrl: constructRedirect(bangUrls[0], queryText) };
+  } else {
+    browser.tabs.update(r.tabId, { url: constructRedirect(bangUrls[0], queryText) });
+    res = { cancel: true };
+  }
+
+  return res;
 }
 
 /**
@@ -85,9 +107,10 @@ function main(): void {
         '*://*.bing.com/*',
         '*://*.duckduckgo.com/*',
         '*://*.qwant.com/*',
+        '*://*.startpage.com/*',
       ],
     },
-    ['blocking'],
+    ['blocking', 'requestBody'],
   );
 
   // Receive bang updates from the options page.

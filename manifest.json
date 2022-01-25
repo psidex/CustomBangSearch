@@ -11,6 +11,7 @@
     "*://*.bing.com/*",
     "*://*.duckduckgo.com/*",
     "*://*.qwant.com/*",
+    "*://*.startpage.com/*",
     "webRequest",
     "webRequestBlocking",
     "storage"

@@ -113,7 +113,7 @@ export async function getBangs(): Promise<BangsType> {
   let { bangs } = await browser.storage.sync.get('bangs');
 
   // Check the first object entry. Not super efficient but whatever.
-  for (const [, value] of Object.entries(bangs)) {
+  for (const [, value] of Object.entries(bangs ?? {})) {
     if (typeof value === 'string') {
       // The value is a string so it's old and needs converting.
       bangs = convertLegacyBangs(bangs);
