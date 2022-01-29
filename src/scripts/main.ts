@@ -30,6 +30,7 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
   const url = new URL(r.url);
   let queryText = url.searchParams.get('q')?.trim() ?? '';
 
+  // Startpage uses a POST request so extract the query from the formdata
   if (url.hostname.match(/^(.*\.)?startpage.com/gi)) {
     if (r.method === 'POST') {
       queryText = r.requestBody?.formData?.query?.[0].trim() ?? '';
@@ -40,7 +41,7 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
 
   if (!queryText) { return {}; }
 
-  // Cut first bang from query text
+  // Cut first bang from query text, it can be anywhere in the string
   let bang = '';
   queryText = queryText.replace(/(?:^\s*|(\b)\s+)!(\w+)(?:\s+(\b)|\s*$)/, (_, leftBoundary, gBang, rightBoundary): string => {
     bang = gBang;
@@ -57,16 +58,20 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
 
   // Users can use a " :: " to chain URLs.
   const bangUrls = bangObj.url.split(' :: ');
-  // Open following URLs in new tabs and then redirect the current tab to the first in the array.
+
+  // Open all except the first URLs in new tabs
   for (let i = 1; i < bangUrls.length; i++) {
     browser.tabs.create({ url: constructRedirect(bangUrls[i], queryText) });
   }
 
+  // Finally redirect the current tab to the first in the array.
   let res: WebRequest.BlockingResponse;
 
   if (r.method === 'GET') {
     res = { redirectUrl: constructRedirect(bangUrls[0], queryText) };
   } else {
+    // If we're handling a startpage POST request, we need to tell the tab where to go,
+    // as redirecting the POST would not change the tabs location.
     browser.tabs.update(r.tabId, { url: constructRedirect(bangUrls[0], queryText) });
     res = { cancel: true };
   }
@@ -99,6 +104,7 @@ function main(): void {
   browser.runtime.onInstalled.addListener(updateCacheFromSync);
   browser.runtime.onStartup.addListener(updateCacheFromSync);
 
+  // requestBody is required to see the startpage POST request data.
   browser.webRequest.onBeforeRequest.addListener(
     processRequest,
     {
