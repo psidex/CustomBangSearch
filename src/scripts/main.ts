@@ -43,12 +43,11 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
 
   // Cut first bang from query text, it can be anywhere in the string
   let bang = '';
-  queryText = queryText.replace(/(?:^\s*|(\b)\s+)!(\w+)(?:\s+(\b)|\s*$)/, (_, leftBoundary, gBang, rightBoundary): string => {
-    bang = gBang;
-    const wordToLeft = leftBoundary !== undefined;
-    const wordToRight = rightBoundary !== undefined;
-    return wordToRight && wordToLeft ? ' ' : '';
+  queryText = queryText.replace(/(^!\S+ | !\S+|^!\S+$)/, (match): string => {
+    bang = match.trim().replace('!', '');
+    return '';
   });
+
   if (!bang) { return {}; }
 
   const bangObj = bangsCached[bang];

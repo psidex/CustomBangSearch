@@ -6,16 +6,13 @@
 [![Chrome extension version](https://img.shields.io/chrome-web-store/v/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 [![Chrome extension rating](https://img.shields.io/chrome-web-store/rating/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 [![Chrome extension user count](https://img.shields.io/chrome-web-store/users/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
-[![Donate link](https://img.shields.io/badge/Donate-Beer-FFDD00.svg?style=flat&colorA=35383d)](https://www.buymeacoffee.com/psidex)
 
 [![Firefox Add-On link](./images/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![Chrome Web Store link](./images/chrome.png)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 
-A web extension that allows you to use DuckDuckGo-like custom bangs directly
-from the address bar.
+A web extension that allows you to use DuckDuckGo-like custom bangs directly from the address bar.
 
-This currently only works if you have Google, Bing, DuckDuckGo, or Qwant set as
-your browsers search engine.
+This currently only works if you have Google, Bing, DuckDuckGo, Qwant, or startpage set as your browsers search engine.
 
 ## Demo
 
@@ -39,11 +36,9 @@ your browsers search engine.
 
 ### Defaults
 
-Take a look at the default bangs if you need some help understanding how to
-write the URLs.
+Take a look at the default bangs if you need some help understanding how to write the URLs.
 
-_The Amazon, Ebay, and Etsy defaults are UK URLs so change those if you need
-to!_
+_The Amazon, Ebay, and Etsy defaults are UK URLs so change those if you need to!_
 
 ## How it works
 
