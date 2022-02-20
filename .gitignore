@@ -1,3 +1,5 @@
+*.zip
+amo_submission.txt
 src/options/options.js
 src/scripts/main.js
 web-ext-artifacts
