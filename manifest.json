@@ -1,13 +1,13 @@
 {
   "manifest_version": 2,
   "name": "Custom Bang Search",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Allows you to use custom bangs inside the search bar",
   "icons": {
     "48": "icons/icon_48.png"
   },
   "permissions": [
-    "*://*.google.com/*",
+    "*://www.google.com/*",
     "*://*.bing.com/*",
     "*://*.duckduckgo.com/*",
     "*://*.qwant.com/*",
