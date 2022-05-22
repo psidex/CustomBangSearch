@@ -69,7 +69,7 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
 
   return (
     <tr>
-      <td><input type="text" value={bang} onChange={bangChanged} style={bangCss} /></td>
+      <td><input type="text" value={bang} onBlur={bangChanged} style={bangCss} /></td>
       <td><input type="text" value={bangInfo.url} onChange={urlChanged} /></td>
       <td><button type="button" title="Trash" onClick={trashBtnlicked}>🗑</button></td>
     </tr>
