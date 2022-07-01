@@ -20,15 +20,15 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
   const bangChanged = (e: React.FocusEvent<HTMLInputElement>): void => {
     const newBang = e.target.value.trim();
 
-    if (newBang in bangs) {
-      toast.error('Can\'t rename bang to a currently used bang');
-      return;
-    }
-
     if (newBang in bangs || newBang === '') {
       setBangCss({ backgroundColor: 'red' });
     } else {
       setBangCss({});
+    }
+
+    if (newBang in bangs) {
+      toast.error('Can\'t rename bang to a currently used bang');
+      return;
     }
 
     const newBangs = { ...bangs };
