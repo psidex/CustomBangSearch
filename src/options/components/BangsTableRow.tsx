@@ -17,7 +17,7 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
   } = props;
   const [bangCss, setBangCss] = useState<object>({});
 
-  const bangChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const bangChanged = (e: React.FocusEvent<HTMLInputElement>): void => {
     const newBang = e.target.value.trim();
 
     if (newBang in bangs) {
@@ -41,7 +41,7 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     setUnsavedChanges(true);
   };
 
-  const urlChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const urlChanged = (e: React.FocusEvent<HTMLInputElement>): void => {
     const newBangs = { ...bangs };
     newBangs[bang] = { id: bangInfo.id, url: e.target.value, pos: bangInfo.pos };
     setBangs(newBangs);
@@ -69,8 +69,8 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
 
   return (
     <tr>
-      <td><input type="text" value={bang} onChange={bangChanged} style={bangCss} /></td>
-      <td><input type="text" value={bangInfo.url} onChange={urlChanged} /></td>
+      <td><input type="text" defaultValue={bang} onBlur={bangChanged} style={bangCss} /></td>
+      <td><input type="text" defaultValue={bangInfo.url} onBlur={urlChanged} /></td>
       <td><button type="button" title="Trash" onClick={trashBtnlicked}>🗑</button></td>
     </tr>
   );
