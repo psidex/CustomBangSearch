@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BangInfoType, BangsType, SetBangsType } from '../../lib/bangs';
 
@@ -17,9 +17,17 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     bangs, setBangs, setUnsavedChanges, bang, bangInfo, setBangError,
   } = props;
   const [bangCss, setBangCss] = useState<object>({});
+  const [internalBangValue, setInternalBangValue] = useState(bang);
+  const [internalUrlValue, setInternalUrlValue] = useState(bangInfo.url);
 
-  const bangLostFocus = (e: React.FocusEvent<HTMLInputElement>): void => {
-    const newBang = e.target.value.trim();
+  // keep track of external changes, e.g. when resetting bangs to default values
+  useEffect(() => {
+    setInternalBangValue(bang);
+    setInternalUrlValue(bangInfo.url);
+  }, [bang, bangInfo]);
+
+  const bangLostFocus = (): void => {
+    const newBang = internalBangValue.trim();
 
     if ((newBang in bangs && newBang !== bang) || newBang === '') {
       setBangCss({ backgroundColor: 'red' });
@@ -49,9 +57,9 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     setUnsavedChanges();
   };
 
-  const urlLostFocus = (e: React.FocusEvent<HTMLInputElement>): void => {
+  const urlLostFocus = (): void => {
     const newBangs = { ...bangs };
-    newBangs[bang] = { id: bangInfo.id, url: e.target.value, pos: bangInfo.pos };
+    newBangs[bang] = { id: bangInfo.id, url: internalUrlValue, pos: bangInfo.pos };
     setBangs(newBangs);
     setUnsavedChanges();
   };
@@ -77,8 +85,23 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
 
   return (
     <tr>
-      <td><input type="text" defaultValue={bang} onBlur={bangLostFocus} style={bangCss} /></td>
-      <td><input type="text" defaultValue={bangInfo.url} onBlur={urlLostFocus} /></td>
+      <td>
+        <input
+          type="text"
+          value={internalBangValue}
+          onChange={(evt): void => setInternalBangValue(evt.target.value)}
+          onBlur={bangLostFocus}
+          style={bangCss}
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          value={internalUrlValue}
+          onChange={(evt): void => setInternalUrlValue(evt.target.value)}
+          onBlur={urlLostFocus}
+        />
+      </td>
       <td><button type="button" title="Trash" onClick={trashBtnlicked}>🗑</button></td>
     </tr>
   );
