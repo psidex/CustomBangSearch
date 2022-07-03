@@ -26,6 +26,11 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
       setBangCss({});
     }
 
+    if (newBang === bang) {
+      // no changes
+      return;
+    }
+
     if (newBang in bangs) {
       toast.error('Can\'t rename bang to a currently used bang');
       return;
