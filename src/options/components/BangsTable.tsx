@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BangsType, SetBangsType } from '../../lib/bangs';
 import BangsTableRow from './BangsTableRow';
 
@@ -14,6 +14,8 @@ export default function BangsTable(props: PropsType): React.ReactElement {
   } = props;
 
   const rows = [];
+  const [bangErrors, setBangErrors] = useState<string[]>([]);
+  const [unsavedInternalChanges, setUnsavedInternalChanges] = useState(false);
 
   for (const [bang, bangObj] of Object.entries(bangs)) {
     rows.push(<BangsTableRow
@@ -22,7 +24,34 @@ export default function BangsTable(props: PropsType): React.ReactElement {
       setBangs={setBangs}
       bangInfo={bangObj}
       bang={bang}
-      setUnsavedChanges={setUnsavedChanges}
+      setUnsavedChanges={(): void => {
+        setUnsavedInternalChanges(true);
+
+        if (bangErrors.length === 0) {
+          setUnsavedChanges(true);
+          setUnsavedInternalChanges(false);
+        }
+      }}
+      setBangError={(error): void => {
+        if (error && !bangErrors.includes(bang)) {
+          const newBangErrors = [...bangErrors, bang];
+
+          setBangErrors(newBangErrors);
+
+          if (newBangErrors.length === 1) {
+            setUnsavedChanges(false);
+          }
+        } else if (!error && bangErrors.includes(bang)) {
+          const newBangErrors = bangErrors.filter((be) => be !== bang);
+
+          setBangErrors(newBangErrors);
+
+          if (newBangErrors.length === 0 && unsavedInternalChanges) {
+            setUnsavedChanges(true);
+            setUnsavedInternalChanges(false);
+          }
+        }
+      }}
     />);
   }
 

@@ -5,7 +5,8 @@ import { BangInfoType, BangsType, SetBangsType } from '../../lib/bangs';
 interface PropsType {
   bangs: BangsType
   setBangs: SetBangsType
-  setUnsavedChanges: React.Dispatch<React.SetStateAction<boolean>>
+  setUnsavedChanges: () => void
+  setBangError: (error: boolean) => void
   // Specific to this row:
   bang: string
   bangInfo: BangInfoType
@@ -13,17 +14,19 @@ interface PropsType {
 
 export default function BangsTableRow(props: PropsType): React.ReactElement {
   const {
-    bangs, setBangs, setUnsavedChanges, bang, bangInfo,
+    bangs, setBangs, setUnsavedChanges, bang, bangInfo, setBangError,
   } = props;
   const [bangCss, setBangCss] = useState<object>({});
 
-  const bangChanged = (e: React.FocusEvent<HTMLInputElement>): void => {
+  const bangLostFocus = (e: React.FocusEvent<HTMLInputElement>): void => {
     const newBang = e.target.value.trim();
 
-    if (newBang in bangs || newBang === '') {
+    if ((newBang in bangs && newBang !== bang) || newBang === '') {
       setBangCss({ backgroundColor: 'red' });
+      setBangError(true);
     } else {
       setBangCss({});
+      setBangError(false);
     }
 
     if (newBang === bang) {
@@ -43,14 +46,14 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     delete newBangs[bang];
     newBangs[newBang] = oldObj;
     setBangs(newBangs);
-    setUnsavedChanges(true);
+    setUnsavedChanges();
   };
 
-  const urlChanged = (e: React.FocusEvent<HTMLInputElement>): void => {
+  const urlLostFocus = (e: React.FocusEvent<HTMLInputElement>): void => {
     const newBangs = { ...bangs };
     newBangs[bang] = { id: bangInfo.id, url: e.target.value, pos: bangInfo.pos };
     setBangs(newBangs);
-    setUnsavedChanges(true);
+    setUnsavedChanges();
   };
 
   const trashBtnlicked = (): void => {
@@ -69,13 +72,13 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     }
 
     setBangs(newBangs);
-    setUnsavedChanges(true);
+    setUnsavedChanges();
   };
 
   return (
     <tr>
-      <td><input type="text" defaultValue={bang} onBlur={bangChanged} style={bangCss} /></td>
-      <td><input type="text" defaultValue={bangInfo.url} onBlur={urlChanged} /></td>
+      <td><input type="text" defaultValue={bang} onBlur={bangLostFocus} style={bangCss} /></td>
+      <td><input type="text" defaultValue={bangInfo.url} onBlur={urlLostFocus} /></td>
       <td><button type="button" title="Trash" onClick={trashBtnlicked}>🗑</button></td>
     </tr>
   );
