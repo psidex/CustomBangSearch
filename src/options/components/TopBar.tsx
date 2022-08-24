@@ -105,7 +105,7 @@ export default function TopBar(props: PropsType): React.ReactElement {
 
   return (
     <div>
-      <button type="button" title="Save the current table" onClick={save} style={css}>Save</button>
+      <button type="button" title="Save the current table" onClick={save} style={css} disabled={!unsavedChanges}>Save</button>
       <button type="button" title="Add a new row to the table" onClick={addNew}>Add New</button>
       <button type="button" title="Import bangs from a file" onClick={importBangs}>Import</button>
       <input

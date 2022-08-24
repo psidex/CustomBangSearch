@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BangInfoType, BangsType, SetBangsType } from '../../lib/bangs';
 
 interface PropsType {
   bangs: BangsType
   setBangs: SetBangsType
-  setUnsavedChanges: React.Dispatch<React.SetStateAction<boolean>>
+  setUnsavedChanges: () => void
+  setBangError: (error: boolean) => void
   // Specific to this row:
   bang: string
   bangInfo: BangInfoType
@@ -13,22 +14,37 @@ interface PropsType {
 
 export default function BangsTableRow(props: PropsType): React.ReactElement {
   const {
-    bangs, setBangs, setUnsavedChanges, bang, bangInfo,
+    bangs, setBangs, setUnsavedChanges, bang, bangInfo, setBangError,
   } = props;
   const [bangCss, setBangCss] = useState<object>({});
+  const [internalBangValue, setInternalBangValue] = useState(bang);
+  const [internalUrlValue, setInternalUrlValue] = useState(bangInfo.url);
 
-  const bangChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const newBang = e.target.value.trim();
+  // keep track of external changes, e.g. when resetting bangs to default values
+  useEffect(() => {
+    setInternalBangValue(bang);
+    setInternalUrlValue(bangInfo.url);
+  }, [bang, bangInfo]);
+
+  const bangLostFocus = (): void => {
+    const newBang = internalBangValue.trim();
+
+    if ((newBang in bangs && newBang !== bang) || newBang === '') {
+      setBangCss({ backgroundColor: 'red' });
+      setBangError(true);
+    } else {
+      setBangCss({});
+      setBangError(false);
+    }
+
+    if (newBang === bang) {
+      // no changes
+      return;
+    }
 
     if (newBang in bangs) {
       toast.error('Can\'t rename bang to a currently used bang');
       return;
-    }
-
-    if (newBang in bangs || newBang === '') {
-      setBangCss({ backgroundColor: 'red' });
-    } else {
-      setBangCss({});
     }
 
     const newBangs = { ...bangs };
@@ -38,14 +54,14 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     delete newBangs[bang];
     newBangs[newBang] = oldObj;
     setBangs(newBangs);
-    setUnsavedChanges(true);
+    setUnsavedChanges();
   };
 
-  const urlChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const urlLostFocus = (): void => {
     const newBangs = { ...bangs };
-    newBangs[bang] = { id: bangInfo.id, url: e.target.value, pos: bangInfo.pos };
+    newBangs[bang] = { id: bangInfo.id, url: internalUrlValue, pos: bangInfo.pos };
     setBangs(newBangs);
-    setUnsavedChanges(true);
+    setUnsavedChanges();
   };
 
   const trashBtnlicked = (): void => {
@@ -64,13 +80,28 @@ export default function BangsTableRow(props: PropsType): React.ReactElement {
     }
 
     setBangs(newBangs);
-    setUnsavedChanges(true);
+    setUnsavedChanges();
   };
 
   return (
     <tr>
-      <td><input type="text" value={bang} onChange={bangChanged} style={bangCss} /></td>
-      <td><input type="text" value={bangInfo.url} onChange={urlChanged} /></td>
+      <td>
+        <input
+          type="text"
+          value={internalBangValue}
+          onChange={(evt): void => setInternalBangValue(evt.target.value)}
+          onBlur={bangLostFocus}
+          style={bangCss}
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          value={internalUrlValue}
+          onChange={(evt): void => setInternalUrlValue(evt.target.value)}
+          onBlur={urlLostFocus}
+        />
+      </td>
       <td><button type="button" title="Trash" onClick={trashBtnlicked}>🗑</button></td>
     </tr>
   );
