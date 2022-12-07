@@ -12,6 +12,13 @@
     "*://*.duckduckgo.com/*",
     "*://*.qwant.com/*",
     "*://*.startpage.com/*",
+    "*://*.ecosia.org/*",
+    "*://*.brave.com/*",
+    "*://*.swisscows.com/*",
+    "*://*.metager.org/*",
+    "*://*.mojeek.com/*",
+    "*://searx.tiekoetter.com/*",
+    "*://searx.be/*",
     "webRequest",
     "webRequestBlocking",
     "storage"

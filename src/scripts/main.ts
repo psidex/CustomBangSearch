@@ -28,14 +28,26 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
 
   // Get query text or empty string
   const url = new URL(r.url);
-  let queryText = url.searchParams.get('q')?.trim() ?? '';
+  let queryParam = url.searchParams.get('q');
+  if (queryParam === null) {
+    queryParam = url.searchParams.get('query');
+  } else if (queryParam === null) {
+    queryParam = url.searchParams.get('eingabe');
+  }
+  let queryText = queryParam?.trim() ?? '';
 
-  // Startpage uses a POST request so extract the query from the formdata
+  // Startpage and searx.be use a POST request so extract the query from the formdata
   if (url.hostname.match(/^(.*\.)?startpage.com/gi)) {
     if (r.method === 'POST') {
       queryText = r.requestBody?.formData?.query?.[0].trim() ?? '';
     } else if (r.method === 'GET') {
       queryText = url.searchParams.get('query')?.trim() ?? '';
+    }
+  } else if (url.hostname.match(/^(.*\/\/)?searx.be/gi)) {
+    if (r.method === 'POST') {
+      queryText = r.requestBody?.formData?.q?.[0].trim() ?? '';
+    } else if (r.method === 'GET') {
+      queryText = url.searchParams.get('q')?.trim() ?? '';
     }
   }
 
@@ -113,6 +125,13 @@ function main(): void {
         '*://*.duckduckgo.com/*',
         '*://*.qwant.com/*',
         '*://*.startpage.com/*',
+        '*://*.ecosia.org/*',
+        '*://*.brave.com/*',
+        '*://*.swisscows.com/*',
+        '*://*.metager.org/*',
+        '*://*.mojeek.com/*',
+        '*://searx.tiekoetter.com/*',
+        '*://searx.be/*',
       ],
     },
     ['blocking', 'requestBody'],
