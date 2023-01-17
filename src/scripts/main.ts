@@ -31,7 +31,8 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
   let queryParam = url.searchParams.get('q');
   if (queryParam === null) {
     queryParam = url.searchParams.get('query');
-  } else if (queryParam === null) {
+  }
+  if (queryParam === null) {
     queryParam = url.searchParams.get('eingabe');
   }
   let queryText = queryParam?.trim() ?? '';
@@ -43,7 +44,8 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
     } else if (r.method === 'GET') {
       queryText = url.searchParams.get('query')?.trim() ?? '';
     }
-  } else if (url.hostname.match(/^(.*\/\/)?searx.be/gi)) {
+  }
+  if (url.hostname.match(/^(.*\/\/)?searx.be/gi)) {
     if (r.method === 'POST') {
       queryText = r.requestBody?.formData?.q?.[0].trim() ?? '';
     } else if (r.method === 'GET') {
@@ -81,7 +83,7 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
   if (r.method === 'GET') {
     res = { redirectUrl: constructRedirect(bangUrls[0], queryText) };
   } else {
-    // If we're handling a startpage POST request, we need to tell the tab where to go,
+    // If we're handling a POST request, we need to tell the tab where to go,
     // as redirecting the POST would not change the tabs location.
     browser.tabs.update(r.tabId, { url: constructRedirect(bangUrls[0], queryText) });
     res = { cancel: true };
@@ -127,7 +129,6 @@ function main(): void {
         '*://*.startpage.com/*',
         '*://*.ecosia.org/*',
         '*://*.brave.com/*',
-        '*://*.swisscows.com/*',
         '*://*.metager.org/*',
         '*://*.mojeek.com/*',
         '*://searx.tiekoetter.com/*',
