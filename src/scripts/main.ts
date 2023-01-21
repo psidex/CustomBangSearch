@@ -28,14 +28,28 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
 
   // Get query text or empty string
   const url = new URL(r.url);
-  let queryText = url.searchParams.get('q')?.trim() ?? '';
+  let queryParam = url.searchParams.get('q');
+  if (queryParam === null) {
+    queryParam = url.searchParams.get('query');
+  }
+  if (queryParam === null) {
+    queryParam = url.searchParams.get('eingabe');
+  }
+  let queryText = queryParam?.trim() ?? '';
 
-  // Startpage uses a POST request so extract the query from the formdata
+  // Startpage and searx.be use a POST request so extract the query from the formdata
   if (url.hostname.match(/^(.*\.)?startpage.com/gi)) {
     if (r.method === 'POST') {
       queryText = r.requestBody?.formData?.query?.[0].trim() ?? '';
     } else if (r.method === 'GET') {
       queryText = url.searchParams.get('query')?.trim() ?? '';
+    }
+  }
+  if (url.hostname.match(/^(.*\/\/)?searx.be/gi)) {
+    if (r.method === 'POST') {
+      queryText = r.requestBody?.formData?.q?.[0].trim() ?? '';
+    } else if (r.method === 'GET') {
+      queryText = url.searchParams.get('q')?.trim() ?? '';
     }
   }
 
@@ -69,7 +83,7 @@ function processRequest(r: WebRequest.OnBeforeRequestDetailsType): WebRequest.Bl
   if (r.method === 'GET') {
     res = { redirectUrl: constructRedirect(bangUrls[0], queryText) };
   } else {
-    // If we're handling a startpage POST request, we need to tell the tab where to go,
+    // If we're handling a POST request, we need to tell the tab where to go,
     // as redirecting the POST would not change the tabs location.
     browser.tabs.update(r.tabId, { url: constructRedirect(bangUrls[0], queryText) });
     res = { cancel: true };
@@ -113,6 +127,12 @@ function main(): void {
         '*://*.duckduckgo.com/*',
         '*://*.qwant.com/*',
         '*://*.startpage.com/*',
+        '*://*.ecosia.org/*',
+        '*://*.brave.com/*',
+        '*://*.metager.org/*',
+        '*://*.mojeek.com/*',
+        '*://searx.tiekoetter.com/*',
+        '*://searx.be/*',
       ],
     },
     ['blocking', 'requestBody'],
