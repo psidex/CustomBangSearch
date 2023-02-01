@@ -1,6 +1,6 @@
 {
   "name": "custombangsearch",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "A web extension that allows you to use DuckDuckGo-like custom bangs directly from the address bar",
   "main": "main.js",
   "scripts": {
