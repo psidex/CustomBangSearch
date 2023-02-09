@@ -72,6 +72,6 @@ files, so make sure they are built before you build the extension package.
 
 ## Credits
 
-- Icon created by [apien on Flaticon](https://www.flaticon.com/free-icons/exclamation-mark)
+- Icon created by [apien on Flaticon](https://www.flaticon.com/free-icon/exclamation-mark_4194667)
 - [DuckDuckGo bangs](https://duckduckgo.com/bang)
 - [!Bang Quick Search](https://addons.mozilla.org/en-US/firefox/addon/bang-quick-search/)
