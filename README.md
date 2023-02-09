@@ -12,8 +12,6 @@
 
 A browser extension to use custom DuckDuckGo-like bangs directly from the address bar
 
-Icon created by [apien @ Flaticon](https://www.flaticon.com/free-icons/exclamation-mark)
-
 ## Demo
 
 TODO: New, good demo. Video and basic explainer image.
@@ -74,5 +72,6 @@ files, so make sure they are built before you build the extension package.
 
 ## Credits
 
+- Icon created by [apien on Flaticon](https://www.flaticon.com/free-icons/exclamation-mark)
 - [DuckDuckGo bangs](https://duckduckgo.com/bang)
 - [!Bang Quick Search](https://addons.mozilla.org/en-US/firefox/addon/bang-quick-search/)
