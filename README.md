@@ -1,4 +1,4 @@
-# Custom Bang Search
+# ![](./images/icons/icon_28.png) Custom Bang Search
 
 [![Firefox Add-On version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![Firefox Add-On rating](https://img.shields.io/amo/rating/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
@@ -10,45 +10,38 @@
 [![Firefox Add-On link](./images/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![Chrome Web Store link](./images/chrome.png)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 
-A web extension that allows you to use DuckDuckGo-like custom bangs directly from the address bar.
+A browser extension to use custom DuckDuckGo-like bangs directly from the address bar
 
-This currently only works if you have Google, Bing, DuckDuckGo, Qwant, or startpage set as your browsers search engine.
+Icon created by [apien @ Flaticon](https://www.flaticon.com/free-icons/exclamation-mark)
 
 ## Demo
 
-![search demo](./images/demo_search.png)
+TODO: New, good demo. Video and basic explainer image.
 
-![result of search demo](./images/demo_result.png)
+## Supported Search Engines
 
-[Demo video](https://youtu.be/q41XyWYLEUM)
+[These search engines are tested and officially supported](./docs/supported-engines.md)
 
-## Options page
+## Options UI
 
-- Go to the extensions options page to change the bangs and where they go
-- Click on any cell in the table to edit it; the bang is what goes after the !
-  (e.g. !m) and the url is where it takes you
-- Use `%s` in the URL to show where the search query should be inserted
-- No changes will be made unless you click the save button, this includes
-  importing and resetting to defaults
-- Bangs are case-sensitive, so you can have 'm' and 'M'
-- **You can open multiple URLs with one bang by using `" :: "` (space, double
-  colon, space) to separate them (see `ea` in the default bangs)**
+TODO: Much better options UI, will require brand new instruction (or none at all?)
 
 ### Defaults
 
 Take a look at the default bangs if you need some help understanding how to write the URLs.
 
-_The Amazon, Ebay, and Etsy defaults are UK URLs so change those if you need to!_
+_Some of the default URLs including Amazon, Ebay, and Etsy are UK URLs, so change those if you need to!_
 
 ## How it works
+
+TODO: This might need updating since manifest v3?
 
 When you type a query in the search bar, your browser makes a request to your
 browsers set search engine. This extension intercepts that request, and if the
 query matches a bang (e.g. `!m new york`) it will tell the browser to go the url
 set to that bang with the given query, instead of your original search.
 
-This has the side effect of (sometimes) working if you type a bang into the
-actual search engine as well.
+This has the side effect of working if you type a bang into the actual search engine as well.
 
 ## Development
 
@@ -57,13 +50,12 @@ actual search engine as well.
 ```bash
 git clone https://github.com/psidex/CustomBangSearch.git
 cd CustomBangSearch
-yarn install
-yarn buildcode # .ts, .tsx -> .js
-yarn buildext # creates extension .zip file
-# You should now have a directory called "web-ext-artifacts" that contains the built extension
+npm install
 ```
 
 ### Details
+
+TODO: Update once done
 
 The only things actually required to build this extension from source to
 something that is installable in your browser are `react`, `react-dom`,
@@ -80,8 +72,7 @@ by `esbuild`.
 TS file. In a similar fashion, `options.html` links to the build not the TSX
 files, so make sure they are built before you build the extension package.
 
-## Credit
+## Credits
 
 - [DuckDuckGo bangs](https://duckduckgo.com/bang)
 - [!Bang Quick Search](https://addons.mozilla.org/en-US/firefox/addon/bang-quick-search/)
-- [Water.css](https://github.com/kognise/water.css)

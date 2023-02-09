@@ -1,0 +1,19 @@
+{
+  "permissions": [
+    "webRequestBlocking"
+  ],
+  "host_permissions": [
+    "*://*.startpage.com/*",
+    "*://searx.be/*"
+  ],
+  "background": {
+    "scripts": [
+      "src/background/main.js"
+    ]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{b67c3a9a-b2a2-4fca-af95-7e7a38f3822e}"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "version": 3,
+  "options": {
+    "ignoreDomains": [],
+    "sync": {
+      "type": "browser",
+      "url": "",
+      "key": ""
+    }
+  },
+  "bangs": [
+    {
+      "id": "BOqjlStMAY",
+      "bang": "test1",
+      "urls": [
+        "https://smile.amazon.co.uk/s?k=%s"
+      ],
+      "pos": 1
+    },
+    {
+      "id": "BOqjlStMAZ",
+      "bang": "test2",
+      "urls": [
+        "https://smile.amazon.co.uk/s?k=%s",
+        "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
+      ],
+      "pos": 2
+    }
+  ]
+}
