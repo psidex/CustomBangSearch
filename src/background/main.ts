@@ -11,7 +11,7 @@ import { IecMessage, IecMessageType } from '../lib/iec';
 
 // TODO: Update extension icon to be chunkier at least, then get proper sized versions of it
 
-function setEventListeners() {
+function setEventListeners(): void {
   if (currentBrowser === 'chrome') {
     // Only fires on tabs where the URL is in host_permissions.
     browser.tabs.onUpdated.addListener((tabId, changed) => {
@@ -33,25 +33,30 @@ function setEventListeners() {
       const msg: IecMessage = {
         type: IecMessageType.SettingsGetResponse,
         data: getSettings(),
-        error: false,
       };
       return Promise.resolve(msg);
     }
 
     if (request.type === IecMessageType.SettingsSet) {
-      const newSettings = <Settings> request.data;
-      await setSettings(newSettings);
+      const newSettings = request.data as Settings;
+      try {
+        await setSettings(newSettings);
+      } catch (err) {
+        return Promise.resolve({
+          type: IecMessageType.Error,
+          data: err as Error,
+        });
+      }
     }
 
     return Promise.resolve({
       type: IecMessageType.Ok,
       data: null,
-      error: false,
     });
   });
 }
 
-function main() {
+function main(): void {
   if (dev) {
     // eslint-disable-next-line no-console
     console.info(`Dev: ${dev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`);

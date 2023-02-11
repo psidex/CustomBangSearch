@@ -1,6 +1,6 @@
-// Define Settings interface(s) here so everyone can use them.
+// Define Settings type(s) here so all files can use them.
 
-export interface StoredBang {
+export type StoredBang = {
   // A unique ID
   id: string
   // The actual bang
@@ -9,9 +9,9 @@ export interface StoredBang {
   urls: string[]
   // Position in settings GUI
   pos: number
-}
+};
 
-export interface Settings {
+export type Settings = {
   version: number,
   options: {
     // search engine URLs to ignore - e.g. searx.tiekoetter.com
@@ -26,4 +26,4 @@ export interface Settings {
     }
   },
   bangs: StoredBang[]
-}
+};

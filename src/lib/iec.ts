@@ -1,4 +1,4 @@
-// IEC - Like IPC but Inter-Extension Communication
+// IEC - Like IPC but Inter-Extension Communication.
 
 import browser from 'webextension-polyfill';
 
@@ -17,21 +17,15 @@ export enum IecMessageType {
   Error,
 }
 
-// TODO: Make readonly somehow.
-export interface IecMessage {
+// Note: readonly for now but it might make sense to remove in future?
+export type IecMessage = Readonly<{
   type: IecMessageType,
-  data: null | string | Settings,
-  error: boolean
-}
-
-// function isIecMessage(m: Object): m is IecMessage {
-//   const maybe = (m as IecMessage);
-//   return maybe.type !== undefined etc;
-// }
+  data: null | string | Settings | Error
+}>;
 
 // Send a message and recieve one in response.
 // Response is likely to be type Ok, empty data, and no error.
 export async function sendIecMessage(m: IecMessage): Promise<IecMessage> {
-  // Probably safe to cast as the only message handler always returns an IecMessage.
-  return <IecMessage> <unknown> browser.runtime.sendMessage(m);
+  // Probably safe to assert as the only message handler always returns an IecMessage.
+  return browser.runtime.sendMessage(m) as Promise<IecMessage>;
 }

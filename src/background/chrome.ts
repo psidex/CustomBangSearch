@@ -2,7 +2,7 @@ import browser from 'webextension-polyfill';
 
 import getRedirects from './shared';
 
-export default function processRequest(tabId: number, url: string) {
+export default function processRequest(tabId: number, url: string): void {
   // From the current URL, get the redirections (if any) to apply.
   const redirections = getRedirects(url);
 
