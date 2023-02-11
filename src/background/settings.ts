@@ -1,7 +1,7 @@
 import browser from 'webextension-polyfill';
 import { nanoid } from 'nanoid';
 
-import defaultSettings from './settings.default.json';
+import defaultSettings from '../lib/settings.default.json';
 import { Settings } from '../lib/settings';
 
 // A lookup table for { bang : [redirect urls] }.

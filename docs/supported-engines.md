@@ -10,7 +10,6 @@ Symbol | Meaning
 🟡 | Working with some problems
 ❌ | Does not work
 
-TODO: Remove broken urls from individual manifests, have way of combining urls when manifests are combined (maybe perms as well?)
 TODO: Check if DDG / Brave search bangs overwrite ours, and if they do, add notes
 
 ## Chrome

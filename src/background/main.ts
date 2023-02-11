@@ -9,8 +9,6 @@ import { Settings } from '../lib/settings';
 import { getSettings, setSettings, loadSettingsIfExists } from './settings';
 import { IecMessage, IecMessageType } from '../lib/iec';
 
-// TODO: Update extension icon to be chunkier at least, then get proper sized versions of it
-
 function setEventListeners(): void {
   if (currentBrowser === 'chrome') {
     // Only fires on tabs where the URL is in host_permissions.
@@ -30,11 +28,10 @@ function setEventListeners(): void {
 
   browser.runtime.onMessage.addListener(async (request: IecMessage): Promise<IecMessage> => {
     if (request.type === IecMessageType.SettingsGet) {
-      const msg: IecMessage = {
+      return Promise.resolve({
         type: IecMessageType.SettingsGetResponse,
         data: getSettings(),
-      };
-      return Promise.resolve(msg);
+      });
     }
 
     if (request.type === IecMessageType.SettingsSet) {
