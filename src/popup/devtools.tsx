@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import defaultSettings from '../lib/settings.default.json';
 import { IecMessageType, sendIecMessage } from '../lib/iec';
 
+/* eslint-disable no-alert */
+
 export default function DevTools(): React.ReactElement {
   const [settingsNowSet, setSettingsNowSet] = useState<boolean>(true);
 
@@ -13,8 +15,7 @@ export default function DevTools(): React.ReactElement {
       data: defaultSettings,
     });
     if (resp.type === IecMessageType.Error) {
-      // eslint-disable-next-line no-alert
-      alert(resp.data);
+      alert(resp.data as string);
     } else {
       setSettingsNowSet(true);
     }

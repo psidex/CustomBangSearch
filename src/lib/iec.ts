@@ -19,7 +19,7 @@ export enum IecMessageType {
 
 export type IecMessage = Readonly<{
   type: IecMessageType,
-  data: null | string | Settings | Error
+  data: null | string | Settings
 }>;
 
 // Send a message and recieve one in response.

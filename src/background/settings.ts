@@ -146,15 +146,15 @@ function convertSettingsV2ToV3(legacySettings: SettingsV2): Settings {
 export async function loadSettingsIfExists(): Promise<void> {
   const { settings: storedSettings, bangs: legacySettings } = await browser.storage.sync.get(['settings', 'bangs']);
   let settingsToStore = storedSettings;
-  let shouldSaveSettingsNow = false;
+  let haveConvertedLegacy = false;
 
   if (storedSettings === undefined && legacySettings !== undefined) {
     if (isSettingsV1(legacySettings)) {
       settingsToStore = convertSettingsV1ToV3(legacySettings);
-      shouldSaveSettingsNow = true;
+      haveConvertedLegacy = true;
     } else if (isSettingsV2(legacySettings)) {
       settingsToStore = convertSettingsV2ToV3(legacySettings);
-      shouldSaveSettingsNow = true;
+      haveConvertedLegacy = true;
     }
   }
 
@@ -162,7 +162,10 @@ export async function loadSettingsIfExists(): Promise<void> {
 
   if (settingsToStore !== undefined) {
     try {
-      setSettings(settingsToStore, shouldSaveSettingsNow);
+      await setSettings(settingsToStore, haveConvertedLegacy);
+      if (haveConvertedLegacy) {
+        await browser.storage.sync.remove(['bangs']);
+      }
     } catch (err) {
       // just use defaults for now...
     }

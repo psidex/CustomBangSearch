@@ -41,7 +41,7 @@ function setEventListeners(): void {
       } catch (err) {
         return Promise.resolve({
           type: IecMessageType.Error,
-          data: err as Error,
+          data: (err as Error).toString(),
         });
       }
     }
