@@ -41,6 +41,7 @@ export default function getRedirects(
     for (const param of possibleQueryParams) {
       const query = url.searchParams.get(param);
       if (query !== null) {
+        // FIXME: The ? and ?? might be unnecessary?
         queryText = query?.trim() ?? '';
         break;
       }

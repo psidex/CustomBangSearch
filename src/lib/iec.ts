@@ -5,15 +5,15 @@ import browser from 'webextension-polyfill';
 import { Settings } from './settings';
 
 export enum IecMessageType {
-  // Request settings.
+  // Request settings, data type: null.
   SettingsGet,
-  // Request settings response, data will be of type Settings.
+  // Request settings response, data type: Settings.
   SettingsGetResponse,
-  // Request set settings, data will be of type Settings.
+  // Request set settings, data type: Settings.
   SettingsSet,
-  // 200 OK.
+  // 200 OK, data type: null.
   Ok,
-  // Error ocurred, data will be of type Error
+  // Error ocurred, data type: string.
   Error,
 }
 
