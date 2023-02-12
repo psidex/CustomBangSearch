@@ -16,9 +16,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { parseArgs } from 'node:util';
-import { execSync } from 'node:child_process';
 import assert from 'node:assert';
 
+import { execa } from 'execa';
+import { Listr } from 'listr2';
 import fs from 'fs-extra';
 import * as esbuild from 'esbuild';
 
@@ -63,108 +64,137 @@ const {
 });
 assert(browser === 'chrome' || browser === 'firefox', 'browser is valid');
 
-function runOrExit(cmd, silent = false) {
-  let out;
-  try {
-    out = execSync(cmd).toString().trim();
-    if (out !== '' && !silent) {
-      console.log(out);
-    }
-  } catch (err) {
-    console.log(err.stdout.toString().trim());
-    process.exit(1);
-  }
-  return out;
-}
-
-// Make sure that binary dependencies exist.
-runOrExit('7z i', true);
-runOrExit('git --version', true);
-
 if (dev) {
-  console.log('* Building development version');
+  console.log('⚙ Building development version');
 } else {
-  console.log('* Building release version');
+  console.log('⚙ Building release version');
 }
+console.log();
 
-console.log('\nRunning typescript lint...');
-runOrExit('npm run tsc-lint');
-
-if (!dev) {
-  console.log('\nRunning tests...');
-  // runOrExit('npm run test');
-}
-
-console.log('\nMaking build directory...');
-if (fs.existsSync(buildPath)) {
-  console.log('Deleting previous build...');
-  fs.rmSync(buildPath, { recursive: true });
-}
-fs.mkdirSync(buildPath);
-
-console.log('\nGetting git hash...');
-const gitHeadShortHash = runOrExit('git rev-parse HEAD').slice(0, 7);
-
-console.log('\nMerging manifests...');
-// Do this merge before running esbuild so we can insert the correct URLs.
-let manifest = browser === 'chrome' ? manifestChrome : manifestFirefox;
-
-// Object merge isn't deep, so manually merge permission stuff.
-const mergedHostPermissions = [...manifestShared.host_permissions, ...manifest.host_permissions];
-const mergedPermissions = [...manifestShared.permissions, ...manifest.permissions];
-// Overwrite shared settings with browser based values.
-manifest = {
-  ...manifestShared,
-  ...manifest,
-};
-manifest.host_permissions = mergedHostPermissions;
-manifest.permissions = mergedPermissions;
-
-const scriptPaths = ['./src/background/main.ts', './src/optionsui/options.tsx', './src/popup/popup.tsx'];
-const opts = {
-  entryPoints: scriptPaths,
-  outdir: `${buildPath}/src`,
-  bundle: true,
-  logLevel: 'info',
-  platform: 'browser',
-  define: {
-    'process.env.browser': `'${browser}'`,
-    'process.env.dev': `'${dev}'`,
-    'process.env.version': `'${extensionVersion}'`,
-    'process.env.hash': `'${gitHeadShortHash}'`,
-    'process.env.searchEngineUrls': JSON.stringify(mergedHostPermissions),
-    'process.env.buildTime': JSON.stringify(new Date()),
+const tasks = new Listr([
+  {
+    title: 'Build requirements check',
+    task: () => new Listr([
+      {
+        title: '7zip',
+        task: () => execa('7z', ['i']),
+      },
+      {
+        title: 'git',
+        task: () => execa('git', ['--version']),
+      },
+    ], { concurrent: true }),
   },
-};
+  {
+    title: 'Typescript lint',
+    task: () => execa('npm', ['run', 'tsc-lint']),
+  },
+  {
+    title: 'Run tests',
+    skip: () => dev,
+    task: () => execa('npm', ['run', 'test']),
+  },
+  {
+    title: 'Make build directory',
+    task: () => new Listr([
+      {
+        title: 'rm',
+        skip: async () => !await fs.existsSync(buildPath),
+        task: () => fs.rm(buildPath, { recursive: true }),
+      },
+      {
+        title: 'mkdir',
+        task: () => fs.mkdir(buildPath),
+      },
+    ]),
+  },
+  {
+    title: 'Get Git hash',
+    task: async (ctx) => {
+      const { stdout } = await execa('git', ['rev-parse', 'HEAD']);
+      ctx.gitHeadShortHash = stdout.slice(0, 7);
+    },
+  },
+  {
+    title: 'Merge manifests',
+    task: (ctx) => {
+      // Do this merge before running esbuild so we can insert the correct URLs.
+      ctx.manifest = browser === 'chrome' ? manifestChrome : manifestFirefox;
 
-let additions = {};
-if (!dev) {
-  additions = {
-    minify: true,
-  };
-}
+      // Object merge isn't deep, so manually merge permission stuff.
+      ctx.mergedHostPermissions = [
+        ...manifestShared.host_permissions, ...ctx.manifest.host_permissions];
+      const mergedPermissions = [...manifestShared.permissions, ...ctx.manifest.permissions];
+      // Overwrite shared settings with browser based values.
+      ctx.manifest = {
+        ...manifestShared,
+        ...ctx.manifest,
+      };
+      ctx.manifest.host_permissions = ctx.mergedHostPermissions;
+      ctx.manifest.permissions = mergedPermissions;
+    },
+  },
+  {
+    title: 'Run esbuild',
+    task: (ctx) => {
+      const scriptPaths = ['./src/background/main.ts', './src/optionsui/options.tsx', './src/popup/popup.tsx'];
+      const opts = {
+        entryPoints: scriptPaths,
+        outdir: `${buildPath}/src`,
+        bundle: true,
+        logLevel: 'error',
+        platform: 'browser',
+        define: {
+          'process.env.browser': `'${browser}'`,
+          'process.env.dev': `'${dev}'`,
+          'process.env.version': `'${extensionVersion}'`,
+          'process.env.hash': `'${ctx.gitHeadShortHash}'`,
+          'process.env.searchEngineUrls': JSON.stringify(ctx.mergedHostPermissions),
+          'process.env.buildTime': JSON.stringify(new Date()),
+        },
+      };
 
-console.log('\nRunning esbuild...');
-esbuild.buildSync({
-  ...opts,
-  ...additions,
+      let additions = {};
+      if (!dev) {
+        additions = {
+          minify: true,
+        };
+      }
+
+      return esbuild.build({
+        ...opts,
+        ...additions,
+      });
+    },
+  },
+  {
+    title: 'Copy static files',
+    task: async () => {
+      const copies = [];
+      for (const path of toCopy) {
+        copies.push(fs.copy(path, path.replace('./', `${buildPath}/`)));
+      }
+      return Promise.all(copies);
+    },
+  },
+  {
+    title: 'Write manifest',
+    task: (ctx) => {
+      const manifestString = JSON.stringify(ctx.manifest, null, 2);
+      return fs.writeFile(`${buildPath}/manifest.json`, manifestString);
+    },
+  },
+  {
+    title: 'Create zip file',
+    task: (ctx) => {
+      // TODO: If release, zip file for the reviewer that contains all source and build script, etc.
+      //       Maybe only make below zip on release? or have a flag for it?
+      const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}.zip`;
+      return execa('7z', ['a', `-tzip ${zipName}`, `${buildPath}/*`], { shell: true });
+    },
+  },
+]);
+
+tasks.run().catch((err) => {
+  console.error(err);
 });
-
-console.log('\nCopying static files...');
-for (const path of toCopy) {
-  console.log(`  ${path}`);
-  fs.copySync(path, path.replace('./', `${buildPath}/`));
-}
-
-console.log('\nWriting manifest...');
-const manifestString = JSON.stringify(manifest, null, 2);
-fs.writeFileSync(`${buildPath}/manifest.json`, manifestString);
-
-// TODO: If release, zip file for the reviewer that contains all source and build script, etc.
-//       Maybe only make below zip on release? or have a flag for it?
-
-const zipName = `custombangsearch-${browser}-${extensionVersion}-${gitHeadShortHash}.zip`;
-console.log('\nZipping files...');
-runOrExit(`7z a -tzip ${zipName} ${buildPath}/*`);
-
-console.log('\nDone!');

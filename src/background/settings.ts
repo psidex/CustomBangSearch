@@ -36,7 +36,7 @@ let settings: Settings = defaultSettings;
 let bangsLookup: BangsLookup = bangsLookupFromSettings(settings);
 
 function generateNewBangId(): string {
-  return nanoid(10);
+  return nanoid(21);
 }
 
 export function getBangsLookup(): Readonly<BangsLookup> {
@@ -52,7 +52,7 @@ function setBangsLookup(obj: Settings): void {
 }
 
 // This (&getter) is probably safe, no mutex required - https://stackoverflow.com/a/5347062/6396652
-export async function setSettings(obj: Settings, syncSet = true): Promise<Error | void> {
+export async function setSettings(obj: Settings, syncSet = true): Promise<void> {
   settings = obj;
   setBangsLookup(obj);
 
@@ -65,6 +65,7 @@ export async function setSettings(obj: Settings, syncSet = true): Promise<Error 
     return browser.storage.sync.set({ settings });
   }
 
+  // Error return type - https://stackoverflow.com/a/50071254/6396652.
   return Promise.reject(setSettingsSyncErr);
 }
 
