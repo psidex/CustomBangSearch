@@ -36,7 +36,7 @@ TODO: Much better options UI, will require brand new instruction (or none at all
 
 On Firefox, CBS uses the `WebRequestBlocking` API to intercept requests to the supported search engines, and if a bang is found, blocks the request and redirects the user to the chosen URL with the query inserted.
 
-On Chrome, CBS uses the `tabs` API to watch for when tabs URLs update, does a similar search for bangs, and then updates the tab location.
+On Chrome, CBS uses the `tabs` API to watch for when a tab URL updates, does a similar search for bangs, and then updates the tab location.
 
 We use different methods per browser, because `WebRequestBlocking` is faster and more efficient, but [Google's depracation](https://developer.chrome.com/docs/extensions/mv3/mv3-migration/#when-use-blocking-webrequest) of said API in manifest V3 means it can't be used in Chrome.
 
