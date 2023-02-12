@@ -10,7 +10,7 @@
 [![Firefox Add-On link](./images/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![Chrome Web Store link](./images/chrome.png)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 
-A browser extension to use custom DuckDuckGo-like bangs directly from the address bar
+A browser extension to use custom DuckDuckGo-like bangs directly from the address bar.
 
 ## Demo
 
@@ -18,28 +18,29 @@ TODO: New, good demo. Video and basic explainer image.
 
 ## Supported Search Engines
 
-[These search engines are tested and officially supported](./docs/supported-engines.md)
+[These search engines are tested and officially supported](./docs/supported-engines.md).
+
+## Bangs
+
+Go to the options page to start creating custom bangs (see demo above / info below).
+
+Use `%s` in the URL to show where you want your query to be inserted, take a look at the default bangs if you need some help understanding how to format things.
+
+_Some of the default URLs including Amazon, Ebay, and Etsy are UK URLs, so change those if you need to!_
 
 ## Options UI
 
 TODO: Much better options UI, will require brand new instruction (or none at all?)
 
-### Defaults
+## How the extension works
 
-Take a look at the default bangs if you need some help understanding how to write the URLs.
+On Firefox, CBS uses the `WebRequestBlocking` API to intercept requests to the supported search engines, and if a bang is found, blocks the request and redirects the user to the chosen URL with the query inserted.
 
-_Some of the default URLs including Amazon, Ebay, and Etsy are UK URLs, so change those if you need to!_
+On Chrome, CBS uses the `tabs` API to watch for when tabs URLs update, does a similar search for bangs, and then updates the tab location.
 
-## How it works
+We use different methods per browser, because `WebRequestBlocking` is faster and more efficient, but [Google's depracation](https://developer.chrome.com/docs/extensions/mv3/mv3-migration/#when-use-blocking-webrequest) of said API in manifest V3 means it can't be used in Chrome.
 
-TODO: This might need updating since manifest v3?
-
-When you type a query in the search bar, your browser makes a request to your
-browsers set search engine. This extension intercepts that request, and if the
-query matches a bang (e.g. `!m new york`) it will tell the browser to go the url
-set to that bang with the given query, instead of your original search.
-
-This has the side effect of working if you type a bang into the actual search engine as well.
+This unfortunatley means there's some slight differences in behaviour, and each browser has [its own list of supported search engines that work with CBS](./docs/supported-engines.md).
 
 ## Development
 
@@ -49,26 +50,20 @@ This has the side effect of working if you type a bang into the actual search en
 git clone https://github.com/psidex/CustomBangSearch.git
 cd CustomBangSearch
 npm install
+npm run build-firefox OR build-firefox-release OR build-chrome OR build-chrome-release
 ```
+
+This produces a `build` directory containing the compiled JavaScript, and a zip file in the root of the project that can be uploaded to the browser web extension stores.
+
+Non "release" builds are not minified, and can contain debugging calls such as `console.log`.
 
 ### Details
 
-TODO: Update once done
+A custom script, `bob.mjs`, is used to build and package the extension. This was created just to speed up the build process and make testing much easier.
 
-The only things actually required to build this extension from source to
-something that is installable in your browser are `react`, `react-dom`,
-`nanoid`, `react-hot-toast`, and `esbuild`.
+esbuild is used to compile the TypeScript to JavaScript, the tsc compiler is listed as a dependency but this is just used for type checking / linting.
 
-`web-ext` is used to generate the extension package but it _can_ be done by
-hand.
-
-Everything in `devDependencies` is purely for linting, and `typescript` and
-`webextension-polyfill` are purely used for type checking, they aren't required
-by `esbuild`.
-
-`manifest.json` links to the compiled build made by `esbuild.config.js`, not the
-TS file. In a similar fashion, `options.html` links to the build not the TSX
-files, so make sure they are built before you build the extension package.
+The manifest files link to the compiled build made by esbuild, not the TS files, so make sure they are built before you build the extension package.
 
 ## Credits
 
