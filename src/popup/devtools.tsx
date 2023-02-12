@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { Text, Button } from '@chakra-ui/react';
+
 import defaultSettings from '../lib/settings.default.json';
 import { IecMessageType, sendIecMessage } from '../lib/iec';
 
@@ -22,13 +24,13 @@ export default function DevTools(): React.ReactElement {
   }
 
   return (
-    <div>
-      <button type="button" onClick={() => { resetSettings(); }}>Reset Stored Settings</button>
-      <p>
+    <>
+      <Button onClick={() => { resetSettings(); }}>Reset Stored Settings</Button>
+      <Text>
         Setting set correctly:
         {' '}
         {settingsNowSet ? 'yes' : 'no'}
-      </p>
-    </div>
+      </Text>
+    </>
   );
 }

@@ -22,7 +22,8 @@
     "*://searx.tiekoetter.com/*"
   ],
   "options_ui": {
-    "page": "src/optionsui/options.html"
+    "page": "src/optionsui/options.html",
+    "open_in_tab": true
   },
   "action": {
     "browser_style": true,

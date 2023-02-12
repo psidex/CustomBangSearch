@@ -65,9 +65,9 @@ const {
 assert(browser === 'chrome' || browser === 'firefox', 'browser is valid');
 
 if (dev) {
-  console.log('⚙ Building development version');
+  console.log('🔨 Building development version, skipping some steps...');
 } else {
-  console.log('⚙ Building release version');
+  console.log('🔨 Building release version');
 }
 console.log();
 
@@ -86,7 +86,13 @@ const tasks = new Listr([
     ], { concurrent: true }),
   },
   {
+    title: 'Run eslint',
+    skip: () => dev,
+    task: () => execa('npm', ['run', 'lint']),
+  },
+  {
     title: 'Typescript lint',
+    skip: () => dev,
     task: () => execa('npm', ['run', 'tsc-lint']),
   },
   {
@@ -186,13 +192,14 @@ const tasks = new Listr([
   },
   {
     title: 'Create zip file',
+    skip: () => dev,
     task: (ctx) => {
-      // TODO: If release, zip file for the reviewer that contains all source and build script, etc.
-      //       Maybe only make below zip on release? or have a flag for it?
       const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}.zip`;
       return execa('7z', ['a', `-tzip ${zipName}`, `${buildPath}/*`], { shell: true });
     },
   },
+  // TODO: Have a task that, if we're in release mode, creates a zip for the reviewer
+  //       that contains all the .ts(x) source code and build scripts, etc.
 ]);
 
 tasks.run().catch((err) => {

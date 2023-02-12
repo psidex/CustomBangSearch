@@ -1,29 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import browser from 'webextension-polyfill';
 
-import { dev, version } from '../lib/esbuilddefinitions';
+import {
+  ChakraProvider, Heading, Button, Text, VStack,
+} from '@chakra-ui/react';
+
+import browser from 'webextension-polyfill';
 
 import DevTools from './devtools';
 
+import { dev, version } from '../lib/esbuilddefinitions';
+
+// TODO: Some level of support for using the DDG bangs.
+
 function App(): React.ReactElement {
   return (
-    <div>
-      <h1>Custom Bang Search</h1>
-      <div className="versionInfo">
-        <p>
-          {`v${version}`}
-        </p>
-      </div>
-      <button type="button" onClick={() => { browser.runtime.openOptionsPage(); }}>Options Page</button>
+    <VStack>
+      <Heading>Custom Bang Search</Heading>
+      <Text>{`v${version}`}</Text>
+      <Button onClick={() => { browser.runtime.openOptionsPage(); }}>Open Options page</Button>
       {dev && <DevTools />}
-    </div>
+    </VStack>
   );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <ChakraProvider>
+      <App />
+    </ChakraProvider>
   </React.StrictMode>,
 );

@@ -1,23 +1,7 @@
-* {
-  padding: 0;
-  margin: 0;
-  text-align: center;
-}
+/* Most CSS should propbably be inlined in the React */
 
 body {
+  /* Sets the actual size of the popup. */
   min-width: 300px;
   max-width: 300px;
-}
-
-body>div {
-  width: 290px;
-  padding: 10px 5px;
-}
-
-body div * {
-  margin-bottom: 10px;
-}
-
-button {
-  padding: 2px 5px;
 }

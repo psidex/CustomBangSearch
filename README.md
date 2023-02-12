@@ -55,7 +55,7 @@ npm run build-firefox OR build-firefox-release OR build-chrome OR build-chrome-r
 
 This produces a `build` directory containing the compiled JavaScript, and a zip file in the root of the project that can be uploaded to the browser web extension stores.
 
-Non "release" builds are not minified, and can contain debugging calls such as `console.log`.
+Non "release" builds (i.e. dev builds) are not minified, can contain debugging calls such as `console.log`, and also contain some development tools loaded into the popup &| options windows.
 
 ### Details
 
