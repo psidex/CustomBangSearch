@@ -9,6 +9,8 @@ import { Settings } from '../lib/settings';
 import { getSettings, setSettings, loadSettingsIfExists } from './settings';
 import { IecMessage, IecMessageType } from '../lib/iec';
 
+// TODO: probably in processors, respect disabled domains from settings.
+
 function setEventListeners(): void {
   if (currentBrowser === 'chrome') {
     // Only fires on tabs where the URL is in host_permissions.

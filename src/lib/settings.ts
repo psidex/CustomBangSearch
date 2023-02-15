@@ -1,6 +1,6 @@
 // Define Settings type(s) here so all files can use them.
 
-export type StoredBang = {
+export type StoredBangInfo = {
   // A unique ID.
   id: string
   // The actual bang.
@@ -25,5 +25,5 @@ export type Settings = {
       key: string
     }
   },
-  bangs: StoredBang[]
+  bangs: StoredBangInfo[]
 };
