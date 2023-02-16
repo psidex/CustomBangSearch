@@ -16,7 +16,7 @@ import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful'
 
 function App(): React.ReactElement {
   const [loading, setLoading] = useState<boolean>(true);
-  const [bangInfos, setBangInfos] = useState<ReactfulBangInfoContainer>({});
+  const [bangInfos, setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
   // TODO: Have states for each of the individual settings?
 
   useEffect(() => {

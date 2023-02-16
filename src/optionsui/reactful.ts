@@ -1,11 +1,16 @@
-// Below are a couple of types and a function that create a different representation of
-// StoredBangInfo, mainly so that random IDs are generated for each array item, and we
-// keep track of the positions of things. This is to help with rendering.
-
-// Maps are used because they keep track of insertion order. When saving, they are
-// converted back to arrays, which also keep insertion order. This means we never have
-// to manually keep track of the order of things (since the user can't change the order
-// this means the order should always be the same).
+//
+// reactful.ts
+//
+// Below are a couple of types and function(s) that create a different representation of
+// StoredBangInfo, mainly so that we can use maps instead of arrays. This allows us to
+// store a random ID alongside each item, for use as a key in react. Maps also keep track
+// of the insertion order of items, and always iterate in that order. This help with
+// rendering in the same order every time.
+//
+// When saving, maps are converted back to arrays, which also keep insertion order.
+// This means we never have to manually keep track of the order of things (since the
+// user can't change the order this means the order should always be the same).
+//
 
 import { nanoid } from 'nanoid';
 
@@ -21,19 +26,7 @@ export type ReactfulBangInfo = {
 };
 
 // Key is random ID
-// export type ReactfulBangInfoContainer = Map<string, ReactfulBangInfo>;
-export type ReactfulBangInfoContainer = {
-  [ key: string ]: ReactfulBangInfo
-};
-
-// TODO: CURRENT: Maybe use maps as they preserve insertion order
-// Does updating map mess with the order?
-// Find out how to iterate map in order, apparently for-in is not good
-// https://stackoverflow.com/a/5525820/6396652
-// https://www.thecodeship.com/web-development/common-pitfalls-when-working-with-javascript-arrays/
-// This will remove the need for storing pos, as pos in the first place was just storing
-// insertion order#
-// This should also remove the need to sort like we are in BangsTabPanel
+export type ReactfulBangInfoContainer = Map<string, ReactfulBangInfo>;
 
 /**
  * Convert stored to reactful info.
@@ -42,7 +35,7 @@ export type ReactfulBangInfoContainer = {
  * @returns The reactful representation.
  */
 export function storedBangInfoToReactful(s: StoredBangInfo[]): ReactfulBangInfoContainer {
-  const reactfulBangs: ReactfulBangInfoContainer = {};
+  const reactfulBangs: ReactfulBangInfoContainer = new Map();
 
   // TODO: I think we can probably remove ID and pos from stored settings.
 
@@ -62,8 +55,10 @@ export function storedBangInfoToReactful(s: StoredBangInfo[]): ReactfulBangInfoC
       b.urls.set(nanoid(21), storedUrl);
     }
 
-    reactfulBangs[nanoid(21)] = b;
+    reactfulBangs.set(nanoid(21), b);
   }
 
   return reactfulBangs;
 }
+
+export function reactfulToStored() {}

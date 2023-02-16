@@ -10,25 +10,32 @@ import { nanoid } from 'nanoid';
 import { ReactfulBangInfo, ReactfulBangInfoContainer, ReactfulUrlInfo } from './reactful';
 
 type BangInfoPropTypes = {
+  propsId: string,
   info: ReactfulBangInfo
 };
 
 function BangInfo(props: BangInfoPropTypes): React.ReactElement {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [bangId, setBangId] = useState<string>('');
   const [bang, setBang] = useState<string>('');
   const [urls, setUrls] = useState<ReactfulUrlInfo>(new Map());
   const [urlInputs, setUrlInputs] = useState<React.ReactElement[]>([]);
 
-  // TODO: Pass bang ID into this, then have update funciton that passes up to the
-  // parent this ID along with the current bang and URLS.
-  // The top level parent will need some sort of "bangsToSave" obj.
+  // The top level parent will need some sort of "bangsToSave" obj that is not used to
+  // render, is just used to keep track of the new state so when we want to save, it's
+  // then easy to save as we already have one obj that is all up to date.
+  //
+  // TODO: Pass in update func so that when something changes, we can pass up this ID
+  // along with the current bang and URLS, to be saved in the future.
 
   // Only use the props as the initial state for this session.
   // The info prop should only ever change when "save" isclicked, which will cause a big
   // re-render but that's fine.
-  const { info } = props;
+  const { propsId, info } = props;
   useEffect(() => {
     setBang(info.bang);
     setUrls(info.urls);
+    setBangId(propsId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -60,7 +67,7 @@ function BangInfo(props: BangInfoPropTypes): React.ReactElement {
             placeholder="https://example.com/?q=%s"
             width="30em"
           />
-          <Button onClick={() => { deleteUrl(id); }} leftIcon={<DeleteIcon />} variant="outline" />
+          <Button onClick={() => { deleteUrl(id); }} leftIcon={<DeleteIcon />} iconSpacing={0} variant="outline" />
         </HStack>,
       );
     }
@@ -84,26 +91,27 @@ type BangTabPanelPropTypes = {
 };
 
 export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactElement {
+  const [bangInfoRows, setBangInfoRows] = useState<React.ReactElement[]>();
+
   const { bangInfos } = props;
-
-  // TODO: Add new bang button (maybe in parent?), delete bang button.
-
-  const rows = Object.entries(bangInfos).map(([id, info]) => <BangInfo key={id} info={info} />);
-
-  // We want the render order to be the same every session no matter the changes, so we
-  // sort based on the info.pos property which was added to store the exact order.
-  rows.sort((x, y) => {
-    if (x.props.info.pos > y.props.info.pos) {
-      return 1;
+  useEffect(() => {
+    const rows = [];
+    for (const info of bangInfos) {
+      const id = info[0];
+      const rowInfo = info[1];
+      rows.push(
+        <BangInfo key={id} propsId={id} info={rowInfo} />,
+      );
     }
-    return -1;
-  });
+    setBangInfoRows(rows);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <TabPanel>
-      {/* TODO: Buttons */}
+      {/* TODO: Add new bang button (maybe in parent?), delete bang button */}
       <VStack align="left">
-        {rows}
+        {bangInfoRows}
       </VStack>
     </TabPanel>
   );
