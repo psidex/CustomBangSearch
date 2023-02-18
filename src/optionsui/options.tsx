@@ -5,18 +5,17 @@ import {
   Heading, ChakraProvider, Tabs, TabList, TabPanels, Tab, HStack, useColorMode, Button,
   Box, useMediaQuery,
 } from '@chakra-ui/react';
-
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+
 import theme from './theme';
 import BangTabPanel from './BangsTabPanel';
 import SettingsTabPanel from './SettingsTabPanel';
 import AboutTabPanel from './AboutTabPanel';
+import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful';
+import GitHubIcon from './components/GithubIcon';
 
 import { Settings } from '../lib/settings';
 import { IecMessage, IecMessageType, sendIecMessage } from '../lib/iec';
-
-import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful';
-import GitHubIcon from './components/GithubIcon';
 
 function App(): React.ReactElement {
   const { colorMode, toggleColorMode } = useColorMode();

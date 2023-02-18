@@ -1,6 +1,7 @@
 *.zip
 src/**/*.js
 
+site/
 build/
 meta/
 web-ext-artifacts/

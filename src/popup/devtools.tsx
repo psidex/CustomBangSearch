@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Text, Button } from '@chakra-ui/react';
+
+import browser from 'webextension-polyfill';
 
 import defaultSettings from '../lib/settings.default.json';
 import { IecMessageType, sendIecMessage } from '../lib/iec';
@@ -9,6 +11,15 @@ import { IecMessageType, sendIecMessage } from '../lib/iec';
 
 export default function DevTools(): React.ReactElement {
   const [settingsNowSet, setSettingsNowSet] = useState<boolean>(true);
+  const [storedSize, setStoredSize] = useState<number>(0);
+
+  useEffect(() => {
+    const update = async () => {
+      const biu = await browser.storage.sync.getBytesInUse(['settings']);
+      setStoredSize(biu);
+    };
+    update();
+  }, []);
 
   async function resetSettings(): Promise<void> {
     setSettingsNowSet(false);
@@ -31,6 +42,7 @@ export default function DevTools(): React.ReactElement {
         {' '}
         {settingsNowSet ? 'yes' : 'no'}
       </Text>
+      <Text>{`Settings is storing ${storedSize} bytes`}</Text>
     </>
   );
 }

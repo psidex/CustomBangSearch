@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import lz from 'lz-string';
 
 import defaultSettings from '../lib/settings.default.json';
 import { Settings } from '../lib/settings';
@@ -56,8 +57,9 @@ export async function setSettings(obj: Settings, syncSet = true): Promise<void> 
   }
 
   if (settings.options.sync.type === 'browser') {
+    const toStore = lz.compressToUTF16(JSON.stringify(settings));
     // TODO: Error if too big to store? Or maybe settings page deals with that directly.
-    return browser.storage.sync.set({ settings });
+    return browser.storage.sync.set({ settings: toStore });
   }
 
   // Error return type - https://stackoverflow.com/a/50071254/6396652.
@@ -135,32 +137,41 @@ function convertSettingsV2ToV3(legacySettings: SettingsV2): Settings {
 
 export async function loadSettingsIfExists(): Promise<void> {
   const { settings: storedSettings, bangs: legacySettings } = await browser.storage.sync.get(['settings', 'bangs']);
-  let settingsToStore = storedSettings;
+
+  // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html#definite-assignment-assertions
+  // "A variable is assigned for all intents and purposes, even if TS analyses cannot detect so"
+  let settingsToSet!: Settings;
+
   let haveConvertedLegacy = false;
 
-  if (storedSettings === undefined && legacySettings !== undefined) {
+  if (storedSettings !== undefined && typeof storedSettings === 'string') {
+    const decompressed = lz.decompressFromUTF16(storedSettings);
+    if (decompressed !== null) {
+      settingsToSet = JSON.parse(decompressed);
+    }
+  } else if (legacySettings !== undefined) {
     if (isSettingsV1(legacySettings)) {
-      settingsToStore = convertSettingsV1ToV3(legacySettings);
+      settingsToSet = convertSettingsV1ToV3(legacySettings);
       haveConvertedLegacy = true;
     } else if (isSettingsV2(legacySettings)) {
-      settingsToStore = convertSettingsV2ToV3(legacySettings);
+      settingsToSet = convertSettingsV2ToV3(legacySettings);
       haveConvertedLegacy = true;
     }
   }
 
   // We don't need to check the version number yet, because V3 is the first to have one.
 
-  if (settingsToStore !== undefined) {
+  if (settingsToSet !== undefined) {
     try {
-      await setSettings(settingsToStore, haveConvertedLegacy);
-      if (haveConvertedLegacy) {
+      await setSettings(settingsToSet, haveConvertedLegacy);
+      if (legacySettings !== undefined) {
         await browser.storage.sync.remove(['bangs']);
       }
     } catch (err) {
       // just use defaults for now...
     }
   }
+  // else, we couldn't load any settings, leave it set to the default values.
 
-  // else, leave it set to the default values.
   return Promise.resolve();
 }
