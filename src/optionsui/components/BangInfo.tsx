@@ -72,7 +72,7 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
             placeholder="https://example.com/?q=%s"
             width="30em"
           />
-          <Button onClick={() => { deleteUrl(urlId); }} leftIcon={<DeleteIcon />} iconSpacing={0} variant="outline" />
+          <Button onClick={() => { deleteUrl(urlId); }} variant="outline"><DeleteIcon /></Button>
         </HStack>,
       );
     }
@@ -82,7 +82,7 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
 
   return (
     <HStack align="top">
-      <Button onClick={() => { removeBangInfo(bangId); }} leftIcon={<DeleteIcon />} iconSpacing={0} variant="outline" />
+      <Button onClick={() => { removeBangInfo(bangId); }} variant="outline"><DeleteIcon /></Button>
       <Input value={info.bang} onChange={bangChanged} placeholder="bang" width="6em" />
       <VStack align="left">
         {urlInputs}
