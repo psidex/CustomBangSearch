@@ -16,7 +16,7 @@ import { nanoid } from 'nanoid';
 
 import { StoredBangInfo } from '../lib/settings';
 
-// Map of random ID : url
+// Map of random ID : URL
 export type ReactfulUrlInfo = Map<string, string>;
 
 export type ReactfulBangInfo = {
@@ -35,8 +35,6 @@ export type ReactfulBangInfoContainer = Map<string, ReactfulBangInfo>;
  */
 export function storedBangInfoToReactful(s: StoredBangInfo[]): ReactfulBangInfoContainer {
   const reactfulBangs: ReactfulBangInfoContainer = new Map();
-
-  // TODO: I think we can probably remove ID and pos from stored settings.
 
   // Array order is preserved wherever the settings go (whether they are serialized,
   // send through runtime, iterated, etc.) so we can rely on their index as a way to
@@ -61,4 +59,21 @@ export function storedBangInfoToReactful(s: StoredBangInfo[]): ReactfulBangInfoC
   return reactfulBangs;
 }
 
-export function reactfulToStored() {}
+export function reactfulBangInfoToStored(r: Readonly<ReactfulBangInfoContainer>): StoredBangInfo[] {
+  const bangsToStore: StoredBangInfo[] = [];
+
+  for (const [, reactfulBang] of r) {
+    const s: StoredBangInfo = {
+      bang: reactfulBang.bang,
+      urls: [],
+    };
+
+    for (const [, reactfulUrl] of reactfulBang.urls) {
+      s.urls.push(reactfulUrl);
+    }
+
+    bangsToStore.push(s);
+  }
+
+  return bangsToStore;
+}

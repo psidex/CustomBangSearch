@@ -3,6 +3,7 @@ import lz from 'lz-string';
 
 import defaultSettings from '../lib/settings.default.json';
 import { Settings } from '../lib/settings';
+import { dev } from '../lib/esbuilddefinitions';
 
 // A lookup table for { bang : [redirect urls] }.
 export type BangsLookup = { [key: string]: string[] };
@@ -145,6 +146,13 @@ export async function loadSettingsIfExists(): Promise<void> {
   let haveConvertedLegacy = false;
 
   if (storedSettings !== undefined && typeof storedSettings === 'string') {
+    if (dev) {
+      // TODO: Remove this?
+      // +10 is a guess based on the other part being "settings: "
+      // eslint-disable-next-line no-console
+      console.log(`Stored bytes should be ${(new TextEncoder().encode(storedSettings)).length + 10}`);
+    }
+
     const decompressed = lz.decompressFromUTF16(storedSettings);
     if (decompressed !== null) {
       settingsToSet = JSON.parse(decompressed);

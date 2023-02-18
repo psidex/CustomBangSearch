@@ -81,7 +81,7 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
   }, [info.urls]);
 
   return (
-    <HStack align="top">
+    <HStack align="top" paddingBottom="1em">
       <Button onClick={() => { removeBangInfo(bangId); }} variant="outline"><DeleteIcon /></Button>
       <Input value={info.bang} onChange={bangChanged} placeholder="bang" width="6em" />
       <VStack align="left">

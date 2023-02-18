@@ -8,9 +8,9 @@ import {
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 
 import theme from './theme';
-import BangTabPanel from './BangsTabPanel';
-import SettingsTabPanel from './SettingsTabPanel';
-import AboutTabPanel from './AboutTabPanel';
+import BangTabPanel from './components/BangsTabPanel';
+import SettingsTabPanel from './components/SettingsTabPanel';
+import AboutTabPanel from './components/AboutTabPanel';
 import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful';
 import GitHubIcon from './components/GithubIcon';
 

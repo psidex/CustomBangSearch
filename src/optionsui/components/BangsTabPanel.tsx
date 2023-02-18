@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import {
   Button, HStack, TabPanel, VStack,
 } from '@chakra-ui/react';
-import { PlusSquareIcon } from '@chakra-ui/icons';
+import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 
 import { nanoid } from 'nanoid';
 
-import { ReactfulBangInfo, ReactfulBangInfoContainer } from './reactful';
-import BangInfo from './components/BangInfo';
+import { ReactfulBangInfo, ReactfulBangInfoContainer } from '../reactful';
+import BangInfo from './BangInfo';
 
 type BangTabPanelPropTypes = {
   bangInfos: Readonly<ReactfulBangInfoContainer>
@@ -19,6 +19,8 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   const [bangInfoRows, setBangInfoRows] = useState<React.ReactElement[]>();
 
   const { bangInfos, setBangInfos } = props;
+
+  const saveBangInfo = () => {};
 
   const updateBangInfo = (id: string, info: ReactfulBangInfo) => {
     // https://stackoverflow.com/q/53605759/6396652
@@ -68,7 +70,8 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
 
   return (
     <TabPanel>
-      <HStack>
+      <HStack paddingBottom="2em">
+        <Button onClick={() => { saveBangInfo(); }} leftIcon={<CheckIcon />} variant="outline">Save</Button>
         <Button onClick={() => { newBangInfo(); }} leftIcon={<PlusSquareIcon />} variant="outline">Add Bang</Button>
       </HStack>
       <VStack align="left">

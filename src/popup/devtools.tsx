@@ -37,12 +37,14 @@ export default function DevTools(): React.ReactElement {
   return (
     <>
       <Button onClick={() => { resetSettings(); }}>Reset Stored Settings</Button>
-      <Text>
+      <Text fontSize="1.25em">
         Setting set correctly:
         {' '}
         {settingsNowSet ? 'yes' : 'no'}
       </Text>
-      <Text>{`Settings is storing ${storedSize} bytes`}</Text>
+      <Text fontSize="1.25em">
+        {`Storing ${storedSize}/${browser.storage.sync.QUOTA_BYTES_PER_ITEM} bytes (${(storedSize / (browser.storage.sync.QUOTA_BYTES_PER_ITEM / 100)).toFixed(1)}% of quota)`}
+      </Text>
     </>
   );
 }
