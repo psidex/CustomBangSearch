@@ -11,164 +11,124 @@
   "bangs": [
     {
       "bang": "a",
-      "id": "BOqjlStMAY",
       "urls": [
         "https://smile.amazon.co.uk/s?k=%s"
-      ],
-      "pos": 1
+      ]
     },
     {
       "bang": "e",
-      "id": "Xyah8ow_xk",
       "urls": [
         "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
-      ],
-      "pos": 2
+      ]
     },
     {
       "bang": "ea",
-      "id": "furHsQ2Cno",
       "urls": [
         "https://smile.amazon.co.uk/s?k=%s",
         "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
-      ],
-      "pos": 3
+      ]
     },
     {
       "bang": "et",
-      "id": "zHOxFihYCp",
       "urls": [
         "https://www.etsy.com/uk/search?q=%s"
-      ],
-      "pos": 4
+      ]
     },
     {
       "bang": "t",
-      "id": "QUcvOPSv0U",
       "urls": [
         "https://www.twitch.tv/search?term=%s"
-      ],
-      "pos": 5
+      ]
     },
     {
       "bang": "y",
-      "id": "zt4gi0nqf7",
       "urls": [
         "https://www.youtube.com/results?search_query=%s"
-      ],
-      "pos": 6
+      ]
     },
     {
       "bang": "av",
-      "id": "YlW5FLqoB6",
       "urls": [
         "https://smile.amazon.co.uk/s?k=%s&i=instant-video"
-      ],
-      "pos": 7
+      ]
     },
     {
       "bang": "n",
-      "id": "q6sgismS9d",
       "urls": [
         "https://www.netflix.com/search?q=%s"
-      ],
-      "pos": 8
+      ]
     },
     {
       "bang": "g",
-      "id": "JZfK3m9wXb",
       "urls": [
         "https://www.google.com/search?q=%s"
-      ],
-      "pos": 9
+      ]
     },
     {
       "bang": "b",
-      "id": "yX2I2AnXmY",
       "urls": [
         "https://www.bing.com/search?q=%s"
-      ],
-      "pos": 10
+      ]
     },
     {
       "bang": "d",
-      "id": "K8ClOmmiks",
       "urls": [
         "https://duckduckgo.com/?q=%s"
-      ],
-      "pos": 11
+      ]
     },
     {
       "bang": "q",
-      "id": "lJyx2PCqyL",
       "urls": [
         "https://www.qwant.com/?q=%s"
-      ],
-      "pos": 12
+      ]
     },
     {
       "bang": "m",
-      "id": "HtE81Lta0f",
       "urls": [
         "https://www.google.com/maps/search/%s"
-      ],
-      "pos": 13
+      ]
     },
     {
       "bang": "r",
-      "id": "l-k8nW4Ru4",
       "urls": [
         "https://www.google.com/search?q=site%3Areddit.com+%s"
-      ],
-      "pos": 14
+      ]
     },
     {
       "bang": "git",
-      "id": "CW4_IfmPTH",
       "urls": [
         "https://github.com/search?q=%s"
-      ],
-      "pos": 15
+      ]
     },
     {
       "bang": "mdn",
-      "id": "k0IBikr_9J",
       "urls": [
         "https://developer.mozilla.org/en-US/search?q=%s"
-      ],
-      "pos": 16
+      ]
     },
     {
       "bang": "pypi",
-      "id": "u9z3ChHj2u",
       "urls": [
         "https://pypi.org/search/?q=%s"
-      ],
-      "pos": 17
+      ]
     },
     {
       "bang": "npm",
-      "id": "BUY4AjgGLI",
       "urls": [
         "https://www.npmjs.com/search?q=%s"
-      ],
-      "pos": 18
+      ]
     },
     {
       "bang": "so",
-      "id": "cl4itqctVJ",
       "urls": [
         "https://stackoverflow.com/search?q=%s"
-      ],
-      "pos": 19
+      ]
     },
     {
       "bang": "w",
-      "id": "NsN0i8fnZI",
       "urls": [
         "https://www.wolframalpha.com/input/?i=%s"
-      ],
-      "pos": 20
+      ]
     }
   ]
 }

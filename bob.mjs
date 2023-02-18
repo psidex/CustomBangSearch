@@ -73,7 +73,7 @@ console.log();
 
 const tasks = new Listr([
   {
-    title: 'Build requirements check',
+    title: 'Check build requirements',
     task: () => new Listr([
       {
         title: '7zip',
@@ -86,12 +86,12 @@ const tasks = new Listr([
     ], { concurrent: true }),
   },
   {
-    title: 'Run eslint',
+    title: 'Run lint',
     skip: () => dev,
     task: () => execa('npm', ['run', 'lint']),
   },
   {
-    title: 'Typescript lint',
+    title: 'Run tsc-lint',
     skip: () => dev,
     task: () => execa('npm', ['run', 'tsc-lint']),
   },
@@ -101,7 +101,7 @@ const tasks = new Listr([
     task: () => execa('npm', ['run', 'test']),
   },
   {
-    title: 'Make build directory',
+    title: 'Setup build directory',
     task: () => new Listr([
       {
         title: 'rm',
@@ -115,7 +115,7 @@ const tasks = new Listr([
     ]),
   },
   {
-    title: 'Get Git hash',
+    title: 'Get Git info',
     task: async (ctx) => {
       const { stdout } = await execa('git', ['rev-parse', 'HEAD']);
       ctx.gitHeadShortHash = stdout.slice(0, 7);

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import {
-  Heading, ChakraProvider, Tabs, TabList, TabPanels, Tab,
+  Heading, ChakraProvider, Tabs, TabList, TabPanels, Tab, HStack, useColorMode, Button,
 } from '@chakra-ui/react';
 
+import theme from './theme';
 import BangTabPanel from './BangsTabPanel';
 import SettingsTabPanel from './SettingsTabPanel';
 import AboutTabPanel from './AboutTabPanel';
@@ -15,9 +16,9 @@ import { IecMessage, IecMessageType, sendIecMessage } from '../lib/iec';
 import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful';
 
 function App(): React.ReactElement {
+  const { colorMode, toggleColorMode } = useColorMode();
   const [loading, setLoading] = useState<boolean>(true);
   const [bangInfos, setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
-  // TODO: Have states for each of the individual settings?
 
   useEffect(() => {
     const update = async () => {
@@ -39,7 +40,16 @@ function App(): React.ReactElement {
 
   return (
     <>
-      <Heading padding="0.5em 2rem">Custom Bang Search</Heading>
+      <HStack>
+        <Heading padding="0.5em 2rem">Custom Bang Search</Heading>
+        <HStack alignSelf="end">
+          <Button onClick={toggleColorMode}>
+            Toggle
+            {' '}
+            {colorMode === 'light' ? 'Dark' : 'Light'}
+          </Button>
+        </HStack>
+      </HStack>
       <Tabs>
         <TabList>
           {/* Margin in the Tab allows the TabList horiz line to still fit the whole width */}
@@ -49,7 +59,7 @@ function App(): React.ReactElement {
         </TabList>
 
         <TabPanels paddingLeft="2rem">
-          <BangTabPanel bangInfos={bangInfos} />
+          <BangTabPanel bangInfos={bangInfos} setBangInfos={setBangInfos} />
           <SettingsTabPanel />
           <AboutTabPanel />
         </TabPanels>
@@ -61,7 +71,7 @@ function App(): React.ReactElement {
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <App />
     </ChakraProvider>
   </React.StrictMode>,

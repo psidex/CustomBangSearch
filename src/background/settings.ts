@@ -1,5 +1,4 @@
 import browser from 'webextension-polyfill';
-import { nanoid } from 'nanoid';
 
 import defaultSettings from '../lib/settings.default.json';
 import { Settings } from '../lib/settings';
@@ -34,10 +33,6 @@ function bangsLookupFromSettings(s: Settings): BangsLookup {
 // Use the setters to update the values stored here.
 let settings: Settings = defaultSettings;
 let bangsLookup: BangsLookup = bangsLookupFromSettings(settings);
-
-function generateNewBangId(): string {
-  return nanoid(21);
-}
 
 export function getBangsLookup(): Readonly<BangsLookup> {
   return bangsLookup;
@@ -116,15 +111,11 @@ function deepCopyObj(obj: object) {
 function convertSettingsV1ToV3(legacySettings: SettingsV1): Settings {
   const newSettings: Settings = deepCopyObj(defaultSettings);
   newSettings.bangs = [];
-  let i = 1;
   for (const [bang, url] of Object.entries(legacySettings)) {
     newSettings.bangs.push({
       bang,
-      id: generateNewBangId(),
       urls: url.split(' :: '),
-      pos: i,
     });
-    i += 1;
   }
   return newSettings;
 }
@@ -136,9 +127,7 @@ function convertSettingsV2ToV3(legacySettings: SettingsV2): Settings {
     // Generate new ID just because there's no reason not to for now.
     newSettings.bangs.push({
       bang,
-      id: generateNewBangId(),
       urls: val.url.split(' :: '),
-      pos: val.pos,
     });
   }
   return newSettings;

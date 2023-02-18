@@ -5,7 +5,7 @@
 // StoredBangInfo, mainly so that we can use maps instead of arrays. This allows us to
 // store a random ID alongside each item, for use as a key in react. Maps also keep track
 // of the insertion order of items, and always iterate in that order. This help with
-// rendering in the same order every time.
+// rendering in the same order every time (the same advantage as an array).
 //
 // When saving, maps are converted back to arrays, which also keep insertion order.
 // This means we never have to manually keep track of the order of things (since the
@@ -21,7 +21,6 @@ export type ReactfulUrlInfo = Map<string, string>;
 
 export type ReactfulBangInfo = {
   bang: string
-  pos: number,
   urls: ReactfulUrlInfo
 };
 
@@ -44,10 +43,9 @@ export function storedBangInfoToReactful(s: StoredBangInfo[]): ReactfulBangInfoC
   // "remember" the position of things in the UI (which shouldn't change, as it isn't
   // changable by the user).
 
-  for (const [i, storedBang] of s.entries()) {
+  for (const storedBang of s) {
     const b: ReactfulBangInfo = {
       bang: storedBang.bang,
-      pos: i,
       urls: new Map(),
     };
 
@@ -55,6 +53,8 @@ export function storedBangInfoToReactful(s: StoredBangInfo[]): ReactfulBangInfoC
       b.urls.set(nanoid(21), storedUrl);
     }
 
+    // We use nanoid(21), because thats the default, but passing it in means if the
+    // default chanages in the future, it wont potentially break things.
     reactfulBangs.set(nanoid(21), b);
   }
 

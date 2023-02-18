@@ -1,14 +1,13 @@
 // Define Settings type(s) here so all files can use them.
 
+// Should always be a whole number.
+export const currentSettingsVersion: number = 3;
+
 export type StoredBangInfo = {
-  // A unique ID.
-  id: string
   // The actual bang.
   bang: string
   // The URLs to redirect to / open.
   urls: string[]
-  // Position in settings GUI.
-  pos: number
 };
 
 export type Settings = {
