@@ -57,7 +57,7 @@ export async function setSettings(obj: Settings, syncSet = true): Promise<void> 
     return Promise.resolve();
   }
 
-  if (settings.options.sync.type === 'browser') {
+  if (settings.options.storage.type === 'browser') {
     const toStore = lz.compressToUTF16(JSON.stringify(settings));
     // TODO: Error if too big to store? Or maybe settings page deals with that directly.
     return browser.storage.sync.set({ settings: toStore });

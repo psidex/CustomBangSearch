@@ -34,7 +34,7 @@ function App(): React.ReactElement {
   const [storedSettings, setStoredSettings] = useState<Settings>();
 
   // To be used to render information & changed by the user.
-  const [options, setOptions] = useState<SettingsOptions>({ ignoreDomains: [], sync: { type: 'browser', url: '', key: '' } });
+  const [options, setOptions] = useState<SettingsOptions>({ ignoreDomains: [], storage: { type: 'browser', url: '', key: '' } });
   const [bangInfos, setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
 
   // Update settings saved in sync storage. THe passed variable should come from the above states.
@@ -54,6 +54,8 @@ function App(): React.ReactElement {
       return;
     }
 
+    // TODO: Do we definetly need to deep clone here? (overwriting nested mutable data?)
+    //       Good test would be to console.log storedsettings before and after? does it change?
     // State vars are read only, no mutation!
     let newSettings: Settings = cloneDeep(storedSettings);
 

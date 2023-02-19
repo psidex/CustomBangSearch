@@ -13,8 +13,10 @@ export type StoredBangInfo = {
 export type SettingsOptions = {
   // Search engine URLs to ignore, e.g. searx.tiekoetter.com.
   ignoreDomains: string[]
-  sync: {
+  storage: {
     // For now, only "browser" is supported.
+    // TODO: "browser" should be "sync" instead.
+    // TODO: Support "local" ie localstorage (maybe check indexeddb?) does localstorage forget?
     type: string
     // If type is "server", this can be the server URL.
     url: string

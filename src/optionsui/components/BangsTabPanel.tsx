@@ -6,7 +6,6 @@ import {
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 
 import { nanoid } from 'nanoid';
-import cloneDeep from 'lodash.clonedeep';
 
 import { ReactfulBangInfo, ReactfulBangInfoContainer, reactfulBangInfoToStored } from '../reactful';
 import BangInfo from './BangInfo';
@@ -28,14 +27,14 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   };
 
   const updateBangInfo = (id: string, info: ReactfulBangInfo) => {
-    setBangInfos((oldBangInfos) => cloneDeep(oldBangInfos).set(id, info));
+    // Shallow copy then update with entirely new value at given id, no mutation happens.
+    setBangInfos((oldBangInfos) => new Map(oldBangInfos).set(id, info));
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const newBangInfo = () => {
     const newUrls = new Map();
     newUrls.set(nanoid(21), 'https://example.com/?q=%s');
-    setBangInfos((oldBangInfos) => cloneDeep(oldBangInfos).set(nanoid(21), {
+    setBangInfos((oldBangInfos) => new Map(oldBangInfos).set(nanoid(21), {
       bang: 'e',
       urls: newUrls,
     }));
@@ -43,9 +42,10 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
 
   const removeBangInfo = (id: string) => {
     setBangInfos((oldBangInfos) => {
-      const deepCopy = cloneDeep(oldBangInfos);
-      deepCopy.delete(id);
-      return deepCopy;
+      const shallowCopy = new Map(oldBangInfos);
+      // shallowCopy is a new map, removing from this wont affect the key/value in the state var.
+      shallowCopy.delete(id);
+      return shallowCopy;
     });
   };
 
