@@ -32,3 +32,5 @@ root.render(
     </ChakraProvider>
   </React.StrictMode>,
 );
+
+// TODO: In all code, for all states, deep copy, never mutate state.

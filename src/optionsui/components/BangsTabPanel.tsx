@@ -6,42 +6,46 @@ import {
 import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 
 import { nanoid } from 'nanoid';
+import cloneDeep from 'lodash.clonedeep';
 
-import { ReactfulBangInfo, ReactfulBangInfoContainer } from '../reactful';
+import { ReactfulBangInfo, ReactfulBangInfoContainer, reactfulBangInfoToStored } from '../reactful';
 import BangInfo from './BangInfo';
 
 type BangTabPanelPropTypes = {
   bangInfos: Readonly<ReactfulBangInfoContainer>
   setBangInfos: React.Dispatch<React.SetStateAction<ReactfulBangInfoContainer>>
+  updateSettings: Function // FIXME
 };
 
 export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactElement {
   const [bangInfoRows, setBangInfoRows] = useState<React.ReactElement[]>();
 
-  const { bangInfos, setBangInfos } = props;
+  const { bangInfos, setBangInfos, updateSettings } = props;
 
-  const saveBangInfo = () => {};
+  const saveBangInfo = () => {
+    // Don't need to clone beacuse it's only read.
+    updateSettings(undefined, reactfulBangInfoToStored(bangInfos));
+  };
 
   const updateBangInfo = (id: string, info: ReactfulBangInfo) => {
-    // https://stackoverflow.com/q/53605759/6396652
-    setBangInfos((oldBangInfos) => new Map(oldBangInfos.set(id, info)));
+    setBangInfos((oldBangInfos) => cloneDeep(oldBangInfos).set(id, info));
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const newBangInfo = () => {
     const newUrls = new Map();
     newUrls.set(nanoid(21), 'https://example.com/?q=%s');
-    setBangInfos((oldBangInfos) => new Map(oldBangInfos.set(nanoid(21), {
+    setBangInfos((oldBangInfos) => cloneDeep(oldBangInfos).set(nanoid(21), {
       bang: 'e',
       urls: newUrls,
-    })));
+    }));
   };
 
   const removeBangInfo = (id: string) => {
     setBangInfos((oldBangInfos) => {
-      const stateCopy = new Map(oldBangInfos);
-      stateCopy.delete(id);
-      return new Map(stateCopy);
+      const deepCopy = cloneDeep(oldBangInfos);
+      deepCopy.delete(id);
+      return deepCopy;
     });
   };
 

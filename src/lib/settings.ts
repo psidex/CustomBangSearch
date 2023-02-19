@@ -10,19 +10,21 @@ export type StoredBangInfo = {
   urls: string[]
 };
 
+export type SettingsOptions = {
+  // Search engine URLs to ignore, e.g. searx.tiekoetter.com.
+  ignoreDomains: string[]
+  sync: {
+    // For now, only "browser" is supported.
+    type: string
+    // If type is "server", this can be the server URL.
+    url: string
+    // If type is "server", this can be secret API key.
+    key: string
+  }
+};
+
 export type Settings = {
   version: number,
-  options: {
-    // Search engine URLs to ignore, e.g. searx.tiekoetter.com.
-    ignoreDomains: string[]
-    sync: {
-      // For now, only "browser" is supported.
-      type: string
-      // If type is "server", this can be the server URL.
-      url: string
-      // If type is "server", this can be secret API key.
-      key: string
-    }
-  },
+  options: SettingsOptions,
   bangs: StoredBangInfo[]
 };
