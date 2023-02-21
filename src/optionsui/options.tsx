@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import {
@@ -6,8 +6,6 @@ import {
   Box, useMediaQuery, useToast,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
-
-import cloneDeep from 'lodash.clonedeep';
 
 import theme from './theme';
 import BangTabPanel from './components/BangsTabPanel';
@@ -31,7 +29,7 @@ function App(): React.ReactElement {
   const [loading, setLoading] = useState<boolean>(true);
 
   // Just so we know what's stored without having to ask for it lots.
-  const [storedSettings, setStoredSettings] = useState<Settings>();
+  const storedSettings = useRef<Settings>();
 
   // To be used to render information & changed by the user.
   const [options, setOptions] = useState<SettingsOptions>({ ignoreDomains: [], storage: { type: 'browser', url: '', key: '' } });
@@ -42,7 +40,11 @@ function App(): React.ReactElement {
     newOptions: SettingsOptions | undefined = undefined,
     newBangInfos: StoredBangInfo[] | undefined = undefined,
   ) => {
-    if (storedSettings === undefined) {
+    if (newOptions === undefined && newBangInfos === undefined) {
+      return;
+    }
+
+    if (storedSettings.current === undefined) {
       toast({
         title: 'Failed to set settings.',
         description: 'You haven\'t even loaded your original settings yet!',
@@ -54,17 +56,17 @@ function App(): React.ReactElement {
       return;
     }
 
-    // TODO: Do we definetly need to deep clone here? (overwriting nested mutable data?)
-    //       Good test would be to console.log storedsettings before and after? does it change?
-    // State vars are read only, no mutation!
-    let newSettings: Settings = cloneDeep(storedSettings);
-
+    // FIXME: This will only work if 1 of the params is defined, and the other undefined.
+    //        Maybe just write that in the doc string!
+    let merger = {};
     if (newOptions !== undefined) {
-      newSettings = { ...newSettings, ...{ options: newOptions } };
+      merger = { ...storedSettings.current, ...{ options: newOptions } };
     }
     if (newBangInfos !== undefined) {
-      newSettings = { ...newSettings, ...{ bangs: newBangInfos } };
+      merger = { ...storedSettings.current, ...{ bangs: newBangInfos } };
     }
+
+    const newSettings: Settings = merger as Settings;
 
     const resp: IecMessage = await sendIecMessage({
       type: IecMessageType.SettingsSet,
@@ -72,6 +74,7 @@ function App(): React.ReactElement {
     });
 
     if (resp.type !== IecMessageType.Ok) {
+      // TODO: Try extract error text if it was error (it should be).
       toast({
         title: 'Failed to set settings.',
         description: 'Probably just try again.',
@@ -81,7 +84,7 @@ function App(): React.ReactElement {
         position: 'top',
       });
     } else {
-      setStoredSettings(newSettings);
+      storedSettings.current = newSettings;
       toast({
         title: 'Settings updated.',
         description: 'Saved to sync storage.',
@@ -101,7 +104,7 @@ function App(): React.ReactElement {
         data: null,
       });
       if (resp.type === IecMessageType.SettingsGetResponse) {
-        setStoredSettings(resp.data as Settings);
+        storedSettings.current = resp.data as Settings;
         setBangInfos(storedBangInfoToReactful((resp.data as Settings).bangs));
         setOptions((resp.data as Settings).options);
         setLoading(false);

@@ -6,7 +6,7 @@ import {
 import chromeProcessRequest from './chrome';
 import firefoxProcessRequest from './firefox';
 import { Settings } from '../lib/settings';
-import { getSettings, setSettings, loadSettingsIfExists } from './settings';
+import { getSettings, setSettings, tryLoadSettingsFromStorage } from './settings';
 import { IecMessage, IecMessageType } from '../lib/iec';
 
 // TODO: probably in processors, respect disabled domains from settings.
@@ -66,7 +66,7 @@ function main(): void {
   // still have the default bangs whilst it's (presumably) fetching stuff from the
   // browsers sync storage.
 
-  loadSettingsIfExists();
+  tryLoadSettingsFromStorage();
   setEventListeners();
 }
 

@@ -1,9 +1,9 @@
-import browser from 'webextension-polyfill';
-import lz from 'lz-string';
-
 import defaultSettings from '../lib/settings.default.json';
 import { Settings } from '../lib/settings';
-import { dev } from '../lib/esbuilddefinitions';
+import * as storage from './storage';
+
+// "set" and "get" tend to refer to the global setting(s) variables.
+// "load" and "store" tend to refer to the backend storage of the settings.
 
 // A lookup table for { bang : [redirect urls] }.
 export type BangsLookup = { [key: string]: string[] };
@@ -49,18 +49,16 @@ function setBangsLookup(obj: Settings): void {
 }
 
 // This (&getter) is probably safe, no mutex required - https://stackoverflow.com/a/5347062/6396652
-export async function setSettings(obj: Settings, syncSet = true): Promise<void> {
+export async function setSettings(obj: Settings, store = true): Promise<void> {
   settings = obj;
   setBangsLookup(obj);
 
-  if (!syncSet) {
+  if (!store) {
     return Promise.resolve();
   }
 
   if (settings.options.storage.type === 'browser') {
-    const toStore = lz.compressToUTF16(JSON.stringify(settings));
-    // TODO: Error if too big to store? Or maybe settings page deals with that directly.
-    return browser.storage.sync.set({ settings: toStore });
+    return storage.storeSettings(settings, 'browser');
   }
 
   // Error return type - https://stackoverflow.com/a/50071254/6396652.
@@ -106,13 +104,13 @@ function isSettingsV2(arg: any): arg is SettingsV2 {
   return true;
 }
 
-function deepCopyObj(obj: object) {
-  // Doesn't work with complex types.
+function deepCopy(obj: any) {
+  // obj has to be stringifyable.
   return JSON.parse(JSON.stringify(obj));
 }
 
 function convertSettingsV1ToV3(legacySettings: SettingsV1): Settings {
-  const newSettings: Settings = deepCopyObj(defaultSettings);
+  const newSettings: Settings = deepCopy(defaultSettings);
   newSettings.bangs = [];
   for (const [bang, url] of Object.entries(legacySettings)) {
     newSettings.bangs.push({
@@ -124,7 +122,7 @@ function convertSettingsV1ToV3(legacySettings: SettingsV1): Settings {
 }
 
 function convertSettingsV2ToV3(legacySettings: SettingsV2): Settings {
-  const newSettings: Settings = deepCopyObj(defaultSettings);
+  const newSettings: Settings = deepCopy(defaultSettings);
   newSettings.bangs = [];
   for (const [bang, val] of Object.entries(legacySettings)) {
     // Generate new ID just because there's no reason not to for now.
@@ -136,28 +134,25 @@ function convertSettingsV2ToV3(legacySettings: SettingsV2): Settings {
   return newSettings;
 }
 
-export async function loadSettingsIfExists(): Promise<void> {
-  const { settings: storedSettings, bangs: legacySettings } = await browser.storage.sync.get(['settings', 'bangs']);
+export async function tryLoadSettingsFromStorage(): Promise<void> {
+  let storedSettings: Settings | undefined;
+  try {
+    storedSettings = await storage.loadSettings('browser');
+  } catch (err) {
+    // Can't talk to storage (or wrong storage), just use default for now.
+    // FIXME: Specific case for wrong storage, report to user somehow?
+    //        Same goes for setSettings err.
+    return Promise.resolve();
+  }
 
-  // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html#definite-assignment-assertions
-  // "A variable is assigned for all intents and purposes, even if TS analyses cannot detect so"
-  let settingsToSet!: Settings;
+  let settingsToSet = storedSettings;
 
+  // We want to do this even if we loaded settings, to make sure legacy is deleted.
+  const legacySettings = await storage.loadAndRmLegacySettings();
   let haveConvertedLegacy = false;
 
-  if (storedSettings !== undefined && typeof storedSettings === 'string') {
-    if (dev) {
-      // TODO: Remove this?
-      // +10 is a guess based on the other part being "settings: "
-      // eslint-disable-next-line no-console
-      console.log(`Stored bytes should be ${(new TextEncoder().encode(storedSettings)).length + 10}`);
-    }
-
-    const decompressed = lz.decompressFromUTF16(storedSettings);
-    if (decompressed !== null) {
-      settingsToSet = JSON.parse(decompressed);
-    }
-  } else if (legacySettings !== undefined) {
+  // If we found no settings, but we found legacy settings.
+  if (storedSettings === undefined && legacySettings !== undefined) {
     if (isSettingsV1(legacySettings)) {
       settingsToSet = convertSettingsV1ToV3(legacySettings);
       haveConvertedLegacy = true;
@@ -167,19 +162,13 @@ export async function loadSettingsIfExists(): Promise<void> {
     }
   }
 
-  // We don't need to check the version number yet, because V3 is the first to have one.
-
   if (settingsToSet !== undefined) {
     try {
       await setSettings(settingsToSet, haveConvertedLegacy);
-      if (legacySettings !== undefined) {
-        await browser.storage.sync.remove(['bangs']);
-      }
     } catch (err) {
-      // just use defaults for now...
+      // Can't talk to storage, use default for now.
     }
   }
-  // else, we couldn't load any settings, leave it set to the default values.
 
   return Promise.resolve();
 }
