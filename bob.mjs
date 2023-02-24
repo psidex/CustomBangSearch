@@ -31,8 +31,9 @@ const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 const extensionVersion = packageJson.version;
 assert(extensionVersion === manifestShared.version, 'package.json and manifest.shared versions match');
 
+// FIXME: Probably use path library instead of string manipulation?
+
 // Files and directories to copy to the build directory.
-// TODO: All paths should use path library instead of string manipulation.
 const toCopy = [
   './images',
   './src/optionsui/options.css',
@@ -42,6 +43,21 @@ const toCopy = [
   './package.json',
   './README.md',
   './LICENSE',
+];
+
+// Files & dirs for a reviewer.
+const sourceFilesForReview = [
+  './docs',
+  './images',
+  './src',
+  './bob.mjs',
+  './LICENSE',
+  './manifest.chrome.json',
+  './manifest.firefox.json',
+  './manifest.shared.json',
+  './package.json',
+  './README.md',
+  'tsconfig.json',
 ];
 
 const buildPath = './build';
@@ -97,7 +113,7 @@ const tasks = new Listr([
   },
   {
     title: 'Run tests',
-    skip: () => dev,
+    skip: () => true, // TODO: Testing!
     task: () => execa('npm', ['run', 'test']),
   },
   {
@@ -198,8 +214,14 @@ const tasks = new Listr([
       return execa('7z', ['a', `-tzip ${zipName}`, `${buildPath}/*`], { shell: true });
     },
   },
-  // TODO: Have a task that, if we're in release mode, creates a zip for the reviewer
-  //       that contains all the .ts(x) source code and build scripts, etc.
+  {
+    title: 'Create source zip file for review',
+    skip: () => dev,
+    task: (ctx) => {
+      const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-source.zip`;
+      return execa('7z', ['a', `-tzip ${zipName}`, `${sourceFilesForReview.join(' ')}`], { shell: true });
+    },
+  },
 ]);
 
 tasks.run().catch((err) => {

@@ -20,8 +20,6 @@ type SettingsV1 = {
   [key: string]: string;
 };
 
-const setSettingsSyncErr = new Error('Failed to save settings to browers sync storage');
-
 function bangsLookupFromSettings(s: Settings): BangsLookup {
   const l: BangsLookup = {};
   for (const sb of s.bangs) {
@@ -57,12 +55,7 @@ export async function setSettings(obj: Settings, store = true): Promise<void> {
     return Promise.resolve();
   }
 
-  if (settings.options.storage.type === 'browser') {
-    return storage.storeSettings(settings, 'browser');
-  }
-
-  // Error return type - https://stackoverflow.com/a/50071254/6396652.
-  return Promise.reject(setSettingsSyncErr);
+  return storage.storeSettings(settings, 'browser');
 }
 
 function isKeyedObj(arg: any): arg is object {

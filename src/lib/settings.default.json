@@ -1,12 +1,7 @@
 {
   "version": 3,
   "options": {
-    "ignoreDomains": [],
-    "storage": {
-      "type": "browser",
-      "url": "",
-      "key": ""
-    }
+    "ignoreDomains": []
   },
   "bangs": [
     {

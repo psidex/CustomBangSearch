@@ -71,32 +71,22 @@ This does mean that the extension will use slightly more resources (e.g. to stor
 ### Type
 
 ```ts
-export type StoredBang = {
-  // A unique ID.
-  id: string
+export type StoredBangInfo = {
   // The actual bang.
   bang: string
   // The URLs to redirect to / open.
   urls: string[]
-  // Position in settings GUI.
-  pos: number
+};
+
+export type SettingsOptions = {
+  // Search engine URLs to ignore, e.g. searx.tiekoetter.com.
+  ignoreDomains: string[]
 };
 
 export type Settings = {
   version: number,
-  options: {
-    // Search engine URLs to ignore, e.g. searx.tiekoetter.com.
-    ignoreDomains: string[]
-    sync: {
-      // For now, only "browser" is supported.
-      type: string
-      // If type is "server", this can be the server URL.
-      url: string
-      // If type is "server", this can be secret API key.
-      key: string
-    }
-  },
-  bangs: StoredBang[]
+  options: SettingsOptions,
+  bangs: StoredBangInfo[]
 };
 
 ```
@@ -107,39 +97,26 @@ export type Settings = {
 {
   "version": 3,
   "options": {
-    // TODO: Add support in ext for ignoring domains!
-    "ignoreDomains": [],
-    "sync": {
-      "type": "browser",
-      "url": "",
-      "key": ""
-    }
+    "ignoreDomains": []
   },
   "bangs": [
     {
-      "id": "BOqjlStMAY",
-      "bangs": "a",
+      "bang": "a",
       "urls": [
         "https://smile.amazon.co.uk/s?k=%s"
-      ],
-      "pos": 1
+      ]
     },
     {
-      "id": "BOqjlStMAZ",
-      "bangs": "ae",
+      "bang": "e",
       "urls": [
-        "https://smile.amazon.co.uk/s?k=%s",
         "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
-      ],
-      "pos": 2
+      ]
     }
   ]
 }
 ```
 
-For now, this settings JSON is stored in a [single `storage.sync` item](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync#storage_quotas_for_sync_data), maybe JSON.stringify'd, and then maybe compressed using [lz-string](https://pieroxy.net/blog/pages/lz-string/index.html)?
-
-The `sync` setting allows you to define a type, URL, and a key. This is currently unused, but is there because I plan to support external storage of the `bangs` array in the future (using a custom API server).
+For now, this settings JSON is stored in a [single `storage.sync` item](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync#storage_quotas_for_sync_data), JSON.stringify'd, and then maybe compressed using [lz-string](https://pieroxy.net/blog/pages/lz-string/index.html)?
 
 ### Lookup Type
 

@@ -4,9 +4,7 @@ import lz from 'lz-string';
 import { Settings } from '../lib/settings';
 import { dev } from '../lib/esbuilddefinitions';
 
-// TODO: If using browser sync, have option to use localstorage as backup / cache
-// TODO: "removeSettings" to delete when switching storage type
-
+// Currently we only support 'browser', but likely will support more in the future.
 const supportedStorageTypes = new Set(['browser']);
 
 function compressSettings(toCompress: Settings): string {
@@ -24,7 +22,7 @@ function getStorageApi(storageType: string): Promise<browser.Storage.SyncStorage
     return Promise.reject(new Error('unsupported storage type'));
   }
 
-  // TODO: Add support to save to & load from local and custom server (not a priority)
+  // Future work: Add support to save to & load from local and custom server
 
   // if (storageType === 'local') {
   //   api = browser.storage.local;
@@ -35,8 +33,8 @@ function getStorageApi(storageType: string): Promise<browser.Storage.SyncStorage
 
 export async function storeSettings(toStore: Settings, storageType: string): Promise<void> {
   const storageApi = await getStorageApi(storageType);
-  // TODO: Error if compressedSettings too big to store, work out how to calc for each storage type.
   const compressedSettings = compressSettings(toStore);
+  // If compressedSettings is too big, set will reject with error message to show user.
   return storageApi.set({ settings: compressedSettings });
 }
 

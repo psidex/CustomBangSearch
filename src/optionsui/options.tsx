@@ -17,6 +17,8 @@ import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful'
 import { Settings, SettingsOptions, StoredBangInfo } from '../lib/settings';
 import { IecMessage, IecMessageType, sendIecMessage } from '../lib/iec';
 
+// TODO: Some level of support for using the DDG bangs.
+
 function App(): React.ReactElement {
   const { colorMode, toggleColorMode } = useColorMode();
   const toast = useToast();
@@ -32,7 +34,7 @@ function App(): React.ReactElement {
   const storedSettings = useRef<Settings>();
 
   // To be used to render information & changed by the user.
-  const [options, setOptions] = useState<SettingsOptions>({ ignoreDomains: [], storage: { type: 'browser', url: '', key: '' } });
+  const [options, setOptions] = useState<SettingsOptions>({ ignoreDomains: [] });
   const [bangInfos, setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
 
   // Update settings saved in sync storage. THe passed variable should come from the above states.
@@ -73,13 +75,12 @@ function App(): React.ReactElement {
       data: newSettings,
     });
 
-    if (resp.type !== IecMessageType.Ok) {
-      // TODO: Try extract error text if it was error (it should be).
+    if (resp.type === IecMessageType.Error) {
       toast({
         title: 'Failed to set settings.',
-        description: 'Probably just try again.',
+        description: `${resp.data}`,
         status: 'error',
-        duration: 7000,
+        duration: 10000,
         isClosable: true,
         position: 'top',
       });
@@ -89,7 +90,7 @@ function App(): React.ReactElement {
         title: 'Settings updated.',
         description: 'Saved to sync storage.',
         status: 'success',
-        duration: 7000,
+        duration: 5000,
         isClosable: true,
         position: 'top',
       });
@@ -103,36 +104,32 @@ function App(): React.ReactElement {
         type: IecMessageType.SettingsGet,
         data: null,
       });
-      if (resp.type === IecMessageType.SettingsGetResponse) {
+      if (resp.type === IecMessageType.Error) {
+        toast({
+          title: 'Failed to get settings.',
+          description: `${resp.data}`,
+          status: 'error',
+          duration: null, // Display forever.
+          isClosable: false,
+          position: 'top',
+        });
+      } else if (resp.type === IecMessageType.SettingsGetResponse) {
         storedSettings.current = resp.data as Settings;
         setBangInfos(storedBangInfoToReactful((resp.data as Settings).bangs));
         setOptions((resp.data as Settings).options);
         setLoading(false);
-      } // FIXME: else some sort of error message?
+      }
     };
     update();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  let content: any;
+
   if (loading) {
-    return <Heading>Loading...</Heading>;
-  }
-
-  // eslint-disable-next-line no-nested-ternary
-  const widthPercent = windowIsAtLeast2200 ? '40%' : windowIsAtLeast1600 ? '60%' : windowIsAtLeast1200 ? '80%' : '100%';
-
-  return (
-    <Box width={widthPercent} margin="auto">
-      <HStack justifyContent="space-between">
-        <Heading padding="0.5em 2rem">Custom Bang Search</Heading>
-        <HStack padding="0.5em 2rem">
-          <Button variant="outline" onClick={() => { window.open('https://github.com/psidex/CustomBangSearch', '_blank')?.focus(); }}>
-            <GitHubIcon boxSize={6} />
-          </Button>
-          <Button variant="outline" onClick={toggleColorMode}>
-            {colorMode === 'light' ? <MoonIcon boxSize={5} /> : <SunIcon boxSize={5} />}
-          </Button>
-        </HStack>
-      </HStack>
+    content = <Heading>Loading...</Heading>;
+  } else {
+    content = (
       <Tabs>
         <TabList>
           {/* Margin in the Tab allows the TabList horiz line to still fit the whole width */}
@@ -154,6 +151,26 @@ function App(): React.ReactElement {
           <AboutTabPanel />
         </TabPanels>
       </Tabs>
+    );
+  }
+
+  // eslint-disable-next-line no-nested-ternary
+  const widthPercent = windowIsAtLeast2200 ? '40%' : windowIsAtLeast1600 ? '60%' : windowIsAtLeast1200 ? '80%' : '100%';
+
+  return (
+    <Box width={widthPercent} margin="auto">
+      <HStack justifyContent="space-between">
+        <Heading padding="0.5em 2rem">Custom Bang Search</Heading>
+        <HStack padding="0.5em 2rem">
+          <Button variant="outline" onClick={() => { window.open('https://github.com/psidex/CustomBangSearch', '_blank')?.focus(); }}>
+            <GitHubIcon boxSize={6} />
+          </Button>
+          <Button variant="outline" onClick={toggleColorMode}>
+            {colorMode === 'light' ? <MoonIcon boxSize={5} /> : <SunIcon boxSize={5} />}
+          </Button>
+        </HStack>
+      </HStack>
+      {content}
     </Box>
   );
 }

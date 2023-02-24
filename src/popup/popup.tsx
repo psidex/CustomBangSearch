@@ -11,8 +11,6 @@ import DevTools from './devtools';
 
 import { dev, version } from '../lib/esbuilddefinitions';
 
-// TODO: Some level of support for using the DDG bangs.
-
 function App(): React.ReactElement {
   return (
     <VStack>
@@ -32,5 +30,3 @@ root.render(
     </ChakraProvider>
   </React.StrictMode>,
 );
-
-// TODO: In all code, for all states, deep copy, never mutate state.
