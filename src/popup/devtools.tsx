@@ -5,7 +5,7 @@ import { Text, Button } from '@chakra-ui/react';
 import browser from 'webextension-polyfill';
 
 import defaultSettings from '../lib/settings.default.json';
-import { IecMessageType, sendIecMessage } from '../lib/iec';
+import * as storage from '../lib/storage';
 
 /* eslint-disable no-alert */
 
@@ -23,15 +23,8 @@ export default function DevTools(): React.ReactElement {
 
   async function resetSettings(): Promise<void> {
     setSettingsNowSet(false);
-    const resp = await sendIecMessage({
-      type: IecMessageType.SettingsSet,
-      data: defaultSettings,
-    });
-    if (resp.type === IecMessageType.Error) {
-      alert(resp.data as string);
-    } else {
-      setSettingsNowSet(true);
-    }
+    await storage.storeSettings(defaultSettings);
+    setSettingsNowSet(true);
   }
 
   return (

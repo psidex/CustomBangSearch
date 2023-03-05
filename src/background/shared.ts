@@ -1,6 +1,6 @@
 import { WebRequest } from 'webextension-polyfill';
 
-import { getBangsLookup } from './settings';
+import { getBangsLookup } from './lookup';
 
 const possibleQueryParams = ['q', 'query', 'eingabe'];
 

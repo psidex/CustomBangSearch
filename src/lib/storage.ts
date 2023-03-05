@@ -1,19 +1,18 @@
 import browser from 'webextension-polyfill';
 import lz from 'lz-string';
 
-import { Settings } from '../lib/settings';
-import { dev } from '../lib/esbuilddefinitions';
+import { Settings } from './settings';
 
 // Currently we only support 'browser', but likely will support more in the future.
+// Because of this, we have the functionality for more, but hard-code 'browser' for now.
 const supportedStorageTypes = new Set(['browser']);
 
 function compressSettings(toCompress: Settings): string {
   return lz.compressToUTF16(JSON.stringify(toCompress));
 }
 
-function decompressSettings(toDecompress: string): Settings {
+export function decompressSettings(toDecompress: string): Settings | null {
   const decompressed = lz.decompressFromUTF16(toDecompress);
-  // FIXME: Throw error if decompressed is null?
   return JSON.parse(decompressed as string);
 }
 
@@ -21,39 +20,37 @@ function getStorageApi(storageType: string): Promise<browser.Storage.SyncStorage
   if (!supportedStorageTypes.has(storageType)) {
     return Promise.reject(new Error('unsupported storage type'));
   }
-
-  // Future work: Add support to save to & load from local and custom server
-
   // if (storageType === 'local') {
   //   api = browser.storage.local;
   // }
-
+  // if (storageType === 'server') {
+  //   api = some custom implementation
+  // }
   return Promise.resolve(browser.storage.sync);
 }
 
-export async function storeSettings(toStore: Settings, storageType: string): Promise<void> {
-  const storageApi = await getStorageApi(storageType);
+export async function storeSettings(toStore: Settings): Promise<void> {
+  const storageApi = await getStorageApi('browser');
   const compressedSettings = compressSettings(toStore);
   // If compressedSettings is too big, set will reject with error message to show user.
   return storageApi.set({ settings: compressedSettings });
 }
 
-export async function loadSettings(storageType: string): Promise<Settings | undefined> {
-  const storageApi = await getStorageApi(storageType);
+export async function getSettings(): Promise<Settings | undefined> {
+  const storageApi = await getStorageApi('browser');
   const { settings: storedSettingsStr } = await storageApi.get(['settings']);
   if (storedSettingsStr === undefined) {
     return Promise.resolve(undefined);
   }
-  if (dev) {
-    // TODO: Remove this?
-    // +10 is a guess based on the other part being "settings: ", should check
-    // eslint-disable-next-line no-console
-    console.log(`Stored bytes should be ${(new TextEncoder().encode(storedSettingsStr)).length + 10}`);
+  const decompressed = decompressSettings(storedSettingsStr);
+  if (decompressed === null) {
+    // TODO: Maybe throw an err or something?
+    return Promise.resolve(undefined);
   }
-  return Promise.resolve(decompressSettings(storedSettingsStr));
+  return Promise.resolve(decompressed);
 }
 
-export async function loadAndRmLegacySettings(): Promise<any> {
+export async function getAndRmLegacySettings(): Promise<any> {
   const { bangs: legacySettings } = await browser.storage.sync.get(['bangs']);
   if (legacySettings !== undefined) {
     await browser.storage.sync.remove(['bangs']);

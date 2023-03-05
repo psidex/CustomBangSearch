@@ -15,7 +15,7 @@ import GitHubIcon from './components/GithubIcon';
 
 import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful';
 import { Settings, SettingsOptions, StoredBangInfo } from '../lib/settings';
-import { IecMessage, IecMessageType, sendIecMessage } from '../lib/iec';
+import * as storage from '../lib/storage';
 
 // TODO: Some level of support for using the DDG bangs.
 
@@ -48,7 +48,7 @@ function App(): React.ReactElement {
 
     if (storedSettings.current === undefined) {
       toast({
-        title: 'Failed to set settings.',
+        title: 'Failed to set settings',
         description: 'You haven\'t even loaded your original settings yet!',
         status: 'error',
         duration: 7000,
@@ -58,39 +58,33 @@ function App(): React.ReactElement {
       return;
     }
 
-    // FIXME: This will only work if 1 of the params is defined, and the other undefined.
-    //        Maybe just write that in the doc string!
-    let merger = {};
+    let merger = { ...storedSettings.current };
     if (newOptions !== undefined) {
-      merger = { ...storedSettings.current, ...{ options: newOptions } };
+      merger = { ...merger, ...{ options: newOptions } };
     }
     if (newBangInfos !== undefined) {
-      merger = { ...storedSettings.current, ...{ bangs: newBangInfos } };
+      merger = { ...merger, ...{ bangs: newBangInfos } };
     }
 
     const newSettings: Settings = merger as Settings;
 
-    const resp: IecMessage = await sendIecMessage({
-      type: IecMessageType.SettingsSet,
-      data: newSettings,
-    });
-
-    if (resp.type === IecMessageType.Error) {
+    try {
+      await storage.storeSettings(newSettings);
       toast({
-        title: 'Failed to set settings.',
-        description: `${resp.data}`,
-        status: 'error',
-        duration: 10000,
-        isClosable: true,
-        position: 'top',
-      });
-    } else {
-      storedSettings.current = newSettings;
-      toast({
-        title: 'Settings updated.',
+        title: 'Settings updated',
         description: 'Saved to sync storage.',
         status: 'success',
         duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    } catch (err) {
+      // TODO: Special case for "Error: QUOTA_BYTES_PER_ITEM quota exceeded"?
+      toast({
+        title: 'Failed to set settings',
+        description: (err as Error).toString(),
+        status: 'error',
+        duration: 10000,
         isClosable: true,
         position: 'top',
       });
@@ -100,23 +94,20 @@ function App(): React.ReactElement {
   // On first load, set state from stored settings.
   useEffect(() => {
     const update = async () => {
-      const resp: IecMessage = await sendIecMessage({
-        type: IecMessageType.SettingsGet,
-        data: null,
-      });
-      if (resp.type === IecMessageType.Error) {
+      const currentSettings = await storage.getSettings();
+      if (currentSettings === undefined) {
         toast({
-          title: 'Failed to get settings.',
-          description: `${resp.data}`,
+          title: 'Failed to get settings',
+          description: 'getSettings returned undefined.',
           status: 'error',
           duration: null, // Display forever.
           isClosable: false,
           position: 'top',
         });
-      } else if (resp.type === IecMessageType.SettingsGetResponse) {
-        storedSettings.current = resp.data as Settings;
-        setBangInfos(storedBangInfoToReactful((resp.data as Settings).bangs));
-        setOptions((resp.data as Settings).options);
+      } else {
+        storedSettings.current = currentSettings;
+        setBangInfos(storedBangInfoToReactful(currentSettings.bangs));
+        setOptions(currentSettings.options);
         setLoading(false);
       }
     };

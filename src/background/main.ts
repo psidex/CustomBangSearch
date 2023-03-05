@@ -6,12 +6,63 @@ import {
 import chromeProcessRequest from './chrome';
 import firefoxProcessRequest from './firefox';
 import { Settings } from '../lib/settings';
-import { getSettings, setSettings, tryLoadSettingsFromStorage } from './settings';
-import { IecMessage, IecMessageType } from '../lib/iec';
+import * as legacy from './legacy';
+import * as storage from '../lib/storage';
+import { setBangsLookup } from './lookup';
+import defaultSettings from '../lib/settings.default.json';
 
-// TODO: probably in processors, respect disabled domains from settings.
+// TODO: Respsect disabled domains from settings.
 
-function setEventListeners(): void {
+async function setupSettings(): Promise<void> {
+  let currentSettings: Settings | undefined;
+
+  currentSettings = await storage.getSettings();
+
+  const legacySettings = await storage.getAndRmLegacySettings();
+  let convertedSettings: Settings | undefined;
+
+  // If we found no settings, but we found legacy settings.
+  if (currentSettings === undefined && legacySettings !== undefined) {
+    if (legacy.isSettingsV1(legacySettings)) {
+      convertedSettings = legacy.convertSettingsV1ToV3(legacySettings);
+    } else if (legacy.isSettingsV2(legacySettings)) {
+      convertedSettings = legacy.convertSettingsV2ToV3(legacySettings);
+    }
+  }
+
+  if (convertedSettings !== undefined) {
+    currentSettings = convertedSettings;
+  }
+
+  if (currentSettings === undefined) {
+    currentSettings = defaultSettings;
+  }
+
+  setBangsLookup(currentSettings);
+
+  // Redundant if the user just has settings set. Only happens once per load tho, not a problem.
+  return storage.storeSettings(currentSettings);
+}
+
+function main(): void {
+  if (dev) {
+    // eslint-disable-next-line no-console
+    console.info(`Dev: ${dev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`);
+  }
+
+  // Because service workers need to set their event listeners immediatley, we can't await this.
+  // There may be a better way to do this, but for now we just hope it runs quickly!
+  setupSettings();
+
+  browser.storage.sync.onChanged.addListener((changes: { settings?: { newValue: string } }) => {
+    if (changes.settings !== undefined) {
+      const newSettings = storage.decompressSettings(changes.settings.newValue);
+      if (newSettings !== null) {
+        setBangsLookup(newSettings);
+      }
+    }
+  });
+
   if (currentBrowser === 'chrome') {
     // Only fires on tabs where the URL is in host_permissions.
     browser.tabs.onUpdated.addListener((tabId, changed) => {
@@ -27,47 +78,6 @@ function setEventListeners(): void {
       ['blocking', 'requestBody'],
     );
   }
-
-  browser.runtime.onMessage.addListener(async (request: IecMessage): Promise<IecMessage> => {
-    if (request.type === IecMessageType.SettingsGet) {
-      return Promise.resolve({
-        type: IecMessageType.SettingsGetResponse,
-        data: getSettings(),
-      });
-    }
-
-    if (request.type === IecMessageType.SettingsSet) {
-      const newSettings = request.data as Settings;
-      try {
-        await setSettings(newSettings);
-      } catch (err) {
-        return Promise.resolve({
-          type: IecMessageType.Error,
-          data: (err as Error).toString(),
-        });
-      }
-    }
-
-    return Promise.resolve({
-      type: IecMessageType.Ok,
-      data: null,
-    });
-  });
-}
-
-function main(): void {
-  if (dev) {
-    // eslint-disable-next-line no-console
-    console.info(`Dev: ${dev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`);
-  }
-
-  // Event listeners have to be set synchronously, so we just have to hope that
-  // loadSettingsIfExists runs fast. If it doesn't it's not a massive deal, as we will
-  // still have the default bangs whilst it's (presumably) fetching stuff from the
-  // browsers sync storage.
-
-  tryLoadSettingsFromStorage();
-  setEventListeners();
 }
 
 main();
