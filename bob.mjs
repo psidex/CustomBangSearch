@@ -157,6 +157,21 @@ const tasks = new Listr([
     },
   },
   {
+    title: 'Convert host permissions to URLs',
+    task: (ctx) => {
+      // This is something ChatGPT came up with!
+      // This description may not be 100% accurate:
+      // ^\*?:?\/\/ Matches the beginning of the URL (including an optional protocol).
+      // (?:\*\.)? Matches an optional *. subdomain wildcard.
+      // ([^/]+) Captures the hostname; any sequence of characters that is not a forward slash.
+      // (?:\/|$) Matches the end of the URL (either a forward slash or the end of the string).
+      ctx.hostPermissionUrls = ctx.manifest.host_permissions.map((permission) => {
+        const match = permission.match(/^\*?:?\/\/(?:\*\.)?([^/]+)(?:\/|$)/);
+        return match ? match[1] : null;
+      });
+    },
+  },
+  {
     title: 'Run esbuild',
     task: (ctx) => {
       const scriptPaths = ['./src/background/main.ts', './src/optionsui/options.tsx', './src/popup/popup.tsx'];
@@ -171,8 +186,9 @@ const tasks = new Listr([
           'process.env.dev': `'${dev}'`,
           'process.env.version': `'${extensionVersion}'`,
           'process.env.hash': `'${ctx.gitHeadShortHash}'`,
-          'process.env.searchEngineUrls': JSON.stringify(ctx.mergedHostPermissions),
           'process.env.buildTime': JSON.stringify(new Date()),
+          'process.env.hostPermissions': JSON.stringify(ctx.mergedHostPermissions),
+          'process.env.hostPermissionUrls': JSON.stringify(ctx.hostPermissionUrls),
         },
       };
 

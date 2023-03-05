@@ -1,7 +1,7 @@
 import browser from 'webextension-polyfill';
 
 import {
-  dev, currentBrowser, version, hash, searchEngineUrls,
+  dev, currentBrowser, version, hash, hostPermissions,
 } from '../lib/esbuilddefinitions';
 import chromeProcessRequest from './chrome';
 import firefoxProcessRequest from './firefox';
@@ -9,9 +9,13 @@ import { Settings } from '../lib/settings';
 import * as legacy from './legacy';
 import * as storage from '../lib/storage';
 import { setBangsLookup } from './lookup';
+import { setIgnoredDomains } from './ignoreddomains';
 import defaultSettings from '../lib/settings.default.json';
 
-// TODO: Respsect disabled domains from settings.
+function updateGlobals(settings: Settings): void {
+  setBangsLookup(settings);
+  setIgnoredDomains(settings.options.ignoredDomains);
+}
 
 async function setupSettings(): Promise<void> {
   let currentSettings: Settings | undefined;
@@ -38,7 +42,7 @@ async function setupSettings(): Promise<void> {
     currentSettings = defaultSettings;
   }
 
-  setBangsLookup(currentSettings);
+  updateGlobals(currentSettings);
 
   // Redundant if the user just has settings set. Only happens once per load tho, not a problem.
   return storage.storeSettings(currentSettings);
@@ -51,14 +55,14 @@ function main(): void {
   }
 
   // Because service workers need to set their event listeners immediatley, we can't await this.
-  // There may be a better way to do this, but for now we just hope it runs quickly!
+  // FIXME: There may be a better way to do this, but for now we just hope it runs quickly!
   setupSettings();
 
   browser.storage.sync.onChanged.addListener((changes: { settings?: { newValue: string } }) => {
     if (changes.settings !== undefined) {
       const newSettings = storage.decompressSettings(changes.settings.newValue);
       if (newSettings !== null) {
-        setBangsLookup(newSettings);
+        updateGlobals(newSettings);
       }
     }
   });
@@ -74,7 +78,7 @@ function main(): void {
     // The requestBody spec is required for handling POST situations.
     browser.webRequest.onBeforeRequest.addListener(
       firefoxProcessRequest,
-      { urls: searchEngineUrls },
+      { urls: hostPermissions },
       ['blocking', 'requestBody'],
     );
   }

@@ -4,8 +4,6 @@ If you want a search engine added, please [raise an issue](template).
 
 Feel free to submit a PR if you want to add one yourself, or if you have fixed a broken engine.
 
-TODO: Check if DDG / Brave search bangs overwrite ours, and if they do, add notes
-
 Symbol | Meaning
 ---|---
 ✅ | Fully working
@@ -18,8 +16,8 @@ Search Engine | Supported | Notes
 ---|---|---
 google.com | ✅ |
 bing.com | ✅ |
-duckduckgo.com | ✅ |
-search.brave.com | ✅ |
+duckduckgo.com | ✅ | DuckDuckGo's own bangs will overwrite your custom ones (see issue #??)
+search.brave.com | ✅ | Also has bangs built in, same issue as DDG
 metager.org | ✅ |
 mojeek.com | ✅ |
 searx.tiekoetter.com | ✅ |

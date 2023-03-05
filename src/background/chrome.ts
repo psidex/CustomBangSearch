@@ -1,8 +1,13 @@
 import browser from 'webextension-polyfill';
 
-import getRedirects from './shared';
+import { getIgnoredDomains } from './ignoreddomains';
+import { getRedirects, shouldReject } from './shared';
 
 export default function processRequest(tabId: number, url: string): void {
+  if (shouldReject(getIgnoredDomains(), url)) {
+    return;
+  }
+
   // From the current URL, get the redirections (if any) to apply.
   const redirections = getRedirects(url);
 

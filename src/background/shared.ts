@@ -4,9 +4,14 @@ import { getBangsLookup } from './lookup';
 
 const possibleQueryParams = ['q', 'query', 'eingabe'];
 
-/**
- * Construct a URL to send the user to given the bang URL and query text.
- */
+export function shouldReject(blacklist: Readonly<string[]>, url: string): boolean {
+  if (blacklist.includes(new URL(url).hostname)) {
+    return true;
+  }
+  return false;
+}
+
+// Construct a URL to send the user to given the bang URL and query text.
 function constructRedirect(redirectUrl: string, queryText: string): string {
   if (queryText === '') {
     return (new URL(redirectUrl)).origin;
@@ -20,7 +25,7 @@ function constructRedirect(redirectUrl: string, queryText: string): string {
  * @param request (Optional) The request details object from a WebRequestBlocking event.
  * @returns A list of redirections to issue.
  */
-export default function getRedirects(
+export function getRedirects(
   reqUrl: string,
   request: WebRequest.OnBeforeRequestDetailsType | undefined = undefined,
 ): string[] {
@@ -33,22 +38,23 @@ export default function getRedirects(
 
   if (request !== undefined && request.method === 'POST') {
     if (url.hostname.match(/^(.*\.)?startpage.com/gi)) {
-      queryText = request.requestBody?.formData?.query?.[0].trim() ?? '';
+      queryText = request.requestBody?.formData?.query?.[0] ?? '';
     } else if (url.hostname.match(/^(.*\/\/)?searx.be/gi)) {
-      queryText = request.requestBody?.formData?.q?.[0].trim() ?? '';
+      queryText = request.requestBody?.formData?.q?.[0] ?? '';
     }
   } else {
     for (const param of possibleQueryParams) {
-      const query = url.searchParams.get(param);
-      if (query !== null) {
-        // FIXME: The ? and ?? might be unnecessary?
-        queryText = query?.trim() ?? '';
+      const queryFromParam = url.searchParams.get(param);
+      if (queryFromParam !== null) {
+        queryText = queryFromParam;
         break;
       }
     }
   }
 
-  if (!queryText) {
+  queryText = queryText.trim();
+
+  if (queryText.length === 0) {
     return [];
   }
 
@@ -60,7 +66,7 @@ export default function getRedirects(
     return '';
   });
 
-  if (!bang) {
+  if (bang.length === 0) {
     return [];
   }
 

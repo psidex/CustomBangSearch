@@ -12,7 +12,7 @@ export type StoredBangInfo = {
 
 export type SettingsOptions = {
   // Search engine URLs to ignore, e.g. searx.tiekoetter.com.
-  ignoreDomains: string[]
+  ignoredDomains: string[]
 };
 
 export type Settings = {

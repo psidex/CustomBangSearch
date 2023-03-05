@@ -1,11 +1,16 @@
 import browser, { WebRequest } from 'webextension-polyfill';
 
-import getRedirects from './shared';
+import { getIgnoredDomains } from './ignoreddomains';
+import { getRedirects, shouldReject } from './shared';
 
 export default function processRequest(
   r: WebRequest.OnBeforeRequestDetailsType,
 ): WebRequest.BlockingResponse {
   if (r.type !== 'main_frame') {
+    return {};
+  }
+
+  if (shouldReject(getIgnoredDomains(), r.url)) {
     return {};
   }
 

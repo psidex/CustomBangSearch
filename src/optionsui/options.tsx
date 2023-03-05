@@ -34,7 +34,7 @@ function App(): React.ReactElement {
   const storedSettings = useRef<Settings>();
 
   // To be used to render information & changed by the user.
-  const [options, setOptions] = useState<SettingsOptions>({ ignoreDomains: [] });
+  const [options, setOptions] = useState<SettingsOptions>({ ignoredDomains: [] });
   const [bangInfos, setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
 
   // Update settings saved in sync storage. THe passed variable should come from the above states.
@@ -79,10 +79,14 @@ function App(): React.ReactElement {
         position: 'top',
       });
     } catch (err) {
-      // TODO: Special case for "Error: QUOTA_BYTES_PER_ITEM quota exceeded"?
+      const errString = (err as Error).toString();
+      let description = errString;
+      if (errString.includes('QUOTA_BYTES_PER_ITEM')) {
+        description += '. This is likely because you have reached your browsers storage limit for this extension...';
+      }
       toast({
         title: 'Failed to set settings',
-        description: (err as Error).toString(),
+        description,
         status: 'error',
         duration: 10000,
         isClosable: true,

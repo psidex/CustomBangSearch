@@ -17,7 +17,7 @@ export default function SettingsTabPanel(props: SettingsTabPanelPropTypes): Reac
   return (
     <TabPanel>
       <Text>Settings</Text>
-      <Text>{`Ignored domains: ${options.ignoreDomains}`}</Text>
+      <Text>{`Ignored domains: ${options.ignoredDomains}`}</Text>
     </TabPanel>
   );
 }
