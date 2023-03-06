@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
-  HStack, Input, Button, VStack, Text,
+  HStack, Input, Button, VStack,
 } from '@chakra-ui/react';
 import { DeleteIcon, PlusSquareIcon } from '@chakra-ui/icons';
 
@@ -17,10 +17,6 @@ type BangInfoPropTypes = {
 };
 
 export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
-  // Temporary for debugging.
-  const renderCounter = useRef(0);
-  renderCounter.current += 1;
-
   const [urlInputs, setUrlInputs] = useState<React.ReactElement[]>([]);
 
   const {
@@ -80,9 +76,6 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
         {urlInputs}
       </VStack>
       <Button onClick={addUrl} alignSelf="end" leftIcon={<PlusSquareIcon />} variant="outline">Add URL</Button>
-      <Text>
-        {`Renders: ${renderCounter.current}`}
-      </Text>
     </HStack>
   );
 }

@@ -7,7 +7,7 @@
     {
       "bang": "a",
       "urls": [
-        "https://smile.amazon.co.uk/s?k=%s"
+        "https://amazon.co.uk/s?k=%s"
       ]
     },
     {
@@ -19,7 +19,7 @@
     {
       "bang": "ea",
       "urls": [
-        "https://smile.amazon.co.uk/s?k=%s",
+        "https://amazon.co.uk/s?k=%s",
         "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
       ]
     },
@@ -44,7 +44,7 @@
     {
       "bang": "av",
       "urls": [
-        "https://smile.amazon.co.uk/s?k=%s&i=instant-video"
+        "https://amazon.co.uk/s?k=%s&i=instant-video"
       ]
     },
     {

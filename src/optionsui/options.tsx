@@ -9,7 +9,7 @@ import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 
 import theme from './theme';
 import BangTabPanel from './components/BangsTabPanel';
-import SettingsTabPanel from './components/SettingsTabPanel';
+import OptionsTabPanel from './components/OptionsTabPanel';
 import AboutTabPanel from './components/AboutTabPanel';
 import GitHubIcon from './components/GithubIcon';
 
@@ -41,7 +41,7 @@ function App(): React.ReactElement {
   const updateSettings = async (
     newOptions: SettingsOptions | undefined = undefined,
     newBangInfos: StoredBangInfo[] | undefined = undefined,
-  ) => {
+  ): Promise<void> => {
     if (newOptions === undefined && newBangInfos === undefined) {
       return;
     }
@@ -129,7 +129,7 @@ function App(): React.ReactElement {
         <TabList>
           {/* Margin in the Tab allows the TabList horiz line to still fit the whole width */}
           <Tab marginLeft="2rem">Bangs</Tab>
-          <Tab>Settings</Tab>
+          <Tab>Options</Tab>
           <Tab>About</Tab>
         </TabList>
         <TabPanels paddingLeft="2rem">
@@ -138,7 +138,7 @@ function App(): React.ReactElement {
             setBangInfos={setBangInfos}
             updateSettings={updateSettings}
           />
-          <SettingsTabPanel
+          <OptionsTabPanel
             options={options}
             setOptions={setOptions}
             updateSettings={updateSettings}
