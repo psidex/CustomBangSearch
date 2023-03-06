@@ -21,6 +21,7 @@ const defaultReactfulBangs = storedBangInfoToReactful(defaultSettings.bangs);
 type BangTabPanelPropTypes = {
   bangInfos: Readonly<ReactfulBangInfoContainer>
   setBangInfos: React.Dispatch<React.SetStateAction<ReactfulBangInfoContainer>>
+  bangChangesToSave: boolean,
   updateSettings: (newOptions?: SettingsOptions, newBangInfos?: StoredBangInfo[]) => Promise<void>
 };
 
@@ -29,7 +30,9 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   const fileInputRef = useRef<HTMLInputElement>(null);
   const toast = useToast();
 
-  const { bangInfos, setBangInfos, updateSettings } = props;
+  const {
+    bangInfos, setBangInfos, bangChangesToSave, updateSettings,
+  } = props;
 
   // --- Top Buttons ---
 
@@ -39,12 +42,10 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   };
 
   const newBangInfo = () => {
+    // FIXME: This should scroll to the bottom maybe? Or let user know it's at the bottom?
     const newUrls = new Map();
     newUrls.set(nanoid(21), 'https://example.com/?q=%s');
-    setBangInfos((oldBangInfos) => new Map(oldBangInfos).set(nanoid(21), {
-      bang: 'e',
-      urls: newUrls,
-    }));
+    setBangInfos((oldBangInfos) => new Map(oldBangInfos).set(nanoid(21), { bang: 'e', urls: newUrls }));
   };
 
   const importBangs = () => {
@@ -161,7 +162,14 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   return (
     <TabPanel>
       <HStack paddingBottom="2em">
-        <Button onClick={() => { saveBangInfo(); }} leftIcon={<CheckIcon />} variant="outline">Save</Button>
+        <Button
+          onClick={() => { saveBangInfo(); }}
+          leftIcon={<CheckIcon />}
+          colorScheme={bangChangesToSave ? 'yellow' : 'gray'}
+          variant={bangChangesToSave ? 'solid' : 'outline'}
+        >
+          Save
+        </Button>
         <Button onClick={() => { newBangInfo(); }} leftIcon={<PlusSquareIcon />} variant="outline">Add Bang</Button>
         <Button onClick={() => { importBangs(); }} leftIcon={<LinkIcon />} variant="outline">Import</Button>
         <input

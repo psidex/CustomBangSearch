@@ -14,7 +14,6 @@ type SettingsTabPanelPropTypes = {
 };
 
 export default function OptionsTabPanel(props: SettingsTabPanelPropTypes): React.ReactElement {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { options, setOptions, updateSettings } = props;
 
   const [enableSwitches, setEnableSwitches] = useState<React.ReactElement[]>();

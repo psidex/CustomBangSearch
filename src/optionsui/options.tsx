@@ -33,15 +33,26 @@ function App(): React.ReactElement {
   // Just so we know what's stored without having to ask for it lots.
   const storedSettings = useRef<Settings>();
 
-  // To be used to render information & changed by the user.
+  // These 2 states are used to render information & are changed by user actions.
   const [options, setOptions] = useState<SettingsOptions>({ ignoredDomains: [] });
-  const [bangInfos, setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const [bangInfos, _setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
+
+  // Could be changed to refer to general changes, but for now just refers to bangInfos.
+  const [bangChangesToSave, setBangChangesToSave] = useState(false);
+
+  const setBangInfos = (value: React.SetStateAction<ReactfulBangInfoContainer>): void => {
+    setBangChangesToSave(true);
+    _setBangInfos(value);
+  };
 
   // Update settings saved in sync storage. THe passed variable should come from the above states.
   const updateSettings = async (
     newOptions: SettingsOptions | undefined = undefined,
     newBangInfos: StoredBangInfo[] | undefined = undefined,
   ): Promise<void> => {
+    // TODO: When save, reject if newBangInfos share the same bang? Maybe do this in the caller?
+
     if (newOptions === undefined && newBangInfos === undefined) {
       return;
     }
@@ -70,6 +81,7 @@ function App(): React.ReactElement {
 
     try {
       await storage.storeSettings(newSettings);
+      setBangChangesToSave(false);
       toast({
         title: 'Settings updated',
         description: 'Saved to sync storage.',
@@ -110,7 +122,8 @@ function App(): React.ReactElement {
         });
       } else {
         storedSettings.current = currentSettings;
-        setBangInfos(storedBangInfoToReactful(currentSettings.bangs));
+        // Use the _ function to bypass the updating of the save button.
+        _setBangInfos(storedBangInfoToReactful(currentSettings.bangs));
         setOptions(currentSettings.options);
         setLoading(false);
       }
@@ -136,6 +149,7 @@ function App(): React.ReactElement {
           <BangTabPanel
             bangInfos={bangInfos}
             setBangInfos={setBangInfos}
+            bangChangesToSave={bangChangesToSave}
             updateSettings={updateSettings}
           />
           <OptionsTabPanel

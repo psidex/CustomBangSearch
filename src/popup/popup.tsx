@@ -11,6 +11,8 @@ import DevTools from './devtools';
 
 import { dev, version } from '../lib/esbuilddefinitions';
 
+// TODO: Theme switch in popup as well?
+
 function App(): React.ReactElement {
   return (
     <VStack>
