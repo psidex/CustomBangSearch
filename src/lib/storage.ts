@@ -44,8 +44,7 @@ export async function getSettings(): Promise<Settings | undefined> {
   }
   const decompressed = decompressSettings(storedSettingsStr);
   if (decompressed === null) {
-    // TODO: Maybe throw an err or something?
-    return Promise.resolve(undefined);
+    return Promise.reject(new Error('decompression of settings returned null'));
   }
   return Promise.resolve(decompressed);
 }

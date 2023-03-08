@@ -20,3 +20,9 @@ export type Settings = {
   options: SettingsOptions,
   bangs: StoredBangInfo[]
 };
+
+// Exports only contain the users bangs, and the current settings version.
+export type BangsExport = {
+  version: number,
+  bangs: StoredBangInfo[]
+};

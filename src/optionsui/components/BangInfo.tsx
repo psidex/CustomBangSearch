@@ -60,7 +60,12 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
             placeholder="https://example.com/?q=%s"
             width="30em"
           />
-          <Button onClick={() => { deleteUrl(urlId); }} variant="outline"><DeleteIcon /></Button>
+          {info.urls.size > 1
+            && (
+            <Button title="Remove this URL" onClick={() => { deleteUrl(urlId); }} variant="ghost">
+              <DeleteIcon />
+            </Button>
+            )}
         </HStack>,
       );
     }
@@ -70,12 +75,16 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
 
   return (
     <HStack align="top" paddingBottom="1em">
-      <Button onClick={() => { removeBangInfo(bangId); }} variant="outline"><DeleteIcon /></Button>
+      <Button title="Remove this bang" onClick={() => { removeBangInfo(bangId); }} variant="ghost">
+        <DeleteIcon />
+      </Button>
       <Input value={info.bang} onChange={bangChanged} placeholder="bang" width="6em" />
       <VStack align="left">
         {urlInputs}
       </VStack>
-      <Button onClick={addUrl} alignSelf="end" leftIcon={<PlusSquareIcon />} variant="outline">Add URL</Button>
+      <Button onClick={addUrl} alignSelf="end" variant="ghost" title="Add URL to this bang">
+        <PlusSquareIcon />
+      </Button>
     </HStack>
   );
 }

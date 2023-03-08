@@ -13,7 +13,9 @@ import {
   ReactfulBangInfo, ReactfulBangInfoContainer, reactfulBangInfoToStored, storedBangInfoToReactful,
 } from '../reactful';
 import BangInfo from './BangInfo';
-import { SettingsOptions, StoredBangInfo } from '../../lib/settings';
+import {
+  SettingsOptions, StoredBangInfo, BangsExport, currentSettingsVersion,
+} from '../../lib/settings';
 import defaultSettings from '../../lib/settings.default.json';
 
 const defaultReactfulBangs = storedBangInfoToReactful(defaultSettings.bangs);
@@ -46,12 +48,18 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
     const newUrls = new Map();
     newUrls.set(nanoid(21), 'https://example.com/?q=%s');
     setBangInfos((oldBangInfos) => new Map(oldBangInfos).set(nanoid(21), { bang: 'e', urls: newUrls }));
+    toast({
+      title: 'New bang added to bottom of list',
+      description: '',
+      status: 'info',
+      duration: 1500,
+      isClosable: true,
+      position: 'top',
+    });
   };
 
   const importBangs = () => {
-    // FIXME: This doesn't quite work properly; because we watch for "change" events,
-    // if the file the user has selected doesn't change (but they want to import it
-    // again, by opening and clicking on it) then this won't run.
+    // TODO: Have some sort of option for appending the import, instead of overwriting?
     if (fileInputRef.current !== null) {
       fileInputRef.current.click();
     }
@@ -64,30 +72,48 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
 
     const file: File = e.target.files[0];
 
-    let newBangs: StoredBangInfo[];
+    if (fileInputRef.current !== null) {
+      // Reset the selected file so that if the user imports the same file again,
+      // the change event will still fire.
+      fileInputRef.current.value = '';
+    }
+
+    let imported: BangsExport;
     try {
-      newBangs = JSON.parse(await file.text());
+      imported = JSON.parse(await file.text());
     } catch (_e) {
       toast({
         title: 'Failed to import bangs',
         description: 'Could not parse invalid JSON.',
         status: 'error',
-        duration: 7000,
+        duration: 10000,
         isClosable: true,
         position: 'top',
       });
       return;
     }
 
-    let converted;
+    if (imported.version !== currentSettingsVersion) {
+      toast({
+        title: 'Failed to import bangs',
+        description: `Found version: ${imported.version}, expecting version: ${currentSettingsVersion}.`,
+        status: 'error',
+        duration: 10000,
+        isClosable: true,
+        position: 'top',
+      });
+      return;
+    }
+
+    let converted: ReactfulBangInfoContainer;
     try {
-      converted = storedBangInfoToReactful(newBangs);
+      converted = storedBangInfoToReactful(imported.bangs);
     } catch (_e) {
       toast({
         title: 'Failed to import bangs',
         description: 'Could not convert JSON to bangs type.',
         status: 'error',
-        duration: 7000,
+        duration: 10000,
         isClosable: true,
         position: 'top',
       });
@@ -99,15 +125,19 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
       title: 'Successfully imported bangs',
       description: `Loaded from file: ${file.name}, don't forget to save!`,
       status: 'success',
-      duration: 7000,
+      duration: 2500,
       isClosable: true,
       position: 'top',
     });
   };
 
   const exportBangs = () => {
-    const toDownload = reactfulBangInfoToStored(bangInfos);
-    const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(toDownload))}`;
+    const converted = reactfulBangInfoToStored(bangInfos);
+    const exported: BangsExport = {
+      version: currentSettingsVersion,
+      bangs: converted,
+    };
+    const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(exported))}`;
     // React probably doesn't like this 😬
     const a = document.createElement('a');
     a.setAttribute('href', dataStr);
@@ -165,13 +195,13 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
         <Button
           onClick={() => { saveBangInfo(); }}
           leftIcon={<CheckIcon />}
-          colorScheme={bangChangesToSave ? 'yellow' : 'gray'}
-          variant={bangChangesToSave ? 'solid' : 'outline'}
+          colorScheme={bangChangesToSave ? 'whatsapp' : 'gray'}
+          variant="solid"
         >
           Save
         </Button>
-        <Button onClick={() => { newBangInfo(); }} leftIcon={<PlusSquareIcon />} variant="outline">Add Bang</Button>
-        <Button onClick={() => { importBangs(); }} leftIcon={<LinkIcon />} variant="outline">Import</Button>
+        <Button onClick={() => { newBangInfo(); }} leftIcon={<PlusSquareIcon />} variant="solid">Add Bang</Button>
+        <Button onClick={() => { importBangs(); }} leftIcon={<LinkIcon />} variant="solid">Import</Button>
         <input
           ref={fileInputRef}
           id="importFileInput"
@@ -180,8 +210,8 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
           style={{ display: 'none' }}
           onChange={fileUpload}
         />
-        <Button onClick={() => { exportBangs(); }} leftIcon={<DownloadIcon />} variant="outline">Export</Button>
-        <Button onClick={() => { resetBangsToDefeault(); }} leftIcon={<RepeatIcon />} variant="outline">Reset To Default</Button>
+        <Button onClick={() => { exportBangs(); }} leftIcon={<DownloadIcon />} variant="solid">Export</Button>
+        <Button onClick={() => { resetBangsToDefeault(); }} leftIcon={<RepeatIcon />} variant="solid">Reset To Default</Button>
       </HStack>
       <VStack align="left">
         {bangInfoRows}

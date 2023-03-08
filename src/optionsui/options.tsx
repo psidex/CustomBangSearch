@@ -37,8 +37,6 @@ function App(): React.ReactElement {
   const [options, setOptions] = useState<SettingsOptions>({ ignoredDomains: [] });
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [bangInfos, _setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
-
-  // Could be changed to refer to general changes, but for now just refers to bangInfos.
   const [bangChangesToSave, setBangChangesToSave] = useState(false);
 
   const setBangInfos = (value: React.SetStateAction<ReactfulBangInfoContainer>): void => {
@@ -60,9 +58,9 @@ function App(): React.ReactElement {
     if (storedSettings.current === undefined) {
       toast({
         title: 'Failed to set settings',
-        description: 'You haven\'t even loaded your original settings yet!',
+        description: 'storedSettings.current is undefined. This probably shouldn\'t happen...',
         status: 'error',
-        duration: 7000,
+        duration: 10000,
         isClosable: true,
         position: 'top',
       });
@@ -86,7 +84,7 @@ function App(): React.ReactElement {
         title: 'Settings updated',
         description: 'Saved to sync storage.',
         status: 'success',
-        duration: 5000,
+        duration: 2500,
         isClosable: true,
         position: 'top',
       });
