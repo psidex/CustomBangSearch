@@ -44,7 +44,6 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   };
 
   const newBangInfo = () => {
-    // FIXME: This should scroll to the bottom maybe? Or let user know it's at the bottom?
     const newUrls = new Map();
     newUrls.set(nanoid(21), 'https://example.com/?q=%s');
     setBangInfos((oldBangInfos) => new Map(oldBangInfos).set(nanoid(21), { bang: 'e', urls: newUrls }));
@@ -59,7 +58,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   };
 
   const importBangs = () => {
-    // TODO: Have some sort of option for appending the import, instead of overwriting?
+    // FIXME: Have some sort of option for appending the import, instead of overwriting?
     if (fileInputRef.current !== null) {
       fileInputRef.current.click();
     }

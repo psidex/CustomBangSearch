@@ -49,8 +49,6 @@ function App(): React.ReactElement {
     newOptions: SettingsOptions | undefined = undefined,
     newBangInfos: StoredBangInfo[] | undefined = undefined,
   ): Promise<void> => {
-    // TODO: When save, reject if newBangInfos share the same bang? Maybe do this in the caller?
-
     if (newOptions === undefined && newBangInfos === undefined) {
       return;
     }
@@ -76,6 +74,22 @@ function App(): React.ReactElement {
     }
 
     const newSettings: Settings = merger as Settings;
+
+    const seenBangs: Set<string> = new Set();
+    for (const bangInfo of newSettings.bangs) {
+      if (seenBangs.has(bangInfo.bang)) {
+        toast({
+          title: 'Failed to set settings',
+          description: `Found 2 of the same bang: ${bangInfo.bang}`,
+          status: 'error',
+          duration: 10000,
+          isClosable: true,
+          position: 'top',
+        });
+        return;
+      }
+      seenBangs.add(bangInfo.bang);
+    }
 
     try {
       await storage.storeSettings(newSettings);
