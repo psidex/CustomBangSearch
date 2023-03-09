@@ -2,25 +2,23 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import {
-  Heading, ChakraProvider, Tabs, TabList, TabPanels, Tab, HStack, useColorMode, Button,
-  Box, useMediaQuery, useToast,
+  Heading, ChakraProvider, Tabs, TabList, TabPanels, Tab, HStack, Box, useMediaQuery,
+  useToast, Text,
 } from '@chakra-ui/react';
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 
-import theme from './theme';
+import browser from 'webextension-polyfill';
+
+import theme from '../lib/theme';
 import BangTabPanel from './components/BangsTabPanel';
 import OptionsTabPanel from './components/OptionsTabPanel';
 import AboutTabPanel from './components/AboutTabPanel';
-import GitHubIcon from './components/GithubIcon';
 
 import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful';
 import { Settings, SettingsOptions, StoredBangInfo } from '../lib/settings';
 import * as storage from '../lib/storage';
-
-// TODO: Some level of support for using the DDG bangs.
+import MiscButtons from '../lib/components/MiscButtons';
 
 function App(): React.ReactElement {
-  const { colorMode, toggleColorMode } = useColorMode();
   const toast = useToast();
 
   // Not very neat but CBA to do anything more complicated...
@@ -29,6 +27,7 @@ function App(): React.ReactElement {
   const [windowIsAtLeast2200] = useMediaQuery('(min-width: 2200px)');
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [storedSize, setStoredSize] = useState<number>(0);
 
   // Just so we know what's stored without having to ask for it lots.
   const storedSettings = useRef<Settings>();
@@ -42,6 +41,10 @@ function App(): React.ReactElement {
   const setBangInfos = (value: React.SetStateAction<ReactfulBangInfoContainer>): void => {
     setBangChangesToSave(true);
     _setBangInfos(value);
+  };
+
+  const updateUsedStorage = async () => {
+    setStoredSize(await browser.storage.sync.getBytesInUse(['settings']));
   };
 
   // Update settings saved in sync storage. THe passed variable should come from the above states.
@@ -92,8 +95,10 @@ function App(): React.ReactElement {
     }
 
     try {
+      storedSettings.current = newSettings;
       await storage.storeSettings(newSettings);
       setBangChangesToSave(false);
+      updateUsedStorage();
       toast({
         title: 'Settings updated',
         description: 'Saved to sync storage.',
@@ -138,6 +143,7 @@ function App(): React.ReactElement {
         _setBangInfos(storedBangInfoToReactful(currentSettings.bangs));
         setOptions(currentSettings.options);
         setLoading(false);
+        updateUsedStorage();
       }
     };
     update();
@@ -182,15 +188,11 @@ function App(): React.ReactElement {
     <Box width={widthPercent} margin="auto">
       <HStack justifyContent="space-between">
         <Heading padding="0.5em 2rem">Custom Bang Search</Heading>
-        <HStack padding="0.5em 2rem">
-          <Button variant="outline" onClick={() => { window.open('https://github.com/psidex/CustomBangSearch', '_blank')?.focus(); }}>
-            <GitHubIcon boxSize={6} />
-          </Button>
-          <Button variant="outline" onClick={toggleColorMode}>
-            {colorMode === 'light' ? <MoonIcon boxSize={5} /> : <SunIcon boxSize={5} />}
-          </Button>
-        </HStack>
+        <MiscButtons />
       </HStack>
+      <Text paddingLeft="2.5rem" paddingBottom="0.5rem" fontSize="1.25em">
+        {`Storing ${storedSize}/${browser.storage.sync.QUOTA_BYTES_PER_ITEM} bytes (${(storedSize / (browser.storage.sync.QUOTA_BYTES_PER_ITEM / 100)).toFixed(1)}%)`}
+      </Text>
       {content}
     </Box>
   );

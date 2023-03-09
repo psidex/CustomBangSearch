@@ -7,18 +7,19 @@ import {
 
 import browser from 'webextension-polyfill';
 
-import DevTools from './devtools';
-
+import theme from '../lib/theme';
+import MiscButtons from '../lib/components/MiscButtons';
 import { dev, version } from '../lib/esbuilddefinitions';
 
-// TODO: Theme switch in popup as well?
+import DevTools from './devtools';
 
 function App(): React.ReactElement {
   return (
     <VStack>
       <Heading>Custom Bang Search</Heading>
       <Text>{`v${version}`}</Text>
-      <Button onClick={() => { browser.runtime.openOptionsPage(); }}>Open Options page</Button>
+      <MiscButtons />
+      <Button variant="outline" onClick={() => { browser.runtime.openOptionsPage(); }}>Options</Button>
       {dev && <DevTools />}
     </VStack>
   );
@@ -27,7 +28,7 @@ function App(): React.ReactElement {
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <App />
     </ChakraProvider>
   </React.StrictMode>,

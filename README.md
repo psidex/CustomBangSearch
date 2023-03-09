@@ -12,8 +12,6 @@
 
 A browser extension to use custom DuckDuckGo-like bangs directly from the address bar.
 
-// TODO: Some level of support for using the DDG bangs.
-
 ## Demo
 
 TODO: New, good demo. Video and basic explainer image.

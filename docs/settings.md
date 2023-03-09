@@ -56,7 +56,7 @@ type SettingsV2 = {
 }
 ```
 
-## Version 3 (WIP)
+## Version 3
 
 ### Reason For Update
 
@@ -80,7 +80,7 @@ export type StoredBangInfo = {
 
 export type SettingsOptions = {
   // Search engine URLs to ignore, e.g. searx.tiekoetter.com.
-  ignoreDomains: string[]
+  ignoredDomains: string[]
 };
 
 export type Settings = {
@@ -88,7 +88,6 @@ export type Settings = {
   options: SettingsOptions,
   bangs: StoredBangInfo[]
 };
-
 ```
 
 ### JSON Example
@@ -97,18 +96,19 @@ export type Settings = {
 {
   "version": 3,
   "options": {
-    "ignoreDomains": []
+    "ignoredDomains": []
   },
   "bangs": [
     {
       "bang": "a",
       "urls": [
-        "https://smile.amazon.co.uk/s?k=%s"
+        "https://amazon.co.uk/s?k=%s"
       ]
     },
     {
-      "bang": "e",
+      "bang": "ea",
       "urls": [
+        "https://amazon.co.uk/s?k=%s",
         "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
       ]
     }
@@ -116,12 +116,4 @@ export type Settings = {
 }
 ```
 
-For now, this settings JSON is stored in a [single `storage.sync` item](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync#storage_quotas_for_sync_data), JSON.stringify'd, and then maybe compressed using [lz-string](https://pieroxy.net/blog/pages/lz-string/index.html)?
-
-### Lookup Type
-
-```ts
-type BangsLookup = { [key: string]: string[] };
-```
-
-A map of bang to url array, to be accessed using `lookup[bangString]`..
+For now, this settings JSON is stored in a [single `storage.sync` item](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync#storage_quotas_for_sync_data), JSON.stringify'd, and then compressed using [lz-string](https://pieroxy.net/blog/pages/lz-string/index.html)

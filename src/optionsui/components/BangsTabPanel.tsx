@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import {
-  Button, HStack, TabPanel, useToast, VStack,
+  Box,
+  Button, HStack, Menu, MenuButton, MenuItem, MenuList, TabPanel, useToast, VStack, Text,
 } from '@chakra-ui/react';
 import {
-  CheckIcon, PlusSquareIcon, RepeatIcon, DownloadIcon, LinkIcon,
+  CheckIcon, PlusSquareIcon, RepeatIcon, DownloadIcon, ChevronDownIcon,
 } from '@chakra-ui/icons';
 
 import { nanoid } from 'nanoid';
@@ -29,6 +30,7 @@ type BangTabPanelPropTypes = {
 
 export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactElement {
   const [bangInfoRows, setBangInfoRows] = useState<React.ReactElement[]>();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const toast = useToast();
 
@@ -58,13 +60,12 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   };
 
   const importBangs = () => {
-    // FIXME: Have some sort of option for appending the import, instead of overwriting?
     if (fileInputRef.current !== null) {
       fileInputRef.current.click();
     }
   };
 
-  const fileUpload = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+  const fileUpload = async (e: React.ChangeEvent<HTMLInputElement>):Promise<void> => {
     if (e.target.files === null) {
       return;
     }
@@ -119,7 +120,9 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
       return;
     }
 
+    converted = new Map([...bangInfos, ...converted]);
     setBangInfos(converted);
+
     toast({
       title: 'Successfully imported bangs',
       description: `Loaded from file: ${file.name}, don't forget to save!`,
@@ -128,6 +131,10 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
       isClosable: true,
       position: 'top',
     });
+  };
+
+  const importDdgBangs = () => {
+    window.open('https://github.com/psidex/CustomBangSearch/ddg', '_blank')?.focus();
   };
 
   const exportBangs = () => {
@@ -167,6 +174,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
 
   const generateRows = () => {
     const rows = [];
+    const isLonely = bangInfos.size === 1;
     for (const info of bangInfos) {
       const id = info[0];
       const rowInfo = info[1];
@@ -177,6 +185,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
           info={rowInfo}
           removeBangInfo={removeBangInfo}
           updateBangInfo={updateBangInfo}
+          isLonely={isLonely}
         />,
       );
     }
@@ -200,15 +209,21 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
           Save
         </Button>
         <Button onClick={() => { newBangInfo(); }} leftIcon={<PlusSquareIcon />} variant="solid">Add Bang</Button>
-        <Button onClick={() => { importBangs(); }} leftIcon={<LinkIcon />} variant="solid">Import</Button>
-        <input
-          ref={fileInputRef}
-          id="importFileInput"
-          type="file"
-          accept="application/json"
-          style={{ display: 'none' }}
-          onChange={fileUpload}
-        />
+
+        {/* Box because of this - https://github.com/chakra-ui/chakra-ui/issues/3440 */}
+        <Box>
+          <Menu>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+              Import
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => { importBangs(); }}><Text fontSize="lg">Import bangs from file</Text></MenuItem>
+              <MenuItem onClick={() => { importDdgBangs(); }}><Text fontSize="lg">Import DuckDuckGo bangs</Text></MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+        <input ref={fileInputRef} type="file" accept="application/json" style={{ display: 'none' }} onChange={fileUpload} />
+
         <Button onClick={() => { exportBangs(); }} leftIcon={<DownloadIcon />} variant="solid">Export</Button>
         <Button onClick={() => { resetBangsToDefeault(); }} leftIcon={<RepeatIcon />} variant="solid">Reset To Default</Button>
       </HStack>

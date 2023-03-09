@@ -2,6 +2,7 @@
 
 body {
   /* Sets the actual size of the popup. */
-  min-width: 300px;
-  max-width: 300px;
+  min-width: 350px;
+  max-width: 350px;
+  padding: 1rem;
 }

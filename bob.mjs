@@ -183,7 +183,7 @@ const tasks = new Listr([
         platform: 'browser',
         define: {
           'process.env.browser': `'${browser}'`,
-          'process.env.dev': `'${dev}'`,
+          'process.env.dev': `${dev}`,
           'process.env.version': `'${extensionVersion}'`,
           'process.env.hash': `'${ctx.gitHeadShortHash}'`,
           'process.env.buildTime': JSON.stringify(new Date()),

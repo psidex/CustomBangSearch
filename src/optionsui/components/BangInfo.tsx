@@ -13,14 +13,15 @@ type BangInfoPropTypes = {
   bangId: string,
   info: ReactfulBangInfo,
   removeBangInfo: (id: string) => void,
-  updateBangInfo: (id: string, info: ReactfulBangInfo) => void
+  updateBangInfo: (id: string, info: ReactfulBangInfo) => void,
+  isLonely: boolean
 };
 
 export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
   const [urlInputs, setUrlInputs] = useState<React.ReactElement[]>([]);
 
   const {
-    bangId, info, removeBangInfo, updateBangInfo,
+    bangId, info, removeBangInfo, updateBangInfo, isLonely,
   } = props;
 
   const bangChanged = (e: any) => {
@@ -75,9 +76,12 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
 
   return (
     <HStack align="top" paddingBottom="1em">
+      {!isLonely
+      && (
       <Button title="Remove this bang" onClick={() => { removeBangInfo(bangId); }} variant="ghost">
         <DeleteIcon />
       </Button>
+      )}
       <Input value={info.bang} onChange={bangChanged} placeholder="bang" width="6em" />
       <VStack align="left">
         {urlInputs}
