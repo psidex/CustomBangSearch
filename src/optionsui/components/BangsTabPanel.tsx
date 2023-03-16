@@ -134,7 +134,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   };
 
   const importDdgBangs = () => {
-    window.open('https://github.com/psidex/CustomBangSearch/ddg', '_blank')?.focus();
+    window.open('https://github.com/psidex/CustomBangSearch/tree/master/ddg', '_blank')?.focus();
   };
 
   const exportBangs = () => {

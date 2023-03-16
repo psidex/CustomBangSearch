@@ -8,13 +8,13 @@
 
 function writeTopNBangs() {
   local count=$1
-  cat ./ddg.json \
-    | jq -s ".[] | sort_by(.r) | reverse | .[:$count] | { version: 3, bangs: [ .[] | {bang: .t, urls: [ .u ] } ] }" \
-    | sed -r 's/\{\{\{s\}\}\}/\%s/g' \
-    > ddg-top-"$count".json
+  cat ./ddg.json |
+    jq -s ".[] | sort_by(.r) | reverse | .[:$count] | { version: 3, bangs: [ .[] | {bang: .t, urls: [ .u ] } ] }" |
+    sed -r 's/\{\{\{s\}\}\}/\%s/g' \
+      >ddg-top-"$count".json
 }
 
-# Quota is  
+# Quota is usually 8192 bytes.
 writeTopNBangs 10  #  595 bytes ( 7.3% of quota)
 writeTopNBangs 25  # 1317 bytes (16.1% of quota)
 writeTopNBangs 50  # 2315 bytes (28.3% of quota)

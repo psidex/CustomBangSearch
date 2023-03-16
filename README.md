@@ -16,21 +16,46 @@ A browser extension to use custom DuckDuckGo-like bangs directly from the addres
 
 TODO: New, good demo. Video and basic explainer image.
 
-## Supported Search Engines
+## Search Engines
 
 [These search engines are tested and officially supported](./docs/supported-engines.md).
 
-## Bangs
+If you set one of these as your browsers search engine, you can use the bangs directly in the search bar.
 
-Go to the options page to start creating custom bangs (see demo above / info below).
+Bangs will also work by just using the search engines normally.
 
-Use `%s` in the URL to show where you want your query to be inserted, take a look at the default bangs if you need some help understanding how to format things.
+## Options Page
+
+All of your bangs and options are saved to the browsers sync storage, meaning if you log into your browser they will sync across to wherever else you are logged in.
+
+This storage has a strict quota, and you can see the amount of it you are using at the top of the options page.
+TODO: Raise issue for striping data across objects.
+
+### Bangs
+
+Go to the options page to start creating custom bangs. This can be accessed through the extensions popup, or through your browsers extensions menu.
+
+Each item in the list shows a bang, and a URL or set of URLs that will be opened when this bang is used.
+
+Pressing the "add bang" button will add a new bang to the bottom of the list, which you can then edit.
+
+The trash buttons on the left remove whole bangs, and the buttons on the right are for URLs.
+
+Use `%s` in the URLs to show where you want your query to be inserted, take a look at the default bangs if you need some help understanding how to format things.
 
 _Some of the default URLs including Amazon, Ebay, and Etsy are UK URLs, so change those if you need to!_
 
-## Options UI
+You can also import and export your list of bangs to/from a valid JSON file.
 
-TODO: Much better options UI, will require brand new instruction (or none at all?)
+If the save button is highlighted green, this means you have unsaved changes and they will not take effect until you press the save button.
+
+### Options
+
+A options tab exists within the options page, which allows you to change the behaviour of the extension. Currently this is just the search engines that the extension is enabled to use bangs with.
+
+### DuckDuckGo Bangs
+
+If you want to import bangs from DuckDuckGo, see [this page](./ddg/README.md).
 
 ## How the extension works
 
@@ -53,7 +78,7 @@ npm install
 npm run build-firefox OR build-firefox-release OR build-chrome OR build-chrome-release
 ```
 
-This produces a `build` directory containing the compiled JavaScript, and a zip file in the root of the project that can be uploaded to the browser web extension stores.
+This produces a `build` directory containing the compiled JavaScript, and if building the release version, 2 zip files in the root of the project that can be uploaded to the browser web extension stores.
 
 Non "release" builds (i.e. dev builds) are not minified, can contain debugging calls such as `console.log`, and also contain some development tools loaded into the popup &| options windows.
 
