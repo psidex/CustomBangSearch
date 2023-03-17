@@ -51,7 +51,9 @@ If the save button is highlighted green, this means you have unsaved changes and
 
 ### Options
 
-A options tab exists within the options page, which allows you to change the behaviour of the extension. Currently this is just the search engines that the extension is enabled to use bangs with.
+A options tab exists within the options page, which allows you to change the behaviour of the extension.
+
+Currently this is just the search engines that the extension is enabled to use bangs with.
 
 ### DuckDuckGo Bangs
 
