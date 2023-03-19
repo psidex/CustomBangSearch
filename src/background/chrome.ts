@@ -3,13 +3,13 @@ import browser from 'webextension-polyfill';
 import { getIgnoredDomains } from './ignoreddomains';
 import { getRedirects, shouldReject } from './shared';
 
-export default function processRequest(tabId: number, url: string): void {
-  if (shouldReject(getIgnoredDomains(), url)) {
+export default async function processRequest(tabId: number, url: string): Promise<void> {
+  if (shouldReject(await getIgnoredDomains(), url)) {
     return;
   }
 
   // From the current URL, get the redirections (if any) to apply.
-  const redirections = getRedirects(url);
+  const redirections = await getRedirects(url);
 
   if (redirections.length === 0) {
     return;

@@ -3,22 +3,22 @@ import browser, { WebRequest } from 'webextension-polyfill';
 import { getIgnoredDomains } from './ignoreddomains';
 import { getRedirects, shouldReject } from './shared';
 
-export default function processRequest(
+export default async function processRequest(
   r: WebRequest.OnBeforeRequestDetailsType,
-): WebRequest.BlockingResponse {
+): Promise<WebRequest.BlockingResponse> {
   if (r.type !== 'main_frame') {
-    return {};
+    return Promise.resolve({});
   }
 
-  if (shouldReject(getIgnoredDomains(), r.url)) {
-    return {};
+  if (shouldReject(await getIgnoredDomains(), r.url)) {
+    return Promise.resolve({});
   }
 
   // From the current URL, get the redirections (if any) to apply.
-  const redirections = getRedirects(r.url, r);
+  const redirections = await getRedirects(r.url, r);
 
   if (redirections.length === 0) {
-    return {};
+    return Promise.resolve({});
   }
 
   // Open all URLs (except the first) in new tabs
@@ -38,5 +38,5 @@ export default function processRequest(
     res = { cancel: true };
   }
 
-  return res;
+  return Promise.resolve(res);
 }

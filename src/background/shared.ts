@@ -25,10 +25,10 @@ function constructRedirect(redirectUrl: string, queryText: string): string {
  * @param request (Optional) The request details object from a WebRequestBlocking event.
  * @returns A list of redirections to issue.
  */
-export function getRedirects(
+export async function getRedirects(
   reqUrl: string,
   request: WebRequest.OnBeforeRequestDetailsType | undefined = undefined,
-): string[] {
+): Promise<string[]> {
   const url = new URL(reqUrl);
   let queryText = '';
 
@@ -55,7 +55,7 @@ export function getRedirects(
   queryText = queryText.trim();
 
   if (queryText.length === 0) {
-    return [];
+    return Promise.resolve([]);
   }
 
   // Cut first bang from query text, it can be anywhere in the string.
@@ -67,14 +67,14 @@ export function getRedirects(
   });
 
   if (bang.length === 0) {
-    return [];
+    return Promise.resolve([]);
   }
 
   // Get the chosen URLs from the bang.
-  const lookup = getBangsLookup();
+  const lookup = await getBangsLookup();
   const redirectionUrls = lookup[bang];
   if (redirectionUrls === undefined || redirectionUrls.length === 0) {
-    return [];
+    return Promise.resolve([]);
   }
 
   // Construct the URL(s) to redirect the user to.
@@ -83,5 +83,5 @@ export function getRedirects(
     redirects.push(constructRedirect(redirectionUrl, queryText));
   }
 
-  return redirects;
+  return Promise.resolve(redirects);
 }

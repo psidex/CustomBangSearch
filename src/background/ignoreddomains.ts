@@ -1,10 +1,10 @@
-// A global single var to hold the current ignored domains object.
-let ignoredDomains: string[] = [];
+import browser from 'webextension-polyfill';
 
 export function setIgnoredDomains(arr: string[]): void {
-  ignoredDomains = arr;
+  browser.storage.local.set({ ignoredDomains: arr });
 }
 
-export function getIgnoredDomains(): Readonly<string[]> {
-  return ignoredDomains;
+export async function getIgnoredDomains(): Promise<Readonly<string[]>> {
+  const { ignoredDomains } = await browser.storage.local.get('ignoredDomains');
+  return Promise.resolve(ignoredDomains);
 }

@@ -17,6 +17,9 @@ import { ReactfulBangInfoContainer, storedBangInfoToReactful } from './reactful'
 import { Settings, SettingsOptions, StoredBangInfo } from '../lib/settings';
 import * as storage from '../lib/storage';
 import MiscButtons from '../lib/components/MiscButtons';
+import { currentBrowser } from '../lib/esbuilddefinitions';
+
+const BROWSER_QUOTA_BYTES_PER_ITEM = currentBrowser === 'chrome' ? browser.storage.sync.QUOTA_BYTES_PER_ITEM : 8192;
 
 function App(): React.ReactElement {
   const toast = useToast();
@@ -191,7 +194,7 @@ function App(): React.ReactElement {
         <MiscButtons />
       </HStack>
       <Text paddingLeft="2.5rem" paddingBottom="0.5rem" fontSize="1.25em">
-        {`Storing ${storedSize}/${browser.storage.sync.QUOTA_BYTES_PER_ITEM} bytes (${(storedSize / (browser.storage.sync.QUOTA_BYTES_PER_ITEM / 100)).toFixed(1)}%)`}
+        {`Storing ${storedSize}/${BROWSER_QUOTA_BYTES_PER_ITEM} bytes (${(storedSize / (BROWSER_QUOTA_BYTES_PER_ITEM / 100)).toFixed(1)}%)`}
       </Text>
       {content}
     </Box>
