@@ -12,6 +12,14 @@
 
 A browser extension to use custom DuckDuckGo-like bangs directly from the address bar.
 
+## Example Searches
+```
+!a monitor  ▶ https://www.amazon.co.uk/s?k=monitor
+!r G273QF   ▶ https://www.google.com/search?q=site%3Areddit.com+G273QF
+!m new york ▶ https://www.google.com/maps/search/new%20york
+!y boids    ▶ https://www.youtube.com/results?search_query=boids
+```
+
 ## Demo
 
 TODO: New, good demo. Video and basic explainer image.
@@ -25,6 +33,10 @@ If you set one of these as your browsers search engine, you can use the bangs di
 Bangs will also work by just using the search engines normally.
 
 ## Options Page
+
+The bang editing menu and general options are accessed using the extensions options page:
+
+![options page screenshot](./images/options-page.png)
 
 All of your bangs and options are saved to the browsers sync storage, meaning if you log into your browser they will sync across to wherever else you are logged in.
 
@@ -51,7 +63,7 @@ If the save button is highlighted green, this means you have unsaved changes and
 
 ### Options
 
-A options tab exists within the options page, which allows you to change the behaviour of the extension.
+An options tab exists within the options page, which allows you to change the behaviour of the extension.
 
 Currently this is just the search engines that the extension is enabled to use bangs with.
 
