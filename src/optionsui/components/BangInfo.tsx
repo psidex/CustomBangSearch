@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-import {
-  HStack, Input, Button, VStack,
-} from '@chakra-ui/react';
+import { HStack, Button, VStack } from '@chakra-ui/react';
 import { DeleteIcon, PlusSquareIcon } from '@chakra-ui/icons';
 
 import { nanoid } from 'nanoid';
 
-import { ReactfulBangInfo } from '../reactful';
+import ControlledInput from './ControlledInput';
+import { ReactfulBangInfo, ReactfulBangInfoContainer } from '../reactful';
 
 type BangInfoPropTypes = {
   bangId: string,
   info: ReactfulBangInfo,
   removeBangInfo: (id: string) => void,
-  updateBangInfo: (id: string, info: ReactfulBangInfo) => void,
+  setBangInfos: React.Dispatch<React.SetStateAction<ReactfulBangInfoContainer>>,
   isLonely: boolean
 };
 
@@ -21,31 +20,55 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
   const [urlInputs, setUrlInputs] = useState<React.ReactElement[]>([]);
 
   const {
-    bangId, info, removeBangInfo, updateBangInfo, isLonely,
+    bangId, info, removeBangInfo, setBangInfos, isLonely,
   } = props;
 
   const bangChanged = (e: any) => {
-    const infoCopy = { ...info };
-    infoCopy.bang = e.target.value;
-    updateBangInfo(bangId, infoCopy);
+    setBangInfos((oldBangInfos: ReactfulBangInfoContainer): ReactfulBangInfoContainer => {
+      const old = oldBangInfos.get(bangId);
+      if (old === undefined) {
+        return oldBangInfos;
+      }
+      const infoCopy: ReactfulBangInfo = { ...old };
+      infoCopy.bang = e.target.value;
+      return new Map(oldBangInfos).set(bangId, infoCopy);
+    });
   };
 
   const urlChanged = (e: any, id: string) => {
-    const infoCopy = { ...info };
-    infoCopy.urls = new Map(info.urls).set(id, e.target.value);
-    updateBangInfo(bangId, infoCopy);
+    setBangInfos((oldBangInfos: ReactfulBangInfoContainer): ReactfulBangInfoContainer => {
+      const old = oldBangInfos.get(bangId);
+      if (old === undefined) {
+        return oldBangInfos;
+      }
+      const infoCopy: ReactfulBangInfo = { ...old };
+      infoCopy.urls = new Map(info.urls).set(id, e.target.value);
+      return new Map(oldBangInfos).set(bangId, infoCopy);
+    });
   };
   const deleteUrl = (id: string) => {
-    const infoCopy = { ...info };
-    const urlsCopy = new Map(info.urls);
-    urlsCopy.delete(id);
-    infoCopy.urls = urlsCopy;
-    updateBangInfo(bangId, infoCopy);
+    setBangInfos((oldBangInfos: ReactfulBangInfoContainer): ReactfulBangInfoContainer => {
+      const old = oldBangInfos.get(bangId);
+      if (old === undefined) {
+        return oldBangInfos;
+      }
+      const infoCopy: ReactfulBangInfo = { ...old };
+      const urlsCopy = new Map(infoCopy.urls);
+      urlsCopy.delete(id);
+      infoCopy.urls = urlsCopy;
+      return new Map(oldBangInfos).set(bangId, infoCopy);
+    });
   };
   const addUrl = () => {
-    const infoCopy = { ...info };
-    infoCopy.urls = new Map(info.urls).set(nanoid(21), 'https://example.com/?q=%s');
-    updateBangInfo(bangId, infoCopy);
+    setBangInfos((oldBangInfos: ReactfulBangInfoContainer): ReactfulBangInfoContainer => {
+      const old = oldBangInfos.get(bangId);
+      if (old === undefined) {
+        return oldBangInfos;
+      }
+      const infoCopy: ReactfulBangInfo = { ...old };
+      infoCopy.urls = new Map(info.urls).set(nanoid(21), 'https://example.com/?q=%s');
+      return new Map(oldBangInfos).set(bangId, infoCopy);
+    });
   };
 
   useEffect(() => {
@@ -55,7 +78,7 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
       const url = urlInfo[1];
       inputs.push(
         <HStack key={urlId}>
-          <Input
+          <ControlledInput
             value={url}
             onChange={(e: any) => { urlChanged(e, urlId); }}
             placeholder="https://example.com/?q=%s"
@@ -82,7 +105,7 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
         <DeleteIcon />
       </Button>
       )}
-      <Input value={info.bang} onChange={bangChanged} placeholder="bang" width="6em" />
+      <ControlledInput value={info.bang} onChange={bangChanged} placeholder="bang" width="6em" />
       <VStack align="left">
         {urlInputs}
       </VStack>

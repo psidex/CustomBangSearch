@@ -11,7 +11,7 @@ import {
 import { nanoid } from 'nanoid';
 
 import {
-  ReactfulBangInfo, ReactfulBangInfoContainer, reactfulBangInfoToStored, storedBangInfoToReactful,
+  ReactfulBangInfoContainer, reactfulBangInfoToStored, storedBangInfoToReactful,
 } from '../reactful';
 import BangInfo from './BangInfo';
 import {
@@ -167,11 +167,6 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
     });
   };
 
-  const updateBangInfo = (id: string, info: ReactfulBangInfo) => {
-    // Shallow copy then update with entirely new value at given id, no mutation happens.
-    setBangInfos((oldBangInfos) => new Map(oldBangInfos).set(id, info));
-  };
-
   const generateRows = () => {
     const rows = [];
     const isLonely = bangInfos.size === 1;
@@ -184,7 +179,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
           bangId={id}
           info={rowInfo}
           removeBangInfo={removeBangInfo}
-          updateBangInfo={updateBangInfo}
+          setBangInfos={setBangInfos}
           isLonely={isLonely}
         />,
       );
