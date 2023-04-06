@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect, useRef, useState, useCallback,
+} from 'react';
 import ReactDOM from 'react-dom/client';
 
 import {
@@ -41,10 +43,13 @@ function App(): React.ReactElement {
   const [bangInfos, _setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
   const [bangChangesToSave, setBangChangesToSave] = useState(false);
 
-  const setBangInfos = (value: React.SetStateAction<ReactfulBangInfoContainer>): void => {
-    setBangChangesToSave(true);
-    _setBangInfos(value);
-  };
+  const setBangInfos = useCallback(
+    (value: React.SetStateAction<ReactfulBangInfoContainer>): void => {
+      setBangChangesToSave(true);
+      _setBangInfos(value);
+    },
+    [setBangChangesToSave, _setBangInfos],
+  );
 
   const updateUsedStorage = async () => {
     setStoredSize(await browser.storage.sync.getBytesInUse(['settings']));

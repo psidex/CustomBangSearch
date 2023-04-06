@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect, useRef, useState, useCallback,
+} from 'react';
 
 import {
   Box,
@@ -158,14 +160,14 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
 
   // --- Buttons on individual bangs ---
 
-  const removeBangInfo = (id: string) => {
+  const removeBangInfo = useCallback((id: string) => {
     setBangInfos((oldBangInfos) => {
       const shallowCopy = new Map(oldBangInfos);
       // shallowCopy is a new map, removing from this wont affect the key/value in the state var.
       shallowCopy.delete(id);
       return shallowCopy;
     });
-  };
+  }, [setBangInfos]);
 
   const generateRows = () => {
     const rows = [];

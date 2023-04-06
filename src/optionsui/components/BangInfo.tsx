@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 
 import { HStack, Button, VStack } from '@chakra-ui/react';
 import { DeleteIcon, PlusSquareIcon } from '@chakra-ui/icons';
@@ -16,7 +16,7 @@ type BangInfoPropTypes = {
   isLonely: boolean
 };
 
-export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
+export default memo((props: BangInfoPropTypes): React.ReactElement => {
   const [urlInputs, setUrlInputs] = useState<React.ReactElement[]>([]);
 
   const {
@@ -114,4 +114,4 @@ export default function BangInfo(props: BangInfoPropTypes): React.ReactElement {
       </Button>
     </HStack>
   );
-}
+});
