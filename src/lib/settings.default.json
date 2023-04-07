@@ -1,0 +1,129 @@
+{
+  "version": 3,
+  "options": {
+    "ignoredDomains": []
+  },
+  "bangs": [
+    {
+      "bang": "a",
+      "urls": [
+        "https://amazon.co.uk/s?k=%s"
+      ]
+    },
+    {
+      "bang": "e",
+      "urls": [
+        "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
+      ]
+    },
+    {
+      "bang": "ea",
+      "urls": [
+        "https://amazon.co.uk/s?k=%s",
+        "https://www.ebay.co.uk/sch/i.html?_nkw=%s"
+      ]
+    },
+    {
+      "bang": "et",
+      "urls": [
+        "https://www.etsy.com/uk/search?q=%s"
+      ]
+    },
+    {
+      "bang": "t",
+      "urls": [
+        "https://www.twitch.tv/search?term=%s"
+      ]
+    },
+    {
+      "bang": "y",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "av",
+      "urls": [
+        "https://amazon.co.uk/s?k=%s&i=instant-video"
+      ]
+    },
+    {
+      "bang": "n",
+      "urls": [
+        "https://www.netflix.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "g",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "b",
+      "urls": [
+        "https://www.bing.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "d",
+      "urls": [
+        "https://duckduckgo.com/?q=%s"
+      ]
+    },
+    {
+      "bang": "q",
+      "urls": [
+        "https://www.qwant.com/?q=%s"
+      ]
+    },
+    {
+      "bang": "m",
+      "urls": [
+        "https://www.google.com/maps/search/%s"
+      ]
+    },
+    {
+      "bang": "r",
+      "urls": [
+        "https://www.google.com/search?q=site%3Areddit.com+%s"
+      ]
+    },
+    {
+      "bang": "git",
+      "urls": [
+        "https://github.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "mdn",
+      "urls": [
+        "https://developer.mozilla.org/en-US/search?q=%s"
+      ]
+    },
+    {
+      "bang": "pypi",
+      "urls": [
+        "https://pypi.org/search/?q=%s"
+      ]
+    },
+    {
+      "bang": "npm",
+      "urls": [
+        "https://www.npmjs.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "so",
+      "urls": [
+        "https://stackoverflow.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "w",
+      "urls": [
+        "https://www.wolframalpha.com/input/?i=%s"
+      ]
+    }
+  ]
+}

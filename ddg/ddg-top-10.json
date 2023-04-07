@@ -1,0 +1,65 @@
+{
+  "version": 3,
+  "bangs": [
+    {
+      "bang": "g",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "yt",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "w",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Special:Search?search=%s"
+      ]
+    },
+    {
+      "bang": "google",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "gi",
+      "urls": [
+        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ]
+    },
+    {
+      "bang": "gm",
+      "urls": [
+        "https://google.com/maps/place/%s"
+      ]
+    },
+    {
+      "bang": "a",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ]
+    },
+    {
+      "bang": "tw",
+      "urls": [
+        "https://twitter.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "maps",
+      "urls": [
+        "https://google.com/maps?q=%s"
+      ]
+    },
+    {
+      "bang": "r",
+      "urls": [
+        "https://www.reddit.com/search?q=%s"
+      ]
+    }
+  ]
+}

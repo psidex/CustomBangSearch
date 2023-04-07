@@ -1,0 +1,11 @@
+{
+  "permissions": [
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.qwant.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/main.js"
+  }
+}

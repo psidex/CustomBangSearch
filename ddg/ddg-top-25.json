@@ -1,0 +1,155 @@
+{
+  "version": 3,
+  "bangs": [
+    {
+      "bang": "g",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "yt",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "w",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Special:Search?search=%s"
+      ]
+    },
+    {
+      "bang": "google",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "gi",
+      "urls": [
+        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ]
+    },
+    {
+      "bang": "gm",
+      "urls": [
+        "https://google.com/maps/place/%s"
+      ]
+    },
+    {
+      "bang": "a",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ]
+    },
+    {
+      "bang": "tw",
+      "urls": [
+        "https://twitter.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "maps",
+      "urls": [
+        "https://google.com/maps?q=%s"
+      ]
+    },
+    {
+      "bang": "r",
+      "urls": [
+        "https://www.reddit.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "m",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ]
+    },
+    {
+      "bang": "imdb",
+      "urls": [
+        "http://www.imdb.com/find?s=all&q=%s"
+      ]
+    },
+    {
+      "bang": "gh",
+      "urls": [
+        "https://github.com/search?utf8=%E2%9C%93&q=%s"
+      ]
+    },
+    {
+      "bang": "wikipedia",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ]
+    },
+    {
+      "bang": "gt",
+      "urls": [
+        "https://translate.google.com/#auto/en/%s"
+      ]
+    },
+    {
+      "bang": "wiki",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ]
+    },
+    {
+      "bang": "s",
+      "urls": [
+        "http://startpage.com/do/metasearch.pl?query=%s"
+      ]
+    },
+    {
+      "bang": "wen",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ]
+    },
+    {
+      "bang": "youtube",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "i",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ]
+    },
+    {
+      "bang": "sp",
+      "urls": [
+        "https://startpage.com/do/metasearch.pl?query=%s"
+      ]
+    },
+    {
+      "bang": "wt",
+      "urls": [
+        "https://en.wiktionary.org/w/index.php?search=%s&title=Special%3ASearch&go=Go"
+      ]
+    },
+    {
+      "bang": "tr",
+      "urls": [
+        "http://translate.google.com/#auto/en/%s"
+      ]
+    },
+    {
+      "bang": "aw",
+      "urls": [
+        "https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s"
+      ]
+    },
+    {
+      "bang": "gn",
+      "urls": [
+        "https://news.google.com/news/search/section/q/%s"
+      ]
+    }
+  ]
+}

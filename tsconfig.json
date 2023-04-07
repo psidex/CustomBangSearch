@@ -1,12 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["dom"],
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
+    // skipLibCheck required because Chakra UI is currently broken:
+    // https://github.com/chakra-ui/chakra-ui/issues/7116
+    // Short description of the effects this has on this project:
+    // https://www.testim.io/blog/typescript-skiplibcheck/
     "skipLibCheck": true,
-    "jsx": "react"
+    "target": "es6",
+    "lib": [
+      "ES6",
+      "dom"
+    ],
+    "module": "commonjs",
+    "strict": true,
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   }
 }

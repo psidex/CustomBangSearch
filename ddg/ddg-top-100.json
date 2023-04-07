@@ -1,0 +1,605 @@
+{
+  "version": 3,
+  "bangs": [
+    {
+      "bang": "g",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "yt",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "w",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Special:Search?search=%s"
+      ]
+    },
+    {
+      "bang": "google",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "gi",
+      "urls": [
+        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ]
+    },
+    {
+      "bang": "gm",
+      "urls": [
+        "https://google.com/maps/place/%s"
+      ]
+    },
+    {
+      "bang": "a",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ]
+    },
+    {
+      "bang": "tw",
+      "urls": [
+        "https://twitter.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "maps",
+      "urls": [
+        "https://google.com/maps?q=%s"
+      ]
+    },
+    {
+      "bang": "r",
+      "urls": [
+        "https://www.reddit.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "m",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ]
+    },
+    {
+      "bang": "imdb",
+      "urls": [
+        "http://www.imdb.com/find?s=all&q=%s"
+      ]
+    },
+    {
+      "bang": "gh",
+      "urls": [
+        "https://github.com/search?utf8=%E2%9C%93&q=%s"
+      ]
+    },
+    {
+      "bang": "wikipedia",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ]
+    },
+    {
+      "bang": "gt",
+      "urls": [
+        "https://translate.google.com/#auto/en/%s"
+      ]
+    },
+    {
+      "bang": "wiki",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ]
+    },
+    {
+      "bang": "s",
+      "urls": [
+        "http://startpage.com/do/metasearch.pl?query=%s"
+      ]
+    },
+    {
+      "bang": "wen",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ]
+    },
+    {
+      "bang": "youtube",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "i",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ]
+    },
+    {
+      "bang": "sp",
+      "urls": [
+        "https://startpage.com/do/metasearch.pl?query=%s"
+      ]
+    },
+    {
+      "bang": "wt",
+      "urls": [
+        "https://en.wiktionary.org/w/index.php?search=%s&title=Special%3ASearch&go=Go"
+      ]
+    },
+    {
+      "bang": "tr",
+      "urls": [
+        "http://translate.google.com/#auto/en/%s"
+      ]
+    },
+    {
+      "bang": "aw",
+      "urls": [
+        "https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s"
+      ]
+    },
+    {
+      "bang": "gn",
+      "urls": [
+        "https://news.google.com/news/search/section/q/%s"
+      ]
+    },
+    {
+      "bang": "gmaps",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ]
+    },
+    {
+      "bang": "wa",
+      "urls": [
+        "https://www.wolframalpha.com/input/?i=%s"
+      ]
+    },
+    {
+      "bang": "sr",
+      "urls": [
+        "http://reddit.com/r/%s"
+      ]
+    },
+    {
+      "bang": "wikt",
+      "urls": [
+        "http://en.wiktionary.org/wiki/Special:Search?search=%s&go=Define"
+      ]
+    },
+    {
+      "bang": "deepl",
+      "urls": [
+        "https://www.deepl.com/translator#xx/en/%s"
+      ]
+    },
+    {
+      "bang": "b",
+      "urls": [
+        "https://www.bing.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "wde",
+      "urls": [
+        "https://de.wikipedia.org/w/index.php?search=%s"
+      ]
+    },
+    {
+      "bang": "fb",
+      "urls": [
+        "https://www.facebook.com/search.php/?q=%s"
+      ]
+    },
+    {
+      "bang": "gmail",
+      "urls": [
+        "https://mail.google.com/mail/#search/%s"
+      ]
+    },
+    {
+      "bang": "ya",
+      "urls": [
+        "https://yandex.ru/search/?text=%s"
+      ]
+    },
+    {
+      "bang": "osm",
+      "urls": [
+        "https://www.openstreetmap.org/search?query=%s"
+      ]
+    },
+    {
+      "bang": "you",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "twitter",
+      "urls": [
+        "https://twitter.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "gsc",
+      "urls": [
+        "http://scholar.google.com/scholar?q=%s&btnG=Search&as_sdt=800000000001&as_sdtp=on"
+      ]
+    },
+    {
+      "bang": "gde",
+      "urls": [
+        "http://www.google.de/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ]
+    },
+    {
+      "bang": "e",
+      "urls": [
+        "https://www.ebay.com/sch/items/?_nkw=%s"
+      ]
+    },
+    {
+      "bang": "scholar",
+      "urls": [
+        "http://scholar.google.com/scholar?q=%s&btnG=Search&as_sdt=800000000001&as_sdtp=on"
+      ]
+    },
+    {
+      "bang": "leo",
+      "urls": [
+        "https://dict.leo.org/englisch-deutsch/%s"
+      ]
+    },
+    {
+      "bang": "npm",
+      "urls": [
+        "https://www.npmjs.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "translate",
+      "urls": [
+        "https://translate.google.com/#auto/en/%s"
+      ]
+    },
+    {
+      "bang": "mdn",
+      "urls": [
+        "https://developer.mozilla.org/search?q=%s"
+      ]
+    },
+    {
+      "bang": "gfr",
+      "urls": [
+        "http://www.google.fr/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ]
+    },
+    {
+      "bang": "guk",
+      "urls": [
+        "https://www.google.co.uk/search?q=%s"
+      ]
+    },
+    {
+      "bang": "aur",
+      "urls": [
+        "https://aur.archlinux.org/packages/?K=%s"
+      ]
+    },
+    {
+      "bang": "map",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ]
+    },
+    {
+      "bang": "ebay",
+      "urls": [
+        "https://www.ebay.com/sch/items/?_nkw=%s"
+      ]
+    },
+    {
+      "bang": "arch",
+      "urls": [
+        "https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s&go=Go"
+      ]
+    },
+    {
+      "bang": "ade",
+      "urls": [
+        "https://www.amazon.de/s?k=%s"
+      ]
+    },
+    {
+      "bang": "history",
+      "urls": [
+        "http://www.history.com/search?search-field=%s&x=0&y=0"
+      ]
+    },
+    {
+      "bang": "ud",
+      "urls": [
+        "https://www.urbandictionary.com/define.php?term=%s"
+      ]
+    },
+    {
+      "bang": "naver",
+      "urls": [
+        "http://search.naver.com/search.naver?where=nexearch&sm=osd&ie={inputEncoding}&query=%s"
+      ]
+    },
+    {
+      "bang": "amazon",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ]
+    },
+    {
+      "bang": "reddit",
+      "urls": [
+        "https://www.reddit.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "rust",
+      "urls": [
+        "https://doc.rust-lang.org/std/?search=%s"
+      ]
+    },
+    {
+      "bang": "safeoff",
+      "urls": [
+        "/?q=%s&kp=-2"
+      ]
+    },
+    {
+      "bang": "wfr",
+      "urls": [
+        "http://fr.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ]
+    },
+    {
+      "bang": "rym",
+      "urls": [
+        "https://rateyourmusic.com/search?searchterm=%s"
+      ]
+    },
+    {
+      "bang": "twitch",
+      "urls": [
+        "https://twitch.tv/%s"
+      ]
+    },
+    {
+      "bang": "osr",
+      "urls": [
+        "https://old.reddit.com/r/%s"
+      ]
+    },
+    {
+      "bang": "mw",
+      "urls": [
+        "http://www.merriam-webster.com/dictionary/%s"
+      ]
+    },
+    {
+      "bang": "git",
+      "urls": [
+        "https://github.com/search?utf8=%E2%9C%93&q=%s"
+      ]
+    },
+    {
+      "bang": "d",
+      "urls": [
+        "http://www.thefreedictionary.com/%s"
+      ]
+    },
+    {
+      "bang": "linkedin",
+      "urls": [
+        "https://www.linkedin.com/search/results/all/?keywords=%s"
+      ]
+    },
+    {
+      "bang": "namu",
+      "urls": [
+        "https://namu.wiki/go/%s"
+      ]
+    },
+    {
+      "bang": "github",
+      "urls": [
+        "http://github.com/search?q=%s&type=Everything&repo=&langOverride=&start_value=1"
+      ]
+    },
+    {
+      "bang": "cpp",
+      "urls": [
+        "http://en.cppreference.com/mwiki/index.php?search=%s"
+      ]
+    },
+    {
+      "bang": "h",
+      "urls": [
+        "http://www.haskell.org/hoogle/?hoogle=%s"
+      ]
+    },
+    {
+      "bang": "ig",
+      "urls": [
+        "https://www.instagram.com/explore/tags/%s/"
+      ]
+    },
+    {
+      "bang": "steam",
+      "urls": [
+        "http://store.steampowered.com/search/?term=%s"
+      ]
+    },
+    {
+      "bang": "bi",
+      "urls": [
+        "https://www.bing.com/images/search?q=%s&go=&form=QBIL&qs=n"
+      ]
+    },
+    {
+      "bang": "crates",
+      "urls": [
+        "https://crates.io/search?q=%s"
+      ]
+    },
+    {
+      "bang": "hn",
+      "urls": [
+        "https://hn.algolia.com/?q=%s"
+      ]
+    },
+    {
+      "bang": "ytm",
+      "urls": [
+        "https://music.youtube.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "genius",
+      "urls": [
+        "https://genius.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "rt",
+      "urls": [
+        "https://www.rottentomatoes.com/search/?search=%s"
+      ]
+    },
+    {
+      "bang": "auk",
+      "urls": [
+        "https://www.amazon.co.uk/s?k=%s"
+      ]
+    },
+    {
+      "bang": "ddg",
+      "urls": [
+        "http://duckduckgo.com/?q=%s"
+      ]
+    },
+    {
+      "bang": "mal",
+      "urls": [
+        "https://myanimelist.net/anime.php?q=%s"
+      ]
+    },
+    {
+      "bang": "jisho",
+      "urls": [
+        "http://jisho.org/search/%s"
+      ]
+    },
+    {
+      "bang": "wayback",
+      "urls": [
+        "https://web.archive.org/web/*/%s"
+      ]
+    },
+    {
+      "bang": "ttv",
+      "urls": [
+        "https://www.twitch.tv/search?term=%s"
+      ]
+    },
+    {
+      "bang": "t",
+      "urls": [
+        "http://www.thesaurus.com/browse/%s"
+      ]
+    },
+    {
+      "bang": "drive",
+      "urls": [
+        "https://drive.google.com/drive/search?q=%s "
+      ]
+    },
+    {
+      "bang": "li",
+      "urls": [
+        "https://www.linkedin.com/search/results/all/?keywords=%s"
+      ]
+    },
+    {
+      "bang": "yf",
+      "urls": [
+        "http://finance.yahoo.com/q?s=%s"
+      ]
+    },
+    {
+      "bang": "bgg",
+      "urls": [
+        "https://boardgamegeek.com/geeksearch.php?action=search&objecttype=boardgame&q=%s&B1=Go"
+      ]
+    },
+    {
+      "bang": "gv",
+      "urls": [
+        "https://www.google.com/search?tbm=vid&q=%s"
+      ]
+    },
+    {
+      "bang": "ges",
+      "urls": [
+        "https://www.google.es/search?q=%s "
+      ]
+    },
+    {
+      "bang": "gs",
+      "urls": [
+        "http://www.google.com/products?q=%s&sa=N&tab=pf"
+      ]
+    },
+    {
+      "bang": "dcc",
+      "urls": [
+        "http://www.dict.cc/?s=%s"
+      ]
+    },
+    {
+      "bang": "dpl",
+      "urls": [
+        "https://www.deepl.com/translator#xx/en/%s"
+      ]
+    },
+    {
+      "bang": "img",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ]
+    },
+    {
+      "bang": "scry",
+      "urls": [
+        "https://scryfall.com/search?q=%s"
+      ]
+    },
+    {
+      "bang": "afr",
+      "urls": [
+        "https://www.amazon.fr/s?k=%s"
+      ]
+    },
+    {
+      "bang": "gmap",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ]
+    }
+  ]
+}

@@ -1,11 +1,14 @@
 *.zip
-amo_submission.txt
-src/options/options.js
-src/scripts/main.js
-web-ext-artifacts
+src/**/*.js
+ddg/ddg.json
 
-# Created by https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,yarn,react
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,visualstudiocode,yarn,react
+site/
+build/
+meta/
+web-ext-artifacts/
+
+# Created by https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,react
+# Edit at https://www.toptal.com/developers/gitignore?templates=node,visualstudiocode,react
 
 ### Node ###
 # Logs
@@ -64,6 +67,9 @@ web_modules/
 # Optional eslint cache
 .eslintcache
 
+# Optional stylelint cache
+.stylelintcache
+
 # Microbundle cache
 .rpt2_cache/
 .rts2_cache_cjs/
@@ -79,10 +85,12 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# dotenv environment variable files
 .env
-.env.test
-.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -104,6 +112,12 @@ dist
 
 # vuepress build output
 .vuepress/dist
+
+# vuepress v2.x temp and cache directory
+.temp
+
+# Docusaurus cache and generated files
+.docusaurus
 
 # Serverless directories
 .serverless/
@@ -131,6 +145,11 @@ dist
 # Serverless Webpack directories
 .webpack/
 
+# Optional stylelint cache
+
+# SvelteKit build / generate output
+.svelte-kit
+
 ### react ###
 .DS_*
 **/*.backup.*
@@ -150,30 +169,17 @@ sketch
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-*.code-workspace
+!.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 .history/
+
+# Built Visual Studio Code Extensions
+*.vsix
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
 .ionide
 
-### yarn ###
-# https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
-
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-
-# if you are NOT using Zero-installs, then:
-# comment the following lines
-!.yarn/cache
-
-# and uncomment the following lines
-# .pnp.*
-
-# End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,yarn,react
+# End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,react
