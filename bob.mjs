@@ -63,17 +63,25 @@ const sourceFilesForReview = [
 const buildPath = './build';
 
 const {
-  values: { browser, dev },
+  values: { browser, dev, release },
 } = parseArgs({
   strict: true,
   options: {
+    // chrome or firefox
     browser: {
       type: 'string',
       short: 'b',
     },
+    // dev mode = don't minify, skip linting, etc.
     dev: {
       type: 'boolean',
       short: 'd',
+      default: false,
+    },
+    // release mode = create zip files for releasing
+    release: {
+      type: 'boolean',
+      short: 'r',
       default: false,
     },
   },
@@ -224,7 +232,7 @@ const tasks = new Listr([
   },
   {
     title: 'Create zip file',
-    skip: () => dev,
+    skip: () => (!release || dev),
     task: (ctx) => {
       const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}.zip`;
       return execa('7z', ['a', `-tzip ${zipName}`, `${buildPath}/*`], { shell: true });
@@ -232,7 +240,7 @@ const tasks = new Listr([
   },
   {
     title: 'Create source zip file for review',
-    skip: () => dev,
+    skip: () => (!release || dev),
     task: (ctx) => {
       const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-source.zip`;
       return execa('7z', ['a', `-tzip ${zipName}`, `${sourceFilesForReview.join(' ')}`], { shell: true });

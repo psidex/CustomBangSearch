@@ -42,6 +42,7 @@ All of your bangs and options are saved to the browsers sync storage, meaning if
 
 This storage has a strict quota, and you can see the amount of it you are using at the top of the options page.
 TODO: Raise issue for striping data across objects.
+TODO: Raise issue for fixing obscene number of re-renders when banginfo is edited by user
 
 ### Bangs
 

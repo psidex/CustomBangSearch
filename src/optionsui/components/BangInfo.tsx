@@ -5,8 +5,9 @@ import { DeleteIcon, PlusSquareIcon } from '@chakra-ui/icons';
 
 import { nanoid } from 'nanoid';
 
-import ControlledInput from './ControlledInput';
 import { ReactfulBangInfo, ReactfulBangInfoContainer } from '../reactful';
+import ControlledInput from './ControlledInput';
+import RenderCounter from './RenderCounter';
 
 type BangInfoPropTypes = {
   bangId: string,
@@ -112,6 +113,7 @@ export default memo((props: BangInfoPropTypes): React.ReactElement => {
       <Button onClick={addUrl} alignSelf="end" variant="ghost" title="Add URL to this bang">
         <PlusSquareIcon />
       </Button>
+      <RenderCounter />
     </HStack>
   );
 });
