@@ -20,6 +20,7 @@ import { Settings, SettingsOptions, StoredBangInfo } from '../lib/settings';
 import * as storage from '../lib/storage';
 import MiscButtons from '../lib/components/MiscButtons';
 import { currentBrowser } from '../lib/esbuilddefinitions';
+import RenderCounter from './components/RenderCounter';
 
 const BROWSER_QUOTA_BYTES_PER_ITEM = currentBrowser === 'chrome' ? browser.storage.sync.QUOTA_BYTES_PER_ITEM : 8192;
 
@@ -196,6 +197,7 @@ function App(): React.ReactElement {
     <Box width={widthPercent} margin="auto">
       <HStack justifyContent="space-between">
         <Heading padding="0.5em 2rem">Custom Bang Search</Heading>
+        <RenderCounter />
         <MiscButtons />
       </HStack>
       <Text paddingLeft="2.5rem" paddingBottom="0.5rem" fontSize="1.25em">

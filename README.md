@@ -20,9 +20,9 @@ A browser extension to use custom DuckDuckGo-like bangs directly from the addres
 !y boids    ▶ https://www.youtube.com/results?search_query=boids
 ```
 
-## Demo
+## Demo Video
 
-TODO: New, good demo. Video and basic explainer image.
+[![Demo video](https://img.youtube.com/vi/IXP7RVFMJk4/0.jpg)](https://www.youtube.com/watch?v=IXP7RVFMJk4)
 
 ## Search Engines
 
@@ -41,8 +41,6 @@ The bang editing menu and general options are accessed using the extensions opti
 All of your bangs and options are saved to the browsers sync storage, meaning if you log into your browser they will sync across to wherever else you are logged in.
 
 This storage has a strict quota, and you can see the amount of it you are using at the top of the options page.
-TODO: Raise issue for striping data across objects.
-TODO: Raise issue for fixing obscene number of re-renders when banginfo is edited by user
 
 ### Bangs
 

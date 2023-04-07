@@ -20,6 +20,7 @@ import {
   SettingsOptions, StoredBangInfo, BangsExport, currentSettingsVersion,
 } from '../../lib/settings';
 import defaultSettings from '../../lib/settings.default.json';
+import RenderCounter from './RenderCounter';
 
 const defaultReactfulBangs = storedBangInfoToReactful(defaultSettings.bangs);
 
@@ -223,6 +224,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
 
         <Button onClick={() => { exportBangs(); }} leftIcon={<DownloadIcon />} variant="solid">Export</Button>
         <Button onClick={() => { resetBangsToDefeault(); }} leftIcon={<RepeatIcon />} variant="solid">Reset To Default</Button>
+        <RenderCounter />
       </HStack>
       <VStack align="left">
         {bangInfoRows}
