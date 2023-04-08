@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Custom Bang Search",
   "version": "0.10.0",
-  "description": "Allows you to use custom bangs inside the search bar",
+  "description": "Use custom DuckDuckGo-like bangs directly from the address bar",
   "icons": {
     "96": "images/icons/icon_96.png",
     "128": "images/icons/icon_128.png"
