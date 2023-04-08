@@ -13,6 +13,7 @@
 A browser extension to use custom DuckDuckGo-like bangs directly from the address bar.
 
 ## Example Searches
+
 ```
 !a monitor  ▶ https://www.amazon.co.uk/s?k=monitor
 !r G273QF   ▶ https://www.google.com/search?q=site%3Areddit.com+G273QF
