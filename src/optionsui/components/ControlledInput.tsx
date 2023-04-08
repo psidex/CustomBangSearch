@@ -8,7 +8,7 @@ import { Input } from '@chakra-ui/react';
 // It seems to be a relatively regular problem that people have, so I'm happy to just use this.
 // This solves the problem by wrapping Chakras Input and using state and ref to remember
 // the cursor position.
-// The types & linting are supressed because I know this works and I CBA to figure it out.
+// The types & linting are suppressed because I know this works and I CBA to figure it out.
 // Taken & edited from https://stackoverflow.com/a/68928267/6396652.
 export default function ControlledInput(props: any) {
   const { value, onChange, ...rest } = props;

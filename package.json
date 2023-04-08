@@ -8,9 +8,9 @@
     "lint": "npx eslint ./src/ --cache",
     "tsc-lint": "npx tsc -noEmit",
     "build-firefox": "node ./bob.mjs -d -b firefox",
-    "build-firefox-release": "node ./bob.mjs -b firefox",
+    "build-firefox-release": "node ./bob.mjs -r -b firefox",
     "build-chrome": "node ./bob.mjs -d -b chrome",
-    "build-chrome-release": "node ./bob.mjs -b chrome"
+    "build-chrome-release": "node ./bob.mjs -r -b chrome"
   },
   "repository": {
     "type": "git",

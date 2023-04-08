@@ -54,7 +54,7 @@ function main(): void {
     console.info(`Dev: ${dev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`);
   }
 
-  // Because service workers need to set their event listeners immediatley, we can't await this.
+  // Because service workers need to set their event listeners immediately, we can't await this.
   // FIXME: There may be a better way to do this, but for now we just hope it runs quickly!
   setupSettings();
 

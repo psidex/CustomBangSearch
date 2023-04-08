@@ -68,7 +68,7 @@ export default function AboutTabPanel(): React.ReactElement {
       <Text>You can also import and export your list of bangs to/from a valid JSON file.</Text>
       <Text>If the save button is highlighted green, this means you have unsaved changes and they will not take effect until you press the save button.</Text>
       <SubHeading>Options</SubHeading>
-      <Text>A options tab exists within the options page, which allows you to change the behaviour of the extension.</Text>
+      <Text>An options tab exists within the options page, which allows you to change the behaviour of the extension.</Text>
       <Text>Currently this is just the search engines that the extension is enabled to use bangs with.</Text>
       <SubHeading>DuckDuckGo Bangs</SubHeading>
       <Text>

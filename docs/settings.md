@@ -2,7 +2,7 @@
 
 This outlines how the settings / bangs are stored, how they are represented within the code, and the versions that can exist.
 
-This is a suprisingly important part of the project, as the structure defines how easy it is to lookup bangs, how they are used in the options UI React code, how to update them, how they are stored, etc.
+This is a surprisingly important part of the project, as the structure defines how easy it is to lookup bangs, how they are used in the options UI React code, how to update them, how they are stored, etc.
 
 Version 1 and 2 tried to keep one copy of the settings / bangs as a "single source of truth" and pass it around to everything, but this turns out to be a bad idea.
 

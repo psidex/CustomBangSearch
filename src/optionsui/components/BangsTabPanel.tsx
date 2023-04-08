@@ -155,7 +155,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
     a.remove();
   };
 
-  const resetBangsToDefeault = () => {
+  const resetBangsToDefault = () => {
     setBangInfos(defaultReactfulBangs);
   };
 
@@ -223,7 +223,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
         <input ref={fileInputRef} type="file" accept="application/json" style={{ display: 'none' }} onChange={fileUpload} />
 
         <Button onClick={() => { exportBangs(); }} leftIcon={<DownloadIcon />} variant="solid">Export</Button>
-        <Button onClick={() => { resetBangsToDefeault(); }} leftIcon={<RepeatIcon />} variant="solid">Reset To Default</Button>
+        <Button onClick={() => { resetBangsToDefault(); }} leftIcon={<RepeatIcon />} variant="solid">Reset To Default</Button>
         <RenderCounter />
       </HStack>
       <VStack align="left">
