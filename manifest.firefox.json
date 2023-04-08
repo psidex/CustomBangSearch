@@ -1,5 +1,6 @@
 {
   "permissions": [
+    "webRequest",
     "webRequestBlocking"
   ],
   "host_permissions": [

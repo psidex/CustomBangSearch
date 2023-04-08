@@ -8,7 +8,6 @@
     "128": "images/icons/icon_128.png"
   },
   "permissions": [
-    "webRequest",
     "storage"
   ],
   "host_permissions": [

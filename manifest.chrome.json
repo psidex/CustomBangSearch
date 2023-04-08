@@ -1,7 +1,5 @@
 {
-  "permissions": [
-    "scripting"
-  ],
+  "permissions": [],
   "host_permissions": [
     "*://*.qwant.com/*"
   ],
