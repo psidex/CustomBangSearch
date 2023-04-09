@@ -21,6 +21,7 @@ import * as storage from '../lib/storage';
 import MiscButtons from '../lib/components/MiscButtons';
 import { currentBrowser } from '../lib/esbuilddefinitions';
 import RenderCounter from './components/RenderCounter';
+import PermissionsRequester from '../lib/components/PermissionsRequester';
 
 const BROWSER_QUOTA_BYTES_PER_ITEM = currentBrowser === 'chrome' ? browser.storage.sync.QUOTA_BYTES_PER_ITEM : 8192;
 
@@ -197,6 +198,7 @@ function App(): React.ReactElement {
     <Box width={widthPercent} margin="auto">
       <HStack justifyContent="space-between">
         <Heading padding="0.5em 2rem">Custom Bang Search</Heading>
+        <PermissionsRequester closeWindow={false} />
         <RenderCounter />
         <MiscButtons />
       </HStack>

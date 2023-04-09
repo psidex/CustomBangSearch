@@ -4,7 +4,7 @@ import { dev } from '../../lib/esbuilddefinitions';
 
 // A simple render counter for debugging purposes.
 // Can't use normal react debugging tools on extension pages :(
-export default function RenderCounter() {
+export default function RenderCounter(): React.ReactElement | null {
   const renderCounter = useRef(0);
   if (!dev) {
     return null;
