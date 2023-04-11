@@ -1,12 +1,8 @@
 {
   "permissions": [
-    "webRequest",
     "webRequestBlocking"
   ],
-  "host_permissions": [
-    "*://*.startpage.com/*",
-    "*://searx.be/*"
-  ],
+  "host_permissions": [],
   "background": {
     "scripts": [
       "src/background/main.js"

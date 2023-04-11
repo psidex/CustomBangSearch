@@ -32,7 +32,6 @@ export async function getRedirects(
   const url = new URL(reqUrl);
   let queryText = '';
 
-  // request will only be defined by the Firefox processor.
   // Startpage and searx.be send POST request so extract the query from the formdata.
   // Else try to get the query parameter from the URL.
 

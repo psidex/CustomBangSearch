@@ -68,18 +68,20 @@ function main(): void {
   });
 
   if (currentBrowser === 'chrome') {
-    // Only fires on tabs where the URL is in host_permissions.
-    browser.tabs.onUpdated.addListener((tabId, changed) => {
-      if (changed.url !== undefined) {
-        chromeProcessRequest(tabId, changed.url);
-      }
-    });
+    browser.webRequest.onBeforeRequest.addListener(
+      (r) => {
+        // Type defs don't like an async non-blocking handler.
+        chromeProcessRequest(r);
+      },
+      { urls: hostPermissions },
+      // The requestBody spec is required for handling POST situations.
+      ['requestBody'],
+    );
   } else {
-    // The requestBody spec is required for handling POST situations.
     browser.webRequest.onBeforeRequest.addListener(
       firefoxProcessRequest,
       { urls: hostPermissions },
-      ['blocking', 'requestBody'],
+      ['requestBody', 'blocking'],
     );
   }
 }

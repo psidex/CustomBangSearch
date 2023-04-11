@@ -27,6 +27,7 @@ export default async function processRequest(
   }
 
   // Finally redirect the current tab to the first in the array.
+  // TODO: Is this better than tabs.update? Maybe unify Chrome and FF a bit more.
   let res: WebRequest.BlockingResponse;
 
   if (r.method === 'GET') {

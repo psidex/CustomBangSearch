@@ -1,18 +1,24 @@
-import browser from 'webextension-polyfill';
+import browser, { WebRequest } from 'webextension-polyfill';
 
 import { getIgnoredDomains } from './ignoreddomains';
 import { getRedirects, shouldReject } from './shared';
 
-export default async function processRequest(tabId: number, url: string): Promise<void> {
-  if (shouldReject(await getIgnoredDomains(), url)) {
-    return;
+export default async function processRequest(
+  r: WebRequest.OnBeforeRequestDetailsType,
+): Promise<void> {
+  if (r.type !== 'main_frame') {
+    return Promise.resolve();
+  }
+
+  if (shouldReject(await getIgnoredDomains(), r.url)) {
+    return Promise.resolve();
   }
 
   // From the current URL, get the redirections (if any) to apply.
-  const redirections = await getRedirects(url);
+  const redirections = await getRedirects(r.url, r);
 
   if (redirections.length === 0) {
-    return;
+    return Promise.resolve();
   }
 
   // Open all URLs (except the first) in new tabs
@@ -21,5 +27,7 @@ export default async function processRequest(tabId: number, url: string): Promis
   }
 
   // Finally send the current tab to the first in the array.
-  browser.tabs.update(tabId, { url: redirections[0] });
+  browser.tabs.update(r.tabId, { url: redirections[0] });
+
+  return Promise.resolve();
 }
