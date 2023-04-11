@@ -1,10 +1,12 @@
-import { WebRequest } from 'webextension-polyfill';
+import browser, { WebRequest } from 'webextension-polyfill';
 
 import { getBangsLookup } from './lookup';
+import { getIgnoredDomains } from './ignoreddomains';
 
 const possibleQueryParams = ['q', 'query', 'eingabe'];
 
-export function shouldReject(blacklist: Readonly<string[]>, url: string): boolean {
+// Should this URL be rejected provided the given blacklist?
+function shouldReject(blacklist: Readonly<string[]>, url: string): boolean {
   if (blacklist.includes(new URL(url).hostname)) {
     return true;
   }
@@ -25,7 +27,7 @@ function constructRedirect(redirectUrl: string, queryText: string): string {
  * @param request (Optional) The request details object from a WebRequestBlocking event.
  * @returns A list of redirections to issue.
  */
-export async function getRedirects(
+async function getRedirects(
   reqUrl: string,
   request: WebRequest.OnBeforeRequestDetailsType | undefined = undefined,
 ): Promise<string[]> {
@@ -83,4 +85,33 @@ export async function getRedirects(
   }
 
   return Promise.resolve(redirects);
+}
+
+export default async function processRequest(
+  r: WebRequest.OnBeforeRequestDetailsType,
+): Promise<void> {
+  if (r.type !== 'main_frame') {
+    return Promise.resolve();
+  }
+
+  if (shouldReject(await getIgnoredDomains(), r.url)) {
+    return Promise.resolve();
+  }
+
+  // From the current URL, get the redirections (if any) to apply.
+  const redirections = await getRedirects(r.url, r);
+
+  if (redirections.length === 0) {
+    return Promise.resolve();
+  }
+
+  // Open all URLs (except the first) in new tabs
+  for (let i = 1; i < redirections.length; i += 1) {
+    browser.tabs.create({ url: redirections[i] });
+  }
+
+  // Finally send the current tab to the first in the array.
+  browser.tabs.update(r.tabId, { url: redirections[0] });
+
+  return Promise.resolve();
 }

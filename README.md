@@ -73,7 +73,7 @@ If you want to import bangs from DuckDuckGo, see [this page](./ddg/README.md).
 
 ## How the extension works
 
-CBS uses the `WebRequestBlocking` API to intercept requests to the supported search engines, and if a bang is found, redirects the user to the chosen URL with the query inserted.
+CBS uses the `webRequest.onBeforeRequest` event listener to listen for requests to the supported search engines, and if a bang is found, sends the user to the chosen URL with the query inserted, using the `tabs.update` API.
 
 ## Development
 

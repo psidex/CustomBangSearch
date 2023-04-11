@@ -1,7 +1,5 @@
 {
-  "permissions": [
-    "webRequestBlocking"
-  ],
+  "permissions": [],
   "host_permissions": [],
   "background": {
     "scripts": [

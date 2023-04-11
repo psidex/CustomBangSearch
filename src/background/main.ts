@@ -3,8 +3,7 @@ import browser from 'webextension-polyfill';
 import {
   dev, currentBrowser, version, hash, hostPermissions,
 } from '../lib/esbuilddefinitions';
-import chromeProcessRequest from './chrome';
-import firefoxProcessRequest from './firefox';
+import processRequest from './requests';
 import { Settings } from '../lib/settings';
 import * as legacy from './legacy';
 import * as storage from '../lib/storage';
@@ -67,23 +66,15 @@ function main(): void {
     }
   });
 
-  if (currentBrowser === 'chrome') {
-    browser.webRequest.onBeforeRequest.addListener(
-      (r) => {
-        // Type defs don't like an async non-blocking handler.
-        chromeProcessRequest(r);
-      },
-      { urls: hostPermissions },
-      // The requestBody spec is required for handling POST situations.
-      ['requestBody'],
-    );
-  } else {
-    browser.webRequest.onBeforeRequest.addListener(
-      firefoxProcessRequest,
-      { urls: hostPermissions },
-      ['requestBody', 'blocking'],
-    );
-  }
+  browser.webRequest.onBeforeRequest.addListener(
+    (r) => {
+      // Type defs don't like an async non-blocking handler.
+      processRequest(r);
+    },
+    { urls: hostPermissions },
+    // The requestBody opt is required for handling POST situations.
+    ['requestBody'],
+  );
 }
 
 main();
