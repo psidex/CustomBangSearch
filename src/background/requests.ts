@@ -22,16 +22,18 @@ function constructRedirect(redirectUrl: string, queryText: string): string {
 }
 
 /**
- * If the first letter of 'queryText' is an unascii exclamation mark, replace it to the ascii exclamation mark.
- * @param queryText
+ * Replace the first non ascii exclamation mark with the ascii exclamation mark.
+ * @param queryText may be something like: `！g rust` (there is a Chinese exclamation mark `！` in it)
+ * @returns         may be something like: `!g rust`
+ *                  (the non ascii exclamation mark `！` has been replaced with the normal ascii exclamation mark `!`)
  */
-function replaceUnasciiExclamationMark(queryText: string) {
-  const unasciiExclamationMarks = [
+function replaceFirstNonAsciiExclamationMark(queryText: string) {
+  const nonAsciiExclamationMarks = [
     "！", // Chinese exclamation mark
   ]
-  for (let unasciiExclamationMark of unasciiExclamationMarks) {
-    if (queryText.charAt(0) === unasciiExclamationMark) {
-      return "!" + queryText.substring(1);
+  for (let nonAsciiExclamationMark of nonAsciiExclamationMarks) {
+    if (queryText.indexOf(nonAsciiExclamationMark) > -1) {
+      return queryText.replace(nonAsciiExclamationMark, "!")
     }
   }
   return queryText;
@@ -75,7 +77,7 @@ async function getRedirects(
     return Promise.resolve([]);
   }
 
-  queryText = replaceUnasciiExclamationMark(queryText);
+  queryText = replaceFirstNonAsciiExclamationMark(queryText);
 
   // Cut first bang from query text, it can be anywhere in the string.
   let bang = '';
