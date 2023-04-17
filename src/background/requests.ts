@@ -1,7 +1,7 @@
-import browser, { WebRequest } from 'webextension-polyfill';
+import browser, {WebRequest} from 'webextension-polyfill';
 
-import { getBangsLookup } from './lookup';
-import { getIgnoredDomains } from './ignoreddomains';
+import {getBangsLookup} from './lookup';
+import {getIgnoredDomains} from './ignoreddomains';
 
 const possibleQueryParams = ['q', 'query', 'eingabe'];
 
@@ -19,6 +19,24 @@ function constructRedirect(redirectUrl: string, queryText: string): string {
     return (new URL(redirectUrl)).origin;
   }
   return redirectUrl.replace(/%s/g, encodeURIComponent(queryText));
+}
+
+/**
+ * Replace the first non ascii exclamation mark with the ascii exclamation mark.
+ * @param queryText may be something like: `！g rust` (there is a Chinese exclamation mark `！` in it)
+ * @returns         may be something like: `!g rust`
+ *                  (the non ascii exclamation mark `！` has been replaced with the normal ascii exclamation mark `!`)
+ */
+function replaceFirstNonAsciiExclamationMark(queryText: string) {
+  const nonAsciiExclamationMarks = [
+    "！", // Chinese exclamation mark
+  ]
+  for (let nonAsciiExclamationMark of nonAsciiExclamationMarks) {
+    if (queryText.indexOf(nonAsciiExclamationMark) > -1) {
+      return queryText.replace(nonAsciiExclamationMark, "!")
+    }
+  }
+  return queryText;
 }
 
 /**
@@ -58,6 +76,8 @@ async function getRedirects(
   if (queryText.length === 0) {
     return Promise.resolve([]);
   }
+
+  queryText = replaceFirstNonAsciiExclamationMark(queryText);
 
   // Cut first bang from query text, it can be anywhere in the string.
   let bang = '';
@@ -107,11 +127,11 @@ export default async function processRequest(
 
   // Open all URLs (except the first) in new tabs
   for (let i = 1; i < redirections.length; i += 1) {
-    browser.tabs.create({ url: redirections[i] });
+    browser.tabs.create({url: redirections[i]});
   }
 
   // Finally send the current tab to the first in the array.
-  browser.tabs.update(r.tabId, { url: redirections[0] });
+  browser.tabs.update(r.tabId, {url: redirections[0]});
 
   return Promise.resolve();
 }
