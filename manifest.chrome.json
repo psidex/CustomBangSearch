@@ -1,6 +1,4 @@
 {
-  "permissions": [],
-  "host_permissions": [],
   "background": {
     "service_worker": "src/background/main.js"
   }

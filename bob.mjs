@@ -146,22 +146,15 @@ const tasks = new Listr([
     },
   },
   {
+    // Do this before running esbuild so we can insert the correct host URLs.
     title: 'Merge manifests',
     task: (ctx) => {
-      // Do this merge before running esbuild so we can insert the correct URLs.
       ctx.manifest = browser === 'chrome' ? manifestChrome : manifestFirefox;
-
-      // Object merge isn't deep, so manually merge permission stuff.
-      ctx.mergedHostPermissions = [
-        ...manifestShared.host_permissions, ...ctx.manifest.host_permissions];
-      const mergedPermissions = [...manifestShared.permissions, ...ctx.manifest.permissions];
       // Overwrite shared settings with browser based values.
       ctx.manifest = {
         ...manifestShared,
         ...ctx.manifest,
       };
-      ctx.manifest.host_permissions = ctx.mergedHostPermissions;
-      ctx.manifest.permissions = mergedPermissions;
     },
   },
   {
@@ -195,7 +188,7 @@ const tasks = new Listr([
           'process.env.version': `'${extensionVersion}'`,
           'process.env.hash': `'${ctx.gitHeadShortHash}'`,
           'process.env.buildTime': JSON.stringify(new Date()),
-          'process.env.hostPermissions': JSON.stringify(ctx.mergedHostPermissions),
+          'process.env.hostPermissions': JSON.stringify(ctx.manifest.host_permissions),
           'process.env.hostPermissionUrls': JSON.stringify(ctx.hostPermissionUrls),
         },
       };

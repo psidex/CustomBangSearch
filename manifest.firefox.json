@@ -1,6 +1,4 @@
 {
-  "permissions": [],
-  "host_permissions": [],
   "background": {
     "scripts": [
       "src/background/main.js"

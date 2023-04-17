@@ -3,7 +3,7 @@ import browser from 'webextension-polyfill';
 import {
   dev, currentBrowser, version, hash, hostPermissions,
 } from '../lib/esbuilddefinitions';
-import processRequest from './requests';
+import { processRequest } from './requests';
 import { Settings } from '../lib/settings';
 import * as legacy from './legacy';
 import * as storage from '../lib/storage';
