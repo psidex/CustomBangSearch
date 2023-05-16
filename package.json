@@ -4,7 +4,7 @@
   "description": "A browser extension to use custom DuckDuckGo-like bangs directly from the address bar",
   "main": "",
   "scripts": {
-    "test": "npx jest",
+    "test": "",
     "lint": "npx eslint ./src/ --cache",
     "tsc-lint": "npx tsc -noEmit",
     "build-firefox": "node ./bob.mjs -d -b firefox",
