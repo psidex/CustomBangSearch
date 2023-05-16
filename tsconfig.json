@@ -7,14 +7,13 @@
     "skipLibCheck": true,
     "target": "es6",
     "lib": [
-      "ES6",
-      "es2017",
+      "esnext",
       "dom"
     ],
-    "module": "commonjs",
     "strict": true,
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "resolveJsonModule": true
   }
 }
