@@ -11,6 +11,13 @@ import { setBangsLookup } from './lookup';
 import { setIgnoredDomains } from './ignoreddomains';
 import defaultSettings from '../lib/settings.default.json';
 
+function devLog(message: string): void {
+  if (dev) {
+    // eslint-disable-next-line no-console
+    console.info(message);
+  }
+}
+
 function updateGlobals(settings: Settings): void {
   setBangsLookup(settings);
   setIgnoredDomains(settings.options.ignoredDomains);
@@ -48,10 +55,7 @@ async function setupSettings(): Promise<void> {
 }
 
 function main(): void {
-  if (dev) {
-    // eslint-disable-next-line no-console
-    console.info(`Dev: ${dev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`);
-  }
+  devLog(`Dev: ${dev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`);
 
   // Because service workers need to set their event listeners immediately, we can't await this.
   // FIXME: There may be a better way to do this, but for now we just hope it runs quickly!
@@ -66,14 +70,25 @@ function main(): void {
     }
   });
 
+  // The requestBody opt is required for handling POST situations.
+  const extraInfoSpec: browser.WebRequest.OnBeforeRequestOptions[] = ['requestBody'];
+
+  // Wrap processRequest because the types don't like an async non-blocking handler.
+  let webRequestHandler = (r: browser.WebRequest.OnBeforeRequestDetailsType) => {
+    processRequest(r);
+  };
+
+  if (currentBrowser === 'firefox') {
+    devLog('Enabling blocking webRequest listener');
+    // Add blocking spec and unwrap processRequest as it may return a blocking response.
+    extraInfoSpec.push('blocking');
+    webRequestHandler = processRequest;
+  }
+
   browser.webRequest.onBeforeRequest.addListener(
-    (r) => {
-      // Type defs don't like an async non-blocking handler.
-      processRequest(r);
-    },
+    webRequestHandler,
     { urls: hostPermissions },
-    // The requestBody opt is required for handling POST situations.
-    ['requestBody'],
+    extraInfoSpec,
   );
 }
 

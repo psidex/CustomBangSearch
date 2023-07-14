@@ -1,5 +1,6 @@
 import browser, { WebRequest } from 'webextension-polyfill';
 
+import { currentBrowser } from '../lib/esbuilddefinitions';
 import { getBangsLookup } from './lookup';
 import { getIgnoredDomains } from './ignoreddomains';
 
@@ -122,7 +123,7 @@ export async function getRedirects(
  */
 export async function processRequest(
   r: WebRequest.OnBeforeRequestDetailsType,
-): Promise<void> {
+): Promise<void | WebRequest.BlockingResponse> {
   if (r.type !== 'main_frame') {
     return Promise.resolve();
   }
@@ -143,8 +144,19 @@ export async function processRequest(
     browser.tabs.create({ url: redirections[i] });
   }
 
-  // Finally send the current tab to the first in the array.
-  browser.tabs.update(r.tabId, { url: redirections[0] });
+  if (r.method !== 'GET' || currentBrowser !== 'firefox') {
+    // If we're handling a POST request, we need to tell the tab where to go, as
+    // redirecting the POST would not change the tabs location.
+    // OR we're not using firefox, in which case we have to use this method anyway.
+    browser.tabs.update(r.tabId, { url: redirections[0] });
 
-  return Promise.resolve();
+    if (currentBrowser === 'firefox') {
+      return Promise.resolve({ cancel: true });
+    }
+
+    return Promise.resolve();
+  }
+
+  // This is a GET request, we are on firefox, so send a blocking response.
+  return Promise.resolve({ redirectUrl: redirections[0] });
 }

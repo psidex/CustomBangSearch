@@ -1,4 +1,7 @@
 {
+  "permissions": [
+    "webRequestBlocking"
+  ],
   "background": {
     "scripts": [
       "src/background/main.js"

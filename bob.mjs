@@ -150,11 +150,17 @@ const tasks = new Listr([
     title: 'Merge manifests',
     task: (ctx) => {
       ctx.manifest = browser === 'chrome' ? manifestChrome : manifestFirefox;
+
+      // Object merge isn't deep, so manually merge permission stuff.
+      const mergedPermissions = [...manifestShared.permissions, ...ctx.manifest.permissions];
+
       // Overwrite shared settings with browser based values.
       ctx.manifest = {
         ...manifestShared,
         ...ctx.manifest,
       };
+
+      ctx.manifest.permissions = mergedPermissions;
     },
   },
   {
