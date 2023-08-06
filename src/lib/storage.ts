@@ -48,11 +48,3 @@ export async function getSettings(): Promise<Settings | undefined> {
   }
   return Promise.resolve(decompressed);
 }
-
-export async function getAndRmLegacySettings(): Promise<any> {
-  const { bangs: legacySettings } = await browser.storage.sync.get(['bangs']);
-  if (legacySettings !== undefined) {
-    await browser.storage.sync.remove(['bangs']);
-  }
-  return legacySettings;
-}

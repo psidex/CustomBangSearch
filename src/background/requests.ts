@@ -2,7 +2,8 @@ import browser, { WebRequest } from 'webextension-polyfill';
 
 import { currentBrowser } from '../lib/esbuilddefinitions';
 import { getBangsLookup } from './lookup';
-import { getIgnoredDomains } from './ignoreddomains';
+import { getLocalOpts } from './localoptions';
+import { SettingsOptions } from '../lib/settings';
 
 const possibleQueryParams = ['q', 'query', 'eingabe'];
 
@@ -56,6 +57,7 @@ export function replaceFirstNonAsciiExclamationMark(queryText: string): string {
  */
 export async function getRedirects(
   request: WebRequest.OnBeforeRequestDetailsType,
+  opts: SettingsOptions,
 ): Promise<string[]> {
   const url = new URL(request.url);
   let queryText = '';
@@ -102,7 +104,21 @@ export async function getRedirects(
 
   // Get the chosen URLs from the bang.
   const lookup = await getBangsLookup();
-  const redirectionUrls = lookup[bang];
+
+  // Get all relevant URLs to redirect to / open.
+  let redirectionUrls: string[] = [];
+
+  if (opts.ignoreCase) {
+    const searchKey = bang.toLowerCase();
+    const asLowercase = searchKey.toLowerCase();
+    const allKeys = Object.keys(lookup).filter((key) => key.toLowerCase() === asLowercase);
+    for (const k of allKeys) {
+      redirectionUrls = redirectionUrls.concat(lookup[k]);
+    }
+  } else {
+    redirectionUrls = lookup[bang];
+  }
+
   if (redirectionUrls === undefined || redirectionUrls.length === 0) {
     return Promise.resolve([]);
   }
@@ -128,12 +144,14 @@ export async function processRequest(
     return Promise.resolve();
   }
 
-  if (shouldReject(await getIgnoredDomains(), r.url)) {
+  const opts = await getLocalOpts();
+
+  if (shouldReject(opts.ignoredDomains, r.url)) {
     return Promise.resolve();
   }
 
   // From the current URL, get the redirections (if any) to apply.
-  const redirections = await getRedirects(r);
+  const redirections = await getRedirects(r, opts);
 
   if (redirections.length === 0) {
     return Promise.resolve();

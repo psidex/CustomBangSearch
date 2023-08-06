@@ -7,8 +7,9 @@
 * but their respective APIs are becoming increasingly divergent, especially with the
 * move to manifest V3.
 *
-* Outputs the built extension files to ./build, and then zips this and places the zip
-* in the current directory, named with the version and browser.
+* Outputs the built extension files to ./build, and then optionally zips the build
+* files and/or the source code and places said zips in the current directory, named
+* with the version and browser.
 *
 */
 
@@ -34,7 +35,7 @@ assert(extensionVersion === manifestShared.version, 'package.json and manifest.s
 // FIXME: Probably use path library instead of string manipulation?
 
 // Files and directories to copy to the build directory.
-const toCopy = [
+const buildFiles = [
   './images',
   './src/optionsui/options.css',
   './src/optionsui/options.html',
@@ -45,8 +46,8 @@ const toCopy = [
   './LICENSE',
 ];
 
-// Files & dirs for a reviewer.
-const sourceFilesForReview = [
+// Source files & dirs, specifically for a reviewer.
+const sourceFiles = [
   './docs',
   './images',
   './src',
@@ -57,13 +58,15 @@ const sourceFilesForReview = [
   './manifest.shared.json',
   './package.json',
   './README.md',
-  'tsconfig.json',
+  './tsconfig.json',
 ];
 
 const buildPath = './build';
 
 const {
-  values: { browser, dev, release },
+  values: {
+    browser, dev, buildzip, sourcezip,
+  },
 } = parseArgs({
   strict: true,
   options: {
@@ -72,16 +75,22 @@ const {
       type: 'string',
       short: 'b',
     },
-    // dev mode = don't minify, skip linting, etc.
+    // dev mode = set dev=true in code, also don't minify, skip linting, etc.
     dev: {
       type: 'boolean',
       short: 'd',
       default: false,
     },
-    // release mode = create zip files for releasing
-    release: {
+    // outputs build zip ready for submission
+    buildzip: {
       type: 'boolean',
-      short: 'r',
+      short: 'z',
+      default: false,
+    },
+    // outputs source zip
+    sourcezip: {
+      type: 'boolean',
+      short: 's',
       default: false,
     },
   },
@@ -89,11 +98,10 @@ const {
 assert(browser === 'chrome' || browser === 'firefox', 'browser is valid');
 
 if (dev) {
-  console.log('🔨 Building development version, skipping some steps...');
+  console.log(`🔨 Building for ${browser} (dev enabled, skipping some steps...)`);
 } else {
-  console.log('🔨 Building release version');
+  console.log(`🔨 Building for ${browser}`);
 }
-console.log();
 
 const tasks = new Listr([
   {
@@ -115,14 +123,9 @@ const tasks = new Listr([
     task: () => execa('npm', ['run', 'lint']),
   },
   {
-    title: 'Run tsc-lint',
+    title: 'Run tsc -noEmit',
     skip: () => dev,
-    task: () => execa('npm', ['run', 'tsc-lint']),
-  },
-  {
-    title: 'Run tests',
-    skip: () => true, // TODO: Testing!
-    task: () => execa('npm', ['run', 'test']),
+    task: () => execa('npm', ['run', 'tsc-noemit']),
   },
   {
     title: 'Setup build directory',
@@ -216,7 +219,7 @@ const tasks = new Listr([
     title: 'Copy static files',
     task: async () => {
       const copies = [];
-      for (const path of toCopy) {
+      for (const path of buildFiles) {
         copies.push(fs.copy(path, path.replace('./', `${buildPath}/`)));
       }
       return Promise.all(copies);
@@ -230,19 +233,19 @@ const tasks = new Listr([
     },
   },
   {
-    title: 'Create zip file',
-    skip: () => (!release || dev),
+    title: 'Create build zip file',
+    skip: () => (!buildzip),
     task: (ctx) => {
       const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}.zip`;
       return execa('7z', ['a', `-tzip ${zipName}`, `${buildPath}/*`], { shell: true });
     },
   },
   {
-    title: 'Create source zip file for review',
-    skip: () => (!release || dev),
+    title: 'Create source zip file',
+    skip: () => (!sourcezip),
     task: (ctx) => {
       const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-source.zip`;
-      return execa('7z', ['a', `-tzip ${zipName}`, `${sourceFilesForReview.join(' ')}`], { shell: true });
+      return execa('7z', ['a', `-tzip ${zipName}`, `${sourceFiles.join(' ')}`], { shell: true });
     },
   },
 ]);

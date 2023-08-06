@@ -1,26 +1,29 @@
 import browser from 'webextension-polyfill';
-import { Settings } from '../lib/settings';
 
-// TODO: Look into localstorage storage limits for this and ignoreddomains!
-// TODO: Same places, check if get is undefined and return default value.
+import { StoredBangInfo } from '../lib/settings';
+
+// TODO: Look into localstorage storage limits for this and other local options!
 
 // A lookup table for { bang : [redirect urls] }.
 export type BangsLookup = { [key: string]: string[] };
 
-function bangsLookupFromSettings(s: Settings): BangsLookup {
+function bangsLookupFromSettings(bangs: StoredBangInfo[]): BangsLookup {
   const l: BangsLookup = {};
-  for (const sb of s.bangs) {
+  for (const sb of bangs) {
     l[sb.bang] = sb.urls;
   }
   return l;
 }
 
-export function setBangsLookup(obj: Settings): void {
-  const bangsLookup = bangsLookupFromSettings(obj);
+export function setBangsLookup(bangs: StoredBangInfo[]): void {
+  const bangsLookup = bangsLookupFromSettings(bangs);
   browser.storage.local.set({ bangsLookup });
 }
 
 export async function getBangsLookup(): Promise<Readonly<BangsLookup>> {
-  const { bangsLookup } = await browser.storage.local.get('bangsLookup');
+  const { bangsLookup } = await browser.storage.local.get({
+    // Default to empty array.
+    bangsLookup: [],
+  });
   return Promise.resolve(bangsLookup);
 }

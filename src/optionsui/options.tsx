@@ -40,7 +40,9 @@ function App(): React.ReactElement {
   const storedSettings = useRef<Settings>();
 
   // These 2 states are used to render information & are changed by user actions.
-  const [options, setOptions] = useState<SettingsOptions>({ ignoredDomains: [] });
+  const [options, setOptions] = useState<SettingsOptions>({
+    ignoredDomains: [], ignoreCase: false,
+  });
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [bangInfos, _setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
   const [bangChangesToSave, setBangChangesToSave] = useState(false);
@@ -57,7 +59,7 @@ function App(): React.ReactElement {
     setStoredSize(await browser.storage.sync.getBytesInUse(['settings']));
   };
 
-  // Update settings saved in sync storage. THe passed variable should come from the above states.
+  // Update settings saved in sync storage. The passed variable should come from the above states.
   const updateSettings = async (
     newOptions: SettingsOptions | undefined = undefined,
     newBangInfos: StoredBangInfo[] | undefined = undefined,

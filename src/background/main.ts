@@ -5,47 +5,28 @@ import {
 } from '../lib/esbuilddefinitions';
 import { processRequest } from './requests';
 import { Settings } from '../lib/settings';
-import * as legacy from './legacy';
 import * as storage from '../lib/storage';
 import { setBangsLookup } from './lookup';
-import { setIgnoredDomains } from './ignoreddomains';
+import { setLocalOpts } from './localoptions';
 import defaultSettings from '../lib/settings.default.json';
-
-function devLog(message: string): void {
-  if (dev) {
-    // eslint-disable-next-line no-console
-    console.info(message);
-  }
-}
+import devLog from '../lib/misc';
 
 function updateGlobals(settings: Settings): void {
-  setBangsLookup(settings);
-  setIgnoredDomains(settings.options.ignoredDomains);
+  setBangsLookup(settings.bangs);
+  setLocalOpts(settings.options);
 }
 
 async function setupSettings(): Promise<void> {
-  let currentSettings: Settings | undefined;
-
-  currentSettings = await storage.getSettings();
-
-  const legacySettings = await storage.getAndRmLegacySettings();
-  let convertedSettings: Settings | undefined;
-
-  // If we found no settings, but we found legacy settings.
-  if (currentSettings === undefined && legacySettings !== undefined) {
-    if (legacy.isSettingsV1(legacySettings)) {
-      convertedSettings = legacy.convertSettingsV1ToV3(legacySettings);
-    } else if (legacy.isSettingsV2(legacySettings)) {
-      convertedSettings = legacy.convertSettingsV2ToV3(legacySettings);
-    }
-  }
-
-  if (convertedSettings !== undefined) {
-    currentSettings = convertedSettings;
-  }
+  let currentSettings = await storage.getSettings();
 
   if (currentSettings === undefined) {
     currentSettings = defaultSettings;
+  }
+
+  if (currentSettings.version === 3) {
+    // TOOD: A more elegant way of detecting and converting settings.
+    currentSettings.version = 4;
+    currentSettings.options.ignoreCase = false;
   }
 
   updateGlobals(currentSettings);

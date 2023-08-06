@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 # List all, sorted, with the usage count in the object:
 # cat ./ddg.json \
 #   | jq -s '.[] | sort_by(.r) | reverse | [ .[] | {bang: .t, usage: .r, urls: [ .u ] } ]' \

@@ -1,7 +1,7 @@
 // Define Settings type(s) here so all files can use them.
 
 // Should always be a whole number.
-export const currentSettingsVersion: number = 3;
+export const currentSettingsVersion: number = 4;
 
 export type StoredBangInfo = {
   // The actual bang.
@@ -13,6 +13,8 @@ export type StoredBangInfo = {
 export type SettingsOptions = {
   // Search engine URLs to ignore, e.g. searx.tiekoetter.com.
   ignoredDomains: string[]
+  // If true, ignore bang case.
+  ignoreCase: boolean
 };
 
 export type Settings = {
