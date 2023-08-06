@@ -23,15 +23,18 @@ async function setupSettings(): Promise<void> {
     currentSettings = defaultSettings;
   }
 
+  // TODO: A more elegant way of detecting and converting settings.
   if (currentSettings.version === 3) {
-    // TODO: A more elegant way of detecting and converting settings.
+    devLog('Converting settings from v3 to v4');
+    // Technically storage.getSettings should only ever return a settings obj that
+    // complies with the current Settings type, but let's not worry about that...
     currentSettings.version = 4;
     currentSettings.options.ignoreCase = false;
   }
 
   updateGlobals(currentSettings);
 
-  // Redundant if the user just has settings set. Only happens once per load tho, not a problem.
+  // Redundant if no changes made. Only happens once per load tho, not a problem.
   return storage.storeSettings(currentSettings);
 }
 
