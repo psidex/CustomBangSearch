@@ -24,7 +24,7 @@ async function setupSettings(): Promise<void> {
   }
 
   if (currentSettings.version === 3) {
-    // TOOD: A more elegant way of detecting and converting settings.
+    // TODO: A more elegant way of detecting and converting settings.
     currentSettings.version = 4;
     currentSettings.options.ignoreCase = false;
   }
