@@ -25,3 +25,4 @@ startpage.com | ✅ |
 ecosia.org | ✅ |
 searx.be | ✅ |
 qwant.com | ❌ | Because it GETs https://api.qwant.com/v3/search/web?q= in the background, not in `main_frame`. Even if we did catch it, redirecting that doesn't redirect the actual page the user is loading.
+kagi.com | ✅ |

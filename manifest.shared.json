@@ -21,7 +21,8 @@
     "*://*.mojeek.com/*",
     "*://searx.tiekoetter.com/*",
     "*://*.startpage.com/*",
-    "*://searx.be/*"
+    "*://searx.be/*",
+    "*://kagi.com/*"
   ],
   "options_ui": {
     "page": "src/optionsui/options.html",
