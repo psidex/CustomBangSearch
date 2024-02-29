@@ -2,7 +2,8 @@
   "version": 4,
   "options": {
     "ignoredDomains": [],
-    "ignoreCase": false
+    "ignoreCase": false,
+    "sortByAlpha": false
   },
   "bangs": [
     {

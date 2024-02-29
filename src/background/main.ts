@@ -23,13 +23,25 @@ async function setupSettings(): Promise<void> {
     currentSettings = defaultSettings;
   }
 
-  // TODO: A more elegant way of detecting and converting settings.
-  if (currentSettings.version === 3) {
-    devLog('Converting settings from v3 to v4');
-    // Technically storage.getSettings should only ever return a settings obj that
-    // complies with the current Settings type, but let's not worry about that...
-    currentSettings.version = 4;
-    currentSettings.options.ignoreCase = false;
+  // Technically storage.getSettings should only ever return a settings obj that
+  // complies with the current Settings type, but let's not worry about that...
+  switch (currentSettings.version) {
+    case 3: {
+      devLog('Converting settings from v3 to v5');
+      currentSettings.version = 5;
+      currentSettings.options.ignoreCase = false;
+      currentSettings.options.sortByAlpha = false;
+      break;
+    }
+    case 4: {
+      devLog('Converting settings from v4 to v5');
+      currentSettings.version = 5;
+      currentSettings.options.sortByAlpha = false;
+      break;
+    }
+    default: {
+      break;
+    }
   }
 
   updateGlobals(currentSettings);

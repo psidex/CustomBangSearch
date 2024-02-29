@@ -39,6 +39,12 @@ export default function OptionsTabPanel(props: SettingsTabPanelPropTypes): React
     setOptions(newOptions);
   };
 
+  const sortByAlphaSwitchChanged = () => {
+    const newOptions = { ...options, ...{ sortByAlpha: !options.sortByAlpha } };
+    updateSettings(newOptions, undefined);
+    setOptions(newOptions);
+  };
+
   useEffect(() => {
     const formControls = [];
     for (const url of hostPermissionUrls) {
@@ -69,6 +75,16 @@ export default function OptionsTabPanel(props: SettingsTabPanelPropTypes): React
           </VStack>
           <FormControl display="flex" alignItems="center">
             <Switch isChecked={options.ignoreCase} onChange={ignoreCaseSwitchChanged} />
+          </FormControl>
+        </HStack>
+        <HStack>
+          <VStack alignItems="start">
+            <Heading as="h4" size="md" width="15em">
+              Sort Bangs Alphabetically
+            </Heading>
+          </VStack>
+          <FormControl display="flex" alignItems="center">
+            <Switch isChecked={options.sortByAlpha} onChange={sortByAlphaSwitchChanged} />
           </FormControl>
         </HStack>
         <VStack alignItems="start">

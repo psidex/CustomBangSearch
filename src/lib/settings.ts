@@ -1,7 +1,7 @@
 // Define Settings type(s) here so all files can use them.
 
 // Should always be a whole number.
-export const currentSettingsVersion: number = 4;
+export const currentSettingsVersion: number = 5;
 
 export type StoredBangInfo = {
   // The actual bang.
@@ -15,6 +15,8 @@ export type SettingsOptions = {
   ignoredDomains: string[]
   // If true, ignore bang case.
   ignoreCase: boolean
+  // Sort bang list alphabeticaly.
+  sortByAlpha: boolean
 };
 
 export type Settings = {

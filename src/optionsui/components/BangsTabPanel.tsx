@@ -13,7 +13,7 @@ import {
 import { nanoid } from 'nanoid';
 
 import {
-  ReactfulBangInfoContainer, reactfulBangInfoToStored, storedBangInfoToReactful,
+  ReactfulBangInfoContainer, reactfulBangInfoToStored, storedBangInfoToReactful, ReactfulBangInfo,
 } from '../reactful';
 import BangInfo from './BangInfo';
 import {
@@ -25,6 +25,7 @@ import RenderCounter from './RenderCounter';
 const defaultReactfulBangs = storedBangInfoToReactful(defaultSettings.bangs);
 
 type BangTabPanelPropTypes = {
+  options: Readonly<SettingsOptions>
   bangInfos: Readonly<ReactfulBangInfoContainer>
   setBangInfos: React.Dispatch<React.SetStateAction<ReactfulBangInfoContainer>>
   bangChangesToSave: boolean,
@@ -38,7 +39,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   const toast = useToast();
 
   const {
-    bangInfos, setBangInfos, bangChangesToSave, updateSettings,
+    options, bangInfos, setBangInfos, bangChangesToSave, updateSettings,
   } = props;
 
   // --- Top Buttons ---
@@ -173,9 +174,18 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   const generateRows = () => {
     const rows = [];
     const isLonely = bangInfos.size === 1;
-    for (const info of bangInfos) {
-      const id = info[0];
-      const rowInfo = info[1];
+
+    let sortedBangInfos: IterableIterator<[string, ReactfulBangInfo]>;
+
+    if (options.sortByAlpha) {
+      sortedBangInfos = Array.from(bangInfos.entries())
+        .sort(([, bangInfoA], [, bangInfoB]) => bangInfoA.bang.localeCompare(bangInfoB.bang))
+        .values();
+    } else {
+      sortedBangInfos = bangInfos.entries();
+    }
+
+    for (const [id, rowInfo] of sortedBangInfos) {
       rows.push(
         <BangInfo
           key={id}
@@ -193,7 +203,7 @@ export default function BangTabPanel(props: BangTabPanelPropTypes): React.ReactE
   useEffect(() => {
     generateRows();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bangInfos]);
+  }, [bangInfos, options]);
 
   return (
     <TabPanel>

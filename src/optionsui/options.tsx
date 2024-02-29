@@ -41,7 +41,7 @@ function App(): React.ReactElement {
 
   // These 2 states are used to render information & are changed by user actions.
   const [options, setOptions] = useState<SettingsOptions>({
-    ignoredDomains: [], ignoreCase: false,
+    ignoredDomains: [], ignoreCase: false, sortByAlpha: false,
   });
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [bangInfos, _setBangInfos] = useState<ReactfulBangInfoContainer>(new Map());
@@ -177,6 +177,7 @@ function App(): React.ReactElement {
         </TabList>
         <TabPanels paddingLeft="2rem">
           <BangTabPanel
+            options={options}
             bangInfos={bangInfos}
             setBangInfos={setBangInfos}
             bangChangesToSave={bangChangesToSave}
