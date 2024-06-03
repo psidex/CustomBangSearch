@@ -11,7 +11,7 @@ set -ex
 function writeTopNBangs() {
   local count=$1
   cat ./ddg.json |
-    jq -s ".[] | sort_by(.r) | reverse | .[:$count] | { version: 3, bangs: [ .[] | {bang: .t, urls: [ .u ] } ] }" |
+    jq -s ".[] | sort_by(.r) | reverse | .[:$count] | { version: 5, bangs: [ .[] | {bang: .t, urls: [ .u ] } ] }" |
     sed -r 's/\{\{\{s\}\}\}/\%s/g' \
       >ddg-top-"$count".json
 }

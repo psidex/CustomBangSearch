@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 5,
   "bangs": [
     {
       "bang": "g",
@@ -38,15 +38,15 @@
       ]
     },
     {
-      "bang": "a",
+      "bang": "wikipedia",
       "urls": [
-        "https://www.amazon.com/s?k=%s"
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
       ]
     },
     {
-      "bang": "tw",
+      "bang": "a",
       "urls": [
-        "https://twitter.com/search?q=%s"
+        "https://www.amazon.com/s?k=%s"
       ]
     },
     {

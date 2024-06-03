@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 5,
   "bangs": [
     {
       "bang": "g",
@@ -38,15 +38,15 @@
       ]
     },
     {
-      "bang": "a",
+      "bang": "wikipedia",
       "urls": [
-        "https://www.amazon.com/s?k=%s"
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
       ]
     },
     {
-      "bang": "tw",
+      "bang": "a",
       "urls": [
-        "https://twitter.com/search?q=%s"
+        "https://www.amazon.com/s?k=%s"
       ]
     },
     {
@@ -80,27 +80,9 @@
       ]
     },
     {
-      "bang": "wikipedia",
-      "urls": [
-        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
-      ]
-    },
-    {
       "bang": "gt",
       "urls": [
         "https://translate.google.com/#auto/en/%s"
-      ]
-    },
-    {
-      "bang": "wiki",
-      "urls": [
-        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
-      ]
-    },
-    {
-      "bang": "s",
-      "urls": [
-        "http://startpage.com/do/metasearch.pl?query=%s"
       ]
     },
     {
@@ -110,9 +92,9 @@
       ]
     },
     {
-      "bang": "youtube",
+      "bang": "wiki",
       "urls": [
-        "https://www.youtube.com/results?search_query=%s"
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
       ]
     },
     {
@@ -122,9 +104,21 @@
       ]
     },
     {
-      "bang": "sp",
+      "bang": "s",
       "urls": [
-        "https://startpage.com/do/metasearch.pl?query=%s"
+        "http://startpage.com/do/metasearch.pl?query=%s"
+      ]
+    },
+    {
+      "bang": "youtube",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "tw",
+      "urls": [
+        "https://twitter.com/search?q=%s"
       ]
     },
     {
@@ -134,21 +128,9 @@
       ]
     },
     {
-      "bang": "tr",
+      "bang": "b",
       "urls": [
-        "http://translate.google.com/#auto/en/%s"
-      ]
-    },
-    {
-      "bang": "aw",
-      "urls": [
-        "https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s"
-      ]
-    },
-    {
-      "bang": "gn",
-      "urls": [
-        "https://news.google.com/news/search/section/q/%s"
+        "https://www.bing.com/search?q=%s"
       ]
     },
     {
@@ -158,51 +140,21 @@
       ]
     },
     {
-      "bang": "wa",
-      "urls": [
-        "https://www.wolframalpha.com/input/?i=%s"
-      ]
-    },
-    {
       "bang": "sr",
       "urls": [
         "http://reddit.com/r/%s"
       ]
     },
     {
-      "bang": "wikt",
+      "bang": "tr",
       "urls": [
-        "http://en.wiktionary.org/wiki/Special:Search?search=%s&go=Define"
+        "http://translate.google.com/#auto/en/%s"
       ]
     },
     {
-      "bang": "deepl",
+      "bang": "sp",
       "urls": [
-        "https://www.deepl.com/translator#xx/en/%s"
-      ]
-    },
-    {
-      "bang": "b",
-      "urls": [
-        "https://www.bing.com/search?q=%s"
-      ]
-    },
-    {
-      "bang": "wde",
-      "urls": [
-        "https://de.wikipedia.org/w/index.php?search=%s"
-      ]
-    },
-    {
-      "bang": "fb",
-      "urls": [
-        "https://www.facebook.com/search.php/?q=%s"
-      ]
-    },
-    {
-      "bang": "gmail",
-      "urls": [
-        "https://mail.google.com/mail/#search/%s"
+        "https://startpage.com/do/metasearch.pl?query=%s"
       ]
     },
     {
@@ -212,33 +164,57 @@
       ]
     },
     {
+      "bang": "deepl",
+      "urls": [
+        "https://www.deepl.com/translator#xx/en/%s"
+      ]
+    },
+    {
+      "bang": "gn",
+      "urls": [
+        "https://news.google.com/news/search/section/q/%s"
+      ]
+    },
+    {
+      "bang": "wikt",
+      "urls": [
+        "http://en.wiktionary.org/wiki/Special:Search?search=%s&go=Define"
+      ]
+    },
+    {
+      "bang": "aw",
+      "urls": [
+        "https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s"
+      ]
+    },
+    {
+      "bang": "wde",
+      "urls": [
+        "https://de.wikipedia.org/w/index.php?search=%s"
+      ]
+    },
+    {
+      "bang": "wa",
+      "urls": [
+        "https://www.wolframalpha.com/input/?i=%s"
+      ]
+    },
+    {
       "bang": "osm",
       "urls": [
         "https://www.openstreetmap.org/search?query=%s"
       ]
     },
     {
-      "bang": "you",
+      "bang": "gmail",
       "urls": [
-        "https://www.youtube.com/results?search_query=%s"
+        "https://mail.google.com/mail/#search/%s"
       ]
     },
     {
-      "bang": "twitter",
-      "urls": [
-        "https://twitter.com/search?q=%s"
-      ]
-    },
-    {
-      "bang": "gsc",
+      "bang": "scholar",
       "urls": [
         "http://scholar.google.com/scholar?q=%s&btnG=Search&as_sdt=800000000001&as_sdtp=on"
-      ]
-    },
-    {
-      "bang": "gde",
-      "urls": [
-        "http://www.google.de/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
       ]
     },
     {
@@ -248,7 +224,25 @@
       ]
     },
     {
-      "bang": "scholar",
+      "bang": "you",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ]
+    },
+    {
+      "bang": "gde",
+      "urls": [
+        "http://www.google.de/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ]
+    },
+    {
+      "bang": "ytvideo",
+      "urls": [
+        "https://www.youtube.com/watch?v=%s"
+      ]
+    },
+    {
+      "bang": "gsc",
       "urls": [
         "http://scholar.google.com/scholar?q=%s&btnG=Search&as_sdt=800000000001&as_sdtp=on"
       ]
@@ -260,15 +254,15 @@
       ]
     },
     {
-      "bang": "npm",
+      "bang": "fb",
       "urls": [
-        "https://www.npmjs.com/search?q=%s"
+        "https://www.facebook.com/search.php/?q=%s"
       ]
     },
     {
-      "bang": "translate",
+      "bang": "npm",
       "urls": [
-        "https://translate.google.com/#auto/en/%s"
+        "https://www.npmjs.com/search?q=%s"
       ]
     },
     {
@@ -278,27 +272,33 @@
       ]
     },
     {
+      "bang": "ebay",
+      "urls": [
+        "https://www.ebay.com/sch/items/?_nkw=%s"
+      ]
+    },
+    {
       "bang": "gfr",
       "urls": [
         "http://www.google.fr/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
       ]
     },
     {
-      "bang": "guk",
-      "urls": [
-        "https://www.google.co.uk/search?q=%s"
-      ]
-    },
-    {
-      "bang": "aur",
-      "urls": [
-        "https://aur.archlinux.org/packages/?K=%s"
-      ]
-    },
-    {
       "bang": "map",
       "urls": [
         "http://maps.google.com/maps?q=%s"
+      ]
+    },
+    {
+      "bang": "history",
+      "urls": [
+        "http://www.history.com/search?search-field=%s&x=0&y=0"
+      ]
+    },
+    {
+      "bang": "translate",
+      "urls": [
+        "https://translate.google.com/#auto/en/%s"
       ]
     }
   ]
