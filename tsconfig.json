@@ -1,10 +1,5 @@
 {
   "compilerOptions": {
-    // skipLibCheck required because Chakra UI is currently broken:
-    // https://github.com/chakra-ui/chakra-ui/issues/7116
-    // Short description of the effects this has on this project:
-    // https://www.testim.io/blog/typescript-skiplibcheck/
-    "skipLibCheck": true,
     "target": "es6",
     "lib": [
       "esnext",

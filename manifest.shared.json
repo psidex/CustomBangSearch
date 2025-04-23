@@ -1,40 +1,37 @@
 {
-  "manifest_version": 3,
-  "name": "Custom Bang Search",
-  "version": "0.10.6",
-  "description": "Use custom DuckDuckGo-like bangs directly from the address bar",
-  "icons": {
-    "96": "images/icons/icon_96.png",
-    "128": "images/icons/icon_128.png"
-  },
-  "permissions": [
-    "storage",
-    "webRequest"
-  ],
-  "host_permissions": [
-    "*://www.google.com/*",
-    "*://*.bing.com/*",
-    "*://*.duckduckgo.com/*",
-    "*://*.ecosia.org/*",
-    "*://*.brave.com/*",
-    "*://*.metager.org/*",
-    "*://*.mojeek.com/*",
-    "*://searx.tiekoetter.com/*",
-    "*://*.startpage.com/*",
-    "*://searx.be/*",
-    "*://kagi.com/*"
-  ],
-  "options_ui": {
-    "page": "src/optionsui/options.html",
-    "open_in_tab": true
-  },
-  "action": {
-    "browser_style": true,
-    "default_icon": {
-      "96": "images/icons/icon_96.png",
-      "128": "images/icons/icon_128.png"
-    },
-    "default_title": "Custom Bang Search",
-    "default_popup": "src/popup/popup.html"
-  }
+	"manifest_version": 3,
+	"name": "Custom Bang Search",
+	"version": "0.10.6",
+	"description": "Use custom DuckDuckGo-like bangs directly from the address bar",
+	"icons": {
+		"96": "images/icons/icon_96.png",
+		"128": "images/icons/icon_128.png"
+	},
+	"permissions": ["storage", "webRequest"],
+	"host_permissions": [
+		"*://www.google.com/*",
+		"*://*.bing.com/*",
+		"*://*.duckduckgo.com/*",
+		"*://*.ecosia.org/*",
+		"*://*.brave.com/*",
+		"*://*.metager.org/*",
+		"*://*.mojeek.com/*",
+		"*://searx.tiekoetter.com/*",
+		"*://*.startpage.com/*",
+		"*://searx.be/*",
+		"*://kagi.com/*"
+	],
+	"options_ui": {
+		"page": "src/optionsui/options.html",
+		"open_in_tab": true
+	},
+	"action": {
+		"browser_style": true,
+		"default_icon": {
+			"96": "images/icons/icon_96.png",
+			"128": "images/icons/icon_128.png"
+		},
+		"default_title": "Custom Bang Search",
+		"default_popup": "src/popup/popup.html"
+	}
 }

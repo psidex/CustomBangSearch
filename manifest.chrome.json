@@ -1,6 +1,6 @@
 {
-  "permissions": [],
-  "background": {
-    "service_worker": "src/background/main.js"
-  }
+	"permissions": [],
+	"background": {
+		"service_worker": "src/background/main.js"
+	}
 }

@@ -1,6 +1,6 @@
 {
   "name": "custombangsearch",
-  "version": "0.10.6",
+  "version": "0.11.0",
   "description": "A browser extension to use custom DuckDuckGo-like bangs directly from the address bar",
   "main": "",
   "scripts": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/psidex/CustomBangSearch.git"
+    "url": "https://github.com/psidex/CustomBangSearch.git"
   },
   "keywords": [
     "chrome",
@@ -38,57 +38,24 @@
     "url": "https://github.com/psidex/CustomBangSearch/issues"
   },
   "homepage": "https://github.com/psidex/CustomBangSearch#readme",
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "webextensions": true
-    },
-    "extends": [
-      "airbnb",
-      "airbnb/hooks",
-      "airbnb-typescript"
-    ],
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
-    "rules": {
-      "no-restricted-syntax": "off"
-    },
-    "ignorePatterns": [
-      "src/**/*.js",
-      "src/**/*.jsx"
-    ]
-  },
   "dependencies": {
-    "@chakra-ui/icons": "^2.1.1",
-    "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
-    "framer-motion": "^11.0.8",
+    "lucide-react": "0.503.0",
     "lz-string": "^1.5.0",
-    "nanoid": "^5.0.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "webextension-polyfill": "^0.10.0"
+    "nanoid": "5.1.5",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "webextension-polyfill": "0.12.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.24",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
-    "@types/webextension-polyfill": "^0.10.7",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "esbuild": "^0.20.1",
-    "eslint": "^8.57.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "execa": "^8.0.1",
-    "fs-extra": "^11.2.0",
-    "listr2": "^8.0.2",
-    "typescript": "^5.3.3"
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "^22.14.1",
+    "@types/react": "19.1.2",
+    "@types/react-dom": "19.1.2",
+    "@types/webextension-polyfill": "0.12.3",
+    "esbuild": "0.25.3",
+    "execa": "9.5.2",
+    "fs-extra": "11.3.0",
+    "listr2": "8.3.2",
+    "typescript": "5.8.3"
   }
 }

@@ -1,91 +1,105 @@
-import browser from 'webextension-polyfill';
+import browser from "webextension-polyfill";
 
 import {
-  dev, currentBrowser, version, hash, hostPermissions,
-} from '../lib/esbuilddefinitions';
-import { processRequest } from './requests';
-import { Settings } from '../lib/settings';
-import * as storage from '../lib/storage';
-import { setBangsLookup } from './lookup';
-import { setLocalOpts } from './localoptions';
-import defaultSettings from '../lib/settings.default.json';
-import devLog from '../lib/misc';
+	inDev,
+	currentBrowser,
+	version,
+	hash,
+	hostPermissions,
+} from "../lib/esbuilddefinitions";
+import { processRequest } from "./requests";
+import type { Config } from "../lib/config/config";
+import * as storage from "../lib/config/storage/storage";
+import { setBangsLookup } from "./lookup";
+import { setLocalOpts } from "./localoptions";
+import defaultConfig from "../lib/config/default";
+import debug from "../lib/misc";
 
-function updateGlobals(settings: Settings): void {
-  setBangsLookup(settings.bangs);
-  setLocalOpts(settings.options);
+function updateGlobals(settings: Config): void {
+	setBangsLookup(settings.bangs);
+	setLocalOpts(settings.options);
 }
 
 async function setupSettings(): Promise<void> {
-  let currentSettings = await storage.getSettings();
+	let currentSettings = await storage.getConfig();
 
-  if (currentSettings === undefined) {
-    currentSettings = defaultSettings;
-  }
+	if (currentSettings === undefined) {
+		currentSettings = defaultConfig;
+	}
 
-  // Technically storage.getSettings should only ever return a settings obj that
-  // complies with the current Settings type, but let's not worry about that...
-  switch (currentSettings.version) {
-    case 3: {
-      devLog('Converting settings from v3 to v5');
-      currentSettings.version = 5;
-      currentSettings.options.ignoreCase = false;
-      currentSettings.options.sortByAlpha = false;
-      break;
-    }
-    case 4: {
-      devLog('Converting settings from v4 to v5');
-      currentSettings.version = 5;
-      currentSettings.options.sortByAlpha = false;
-      break;
-    }
-    default: {
-      break;
-    }
-  }
+	// Technically storage.getSettings should only ever return a settings obj that
+	// complies with the current Settings type, but let's not worry about that...
+	switch (currentSettings.version) {
+		case 3: {
+			debug("Converting settings from v3 to v5");
+			currentSettings.version = 5;
+			currentSettings.options.ignoreBangCase = false;
+			currentSettings.options.sortBangsAlpha = false;
+			break;
+		}
+		case 4: {
+			debug("Converting settings from v4 to v5");
+			currentSettings.version = 5;
+			currentSettings.options.sortBangsAlpha = false;
+			break;
+		}
+		default: {
+			break;
+		}
+	}
 
-  updateGlobals(currentSettings);
+	updateGlobals(currentSettings);
 
-  // Redundant if no changes made. Only happens once per load tho, not a problem.
-  return storage.storeSettings(currentSettings);
+	// Redundant if no changes made. Only happens once per load tho, not a problem.
+	return storage.storeConfig(currentSettings);
 }
 
 function main(): void {
-  devLog(`Dev: ${dev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`);
+	debug(
+		`Dev: ${inDev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`,
+	);
 
-  // Because service workers need to set their event listeners immediately, we can't await this.
-  // FIXME: There may be a better way to do this, but for now we just hope it runs quickly!
-  setupSettings();
+	// Because service workers need to set their event listeners immediately, we can't await this.
+	// FIXME: There may be a better way to do this, but for now we just hope it runs quickly!
+	setupSettings();
 
-  browser.storage.sync.onChanged.addListener((changes: { settings?: { newValue: string } }) => {
-    if (changes.settings !== undefined) {
-      const newSettings = storage.decompressSettings(changes.settings.newValue);
-      if (newSettings !== null) {
-        updateGlobals(newSettings);
-      }
-    }
-  });
+	browser.storage.sync.onChanged.addListener(
+		(changes: { settings?: { newValue: string } }) => {
+			if (changes.settings !== undefined) {
+				const newSettings = storage.decompressSettings(
+					changes.settings.newValue,
+				);
+				if (newSettings !== null) {
+					updateGlobals(newSettings);
+				}
+			}
+		},
+	);
 
-  // The requestBody opt is required for handling POST situations.
-  const extraInfoSpec: browser.WebRequest.OnBeforeRequestOptions[] = ['requestBody'];
+	// The requestBody opt is required for handling POST situations.
+	const extraInfoSpec: browser.WebRequest.OnBeforeRequestOptions[] = [
+		"requestBody",
+	];
 
-  // Wrap processRequest because the types don't like an async non-blocking handler.
-  let webRequestHandler = (r: browser.WebRequest.OnBeforeRequestDetailsType) => {
-    processRequest(r);
-  };
+	// Wrap processRequest because the types don't like an async non-blocking handler.
+	let webRequestHandler = (
+		r: browser.WebRequest.OnBeforeRequestDetailsType,
+	) => {
+		processRequest(r);
+	};
 
-  if (currentBrowser === 'firefox') {
-    devLog('Enabling blocking webRequest listener');
-    // Add blocking spec and unwrap processRequest as it may return a blocking response.
-    extraInfoSpec.push('blocking');
-    webRequestHandler = processRequest;
-  }
+	if (currentBrowser === "firefox") {
+		debug("Enabling blocking webRequest listener");
+		// Add blocking spec and unwrap processRequest as it may return a blocking response.
+		extraInfoSpec.push("blocking");
+		webRequestHandler = processRequest;
+	}
 
-  browser.webRequest.onBeforeRequest.addListener(
-    webRequestHandler,
-    { urls: hostPermissions },
-    extraInfoSpec,
-  );
+	browser.webRequest.onBeforeRequest.addListener(
+		webRequestHandler,
+		{ urls: hostPermissions },
+		extraInfoSpec,
+	);
 }
 
 main();
