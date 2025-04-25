@@ -1,11 +1,13 @@
 import browser, { type WebRequest } from "webextension-polyfill";
 
 import { currentBrowser } from "../lib/esbuilddefinitions";
-import { getBangsLookup } from "./lookup";
-import { getLocalOpts } from "./localoptions";
+import { getBangInfoLookup } from "./lookup";
 import type { Options } from "../lib/config/config";
+import * as storage from "../lib/config/storage/storage";
 
-const possibleQueryParams = ["q", "query", "eingabe"];
+// TODO: Support new BangInfo additions
+
+const possibleQueryParams = ["query", "eingabe", "q"];
 
 /**
  * Should this URL be rejected provided the given blacklist?
@@ -27,33 +29,24 @@ export function shouldReject(
  * Construct a URL to send the user to given the bang URL and query text.
  * @param redirectUrl A URL formatted with `%s` to insert the queryText into.
  * @param queryText The text to insert into the redirectUrl.
+ * @param encode If true passes queryText through encodeURIComponent.
  * @returns The formatted URL.
  */
 export function constructRedirect(
 	redirectUrl: string,
 	queryText: string,
+	encode: boolean,
 ): string {
 	if (queryText === "") {
 		return new URL(redirectUrl).origin;
 	}
-	return redirectUrl.replace(/%s/g, encodeURIComponent(queryText));
-}
-
-/**
- * Replace the first non ascii exclamation mark with the ascii exclamation mark.
- * @param queryText Text that might contain a non standard exclamation mark, e.g. `！g rust`
- * @returns The same text with an ascii exclamation mark instead, e.g. `!g rust`
- */
-export function replaceFirstNonAsciiExclamationMark(queryText: string): string {
-	const nonAsciiExclamationMarks = [
-		"！", // Chinese exclamation mark
-	];
-	for (const nonAsciiExclamationMark of nonAsciiExclamationMarks) {
-		if (queryText.indexOf(nonAsciiExclamationMark) > -1) {
-			return queryText.replace(nonAsciiExclamationMark, "!");
-		}
+	let maybeEncoded: string;
+	if (encode) {
+		maybeEncoded = encodeURIComponent(queryText);
+	} else {
+		maybeEncoded = queryText;
 	}
-	return queryText;
+	return redirectUrl.replace(/%s/g, maybeEncoded);
 }
 
 /**
@@ -93,38 +86,48 @@ export async function getRedirects(
 		return Promise.resolve([]);
 	}
 
-	// Fix exclamation mark if non ascii version found.
-	queryText = replaceFirstNonAsciiExclamationMark(queryText);
+	// Cut the first bang we can find from the query text, it can be anywhere in
+	// the string
+	const { trigger } = opts;
 
-	// Cut first bang from query text, it can be anywhere in the string.
-	let bang = "";
-	queryText = queryText.replace(/(^!\S+ | !\S+|^!\S+$)/, (match): string => {
-		bang = match.trim().replace("!", "");
-		// Replace bang with zero len str.
+	// To include variables it has to be templated and all the regex special chars
+	// escaped (🤮)
+	const matchTrigger = new RegExp(
+		`(^${trigger}\\S+\\s|\\s${trigger}\\S+|^${trigger}\\S+$)`,
+	);
+
+	let keywordUsed = "";
+	queryText = queryText.replace(matchTrigger, (match) => {
+		keywordUsed = match.trim().replace(trigger, "");
+		// Replace bang with zero len str
 		return "";
 	});
 
-	if (bang.length === 0) {
+	if (keywordUsed.length === 0) {
 		return Promise.resolve([]);
 	}
 
-	// Get the chosen URLs from the bang.
-	const lookup = await getBangsLookup();
+	// Get the chosen URLs from the bang keyword
+
+	// TODO: Follow aliases when accessing
+	const lookup = await getBangInfoLookup();
 
 	// Get all relevant URLs to redirect to / open.
 	let redirectionUrls: string[] = [];
 
 	if (opts.ignoreBangCase) {
-		const searchKey = bang.toLowerCase();
+		const searchKey = keywordUsed.toLowerCase();
 		const asLowercase = searchKey.toLowerCase();
 		const allKeys = Object.keys(lookup).filter(
 			(key) => key.toLowerCase() === asLowercase,
 		);
 		for (const k of allKeys) {
-			redirectionUrls = redirectionUrls.concat(lookup[k]);
+			// TODO: Here and below, support default Url
+			redirectionUrls = redirectionUrls.concat(lookup[k].urls);
 		}
 	} else {
-		redirectionUrls = lookup[bang];
+		// If we don't ignore case, then there will only be one entry
+		redirectionUrls = lookup[keywordUsed].urls;
 	}
 
 	if (redirectionUrls === undefined || redirectionUrls.length === 0) {
@@ -134,7 +137,8 @@ export async function getRedirects(
 	// Construct the URL(s) to redirect the user to.
 	const redirects = [];
 	for (const redirectionUrl of redirectionUrls) {
-		redirects.push(constructRedirect(redirectionUrl, queryText));
+		// TODO: Support dontEncodeQuery option from BangInfos
+		redirects.push(constructRedirect(redirectionUrl, queryText, true));
 	}
 
 	return Promise.resolve(redirects);
@@ -145,22 +149,26 @@ export async function getRedirects(
  * @param r The request details.
  * @returns An empty Promise.
  */
+// TODO: Check if void is returned here for an API reason
 export async function processRequest(
 	r: WebRequest.OnBeforeRequestDetailsType,
-	// biome-ignore lint/suspicious/noConfusingVoidType: TODO: Check if void is used here for an API reason
+	// biome-ignore lint/suspicious/noConfusingVoidType:
 ): Promise<void | WebRequest.BlockingResponse> {
 	if (r.type !== "main_frame") {
+		// Any request that's not of type main_frame is very unlikely to be of use
 		return Promise.resolve();
 	}
 
-	const opts = await getLocalOpts();
+	// TODO: try/catch these 2 lines?
+	const { storageMethod } = await browser.storage.local.get("storageMethod");
+	const cfg = await storage.getConfig(storageMethod as string);
 
-	if (shouldReject(opts.ignoredSearchDomains, r.url)) {
+	if (shouldReject(cfg.options.ignoredSearchDomains, r.url)) {
 		return Promise.resolve();
 	}
 
 	// From the current URL, get the redirections (if any) to apply.
-	const redirections = await getRedirects(r, opts);
+	const redirections = await getRedirects(r, cfg.options);
 
 	if (redirections.length === 0) {
 		return Promise.resolve();

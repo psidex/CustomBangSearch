@@ -10,48 +10,39 @@ import {
 import { processRequest } from "./requests";
 import type { Config } from "../lib/config/config";
 import * as storage from "../lib/config/storage/storage";
-import { setBangsLookup } from "./lookup";
-import { setLocalOpts } from "./localoptions";
+import { setBangInfoLookup } from "./lookup";
 import defaultConfig from "../lib/config/default";
 import debug from "../lib/misc";
 
-function updateGlobals(settings: Config): void {
-	setBangsLookup(settings.bangs);
-	setLocalOpts(settings.options);
-}
+const defaultStorageMethod = "sync";
 
-async function setupSettings(): Promise<void> {
-	let currentSettings = await storage.getConfig();
-
-	if (currentSettings === undefined) {
-		currentSettings = defaultConfig;
+async function initConfig(): Promise<void> {
+	let { storageMethod } = await browser.storage.local.get("storageMethod");
+	if (
+		storageMethod === null ||
+		storageMethod === undefined ||
+		typeof storageMethod !== "string" ||
+		!storage.permittedStorageMethods.includes(storageMethod)
+	) {
+		// From here onwards, we assume that the set storageMethod is fine to use
+		storageMethod = defaultStorageMethod;
+		// TODO: In the config UI, we should set this when it's updated by user
+		await browser.storage.local.set({ storageMethod: storageMethod });
 	}
 
-	// Technically storage.getSettings should only ever return a settings obj that
-	// complies with the current Settings type, but let's not worry about that...
-	switch (currentSettings.version) {
-		case 3: {
-			debug("Converting settings from v3 to v5");
-			currentSettings.version = 5;
-			currentSettings.options.ignoreBangCase = false;
-			currentSettings.options.sortBangsAlpha = false;
-			break;
-		}
-		case 4: {
-			debug("Converting settings from v4 to v5");
-			currentSettings.version = 5;
-			currentSettings.options.sortBangsAlpha = false;
-			break;
-		}
-		default: {
-			break;
-		}
+	let currentCfg: Config;
+
+	try {
+		currentCfg = await storage.getConfig(storageMethod as string);
+	} catch (error) {
+		// TODO: What to do here, can we identify what the err is - is it possible
+		// that this will erase someones config if they try to access whilst
+		// offline
+		console.error(`Failed to get config: ${error}`);
+		currentCfg = defaultConfig;
 	}
 
-	updateGlobals(currentSettings);
-
-	// Redundant if no changes made. Only happens once per load tho, not a problem.
-	return storage.storeConfig(currentSettings);
+	return setBangInfoLookup(currentCfg.bangs);
 }
 
 function main(): void {
@@ -60,21 +51,8 @@ function main(): void {
 	);
 
 	// Because service workers need to set their event listeners immediately, we can't await this.
-	// FIXME: There may be a better way to do this, but for now we just hope it runs quickly!
-	setupSettings();
-
-	browser.storage.sync.onChanged.addListener(
-		(changes: { settings?: { newValue: string } }) => {
-			if (changes.settings !== undefined) {
-				const newSettings = storage.decompressSettings(
-					changes.settings.newValue,
-				);
-				if (newSettings !== null) {
-					updateGlobals(newSettings);
-				}
-			}
-		},
-	);
+	// TODO(future): There may be a better way to do this, but for now we just hope it runs quickly!
+	initConfig();
 
 	// The requestBody opt is required for handling POST situations.
 	const extraInfoSpec: browser.WebRequest.OnBeforeRequestOptions[] = [

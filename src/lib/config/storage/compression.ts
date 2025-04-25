@@ -41,7 +41,7 @@ export function decompressConfigFromString(str: string): Config {
 		typeof parsed.version !== "number" ||
 		typeof parsed.options !== "object" ||
 		!Array.isArray(parsed.bangs) ||
-		// TODO: This fn will need to allow config version migration in the future
+		// TODO(future): This fn will need to allow config version migration in the future
 		parsed.version !== currentConfigVersion
 	) {
 		throw new Error("The given JSON is not a valid Config");

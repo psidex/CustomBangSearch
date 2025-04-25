@@ -7,7 +7,7 @@
 		"96": "images/icons/icon_96.png",
 		"128": "images/icons/icon_128.png"
 	},
-	"permissions": ["storage", "webRequest"],
+	"permissions": ["storage", "unlimitedStorage", "webRequest"],
 	"host_permissions": [
 		"*://www.google.com/*",
 		"*://*.bing.com/*",

@@ -4,5 +4,3 @@ export default interface StorageManager {
 	set(str: string): Promise<void>;
 	get(): Promise<string>;
 }
-
-export const byteSize = (str: string) => new Blob([str]).size;
