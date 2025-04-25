@@ -2,7 +2,7 @@ import browser, { type WebRequest } from "webextension-polyfill";
 
 import { currentBrowser } from "../lib/esbuilddefinitions";
 import { getBangInfoLookup } from "./lookup";
-import type { Options } from "../lib/config/config";
+import type { BangInfo, Options } from "../lib/config/config";
 import * as storage from "../lib/config/storage/storage";
 
 // TODO: Support new BangInfo additions
@@ -32,7 +32,7 @@ export function shouldReject(
  * @param encode If true passes queryText through encodeURIComponent.
  * @returns The formatted URL.
  */
-export function constructRedirect(
+function constructRedirect(
 	redirectUrl: string,
 	queryText: string,
 	encode: boolean,
@@ -47,6 +47,19 @@ export function constructRedirect(
 		maybeEncoded = queryText;
 	}
 	return redirectUrl.replace(/%s/g, maybeEncoded);
+}
+
+// Runs constructRedirect on each URL in the BangInfo with the given queryText
+// and options
+function constructRedirects(
+	bangInfo: BangInfo,
+	queryText: string,
+): Array<string> {
+	const redirs = [];
+	for (const url of bangInfo.urls) {
+		redirs.push(constructRedirect(url, queryText, !bangInfo.dontEncodeQuery));
+	}
+	return redirs;
 }
 
 /**
@@ -83,7 +96,7 @@ export async function getRedirects(
 	queryText = queryText.trim();
 
 	if (queryText.length === 0) {
-		return Promise.resolve([]);
+		return [];
 	}
 
 	// Cut the first bang we can find from the query text, it can be anywhere in
@@ -104,7 +117,7 @@ export async function getRedirects(
 	});
 
 	if (keywordUsed.length === 0) {
-		return Promise.resolve([]);
+		return [];
 	}
 
 	// Get the chosen URLs from the bang keyword
@@ -113,7 +126,7 @@ export async function getRedirects(
 	const lookup = await getBangInfoLookup();
 
 	// Get all relevant URLs to redirect to / open.
-	let redirectionUrls: string[] = [];
+	const redirectionBangInfos: BangInfo[] = [];
 
 	if (opts.ignoreBangCase) {
 		const searchKey = keywordUsed.toLowerCase();
@@ -123,25 +136,24 @@ export async function getRedirects(
 		);
 		for (const k of allKeys) {
 			// TODO: Here and below, support default Url
-			redirectionUrls = redirectionUrls.concat(lookup[k].urls);
+			redirectionBangInfos.push(lookup[k]);
 		}
 	} else {
 		// If we don't ignore case, then there will only be one entry
-		redirectionUrls = lookup[keywordUsed].urls;
+		redirectionBangInfos.push(lookup[keywordUsed]);
 	}
 
-	if (redirectionUrls === undefined || redirectionUrls.length === 0) {
-		return Promise.resolve([]);
+	if (redirectionBangInfos === undefined || redirectionBangInfos.length === 0) {
+		return [];
 	}
 
 	// Construct the URL(s) to redirect the user to.
-	const redirects = [];
-	for (const redirectionUrl of redirectionUrls) {
-		// TODO: Support dontEncodeQuery option from BangInfos
-		redirects.push(constructRedirect(redirectionUrl, queryText, true));
+	const redirects: Array<string> = [];
+	for (const bangInfo of redirectionBangInfos) {
+		redirects.push(...constructRedirects(bangInfo, queryText));
 	}
 
-	return Promise.resolve(redirects);
+	return redirects;
 }
 
 /**

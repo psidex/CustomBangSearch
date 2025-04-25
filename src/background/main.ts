@@ -38,11 +38,14 @@ async function initConfig(): Promise<void> {
 		// TODO: What to do here, can we identify what the err is - is it possible
 		// that this will erase someones config if they try to access whilst
 		// offline
-		console.error(`Failed to get config: ${error}`);
+		console.warn(`Failed to get config: ${error}`);
 		currentCfg = defaultConfig;
 	}
 
-	return setBangInfoLookup(currentCfg.bangs);
+	await setBangInfoLookup(currentCfg.bangs);
+
+	// This is required if for example we've set currentCfg to the default one
+	return storage.storeConfig(storageMethod as string, currentCfg);
 }
 
 function main(): void {

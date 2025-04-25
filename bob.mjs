@@ -13,9 +13,6 @@
  *
  */
 
-/* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
-
 import { parseArgs } from "node:util";
 import assert from "node:assert";
 

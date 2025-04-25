@@ -43,7 +43,7 @@ function splitIntoChunks(toChunk: string): Record<string, string> {
 			);
 		}
 
-		chunks[`${chunks.length}`] = toChunk.slice(startIdx, endIdx);
+		chunks[`${Object.keys(chunks).length}`] = toChunk.slice(startIdx, endIdx);
 		startIdx = endIdx;
 	}
 

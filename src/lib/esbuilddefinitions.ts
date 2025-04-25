@@ -1,11 +1,9 @@
-import assert from "node:assert";
-
 // Flag for development mode, enables debugging features
 export const inDev = process.env.dev as unknown as boolean;
 
 // The browser we are building for
 export const currentBrowser = process.env.browser as string;
-assert(["chrome", "firefox"].includes(currentBrowser));
+// assert(["chrome", "firefox"].includes(currentBrowser));
 
 // The current version of the extension, should match package & manifest
 export const version = process.env.version as string;
