@@ -1,61 +1,67 @@
 {
-  "name": "custombangsearch",
-  "version": "0.11.0",
-  "description": "A browser extension to use custom DuckDuckGo-like bangs directly from the address bar",
-  "main": "",
-  "scripts": {
-    "test": "",
-    "lint": "npx eslint ./src/ --cache",
-    "tsc-noemit": "npx tsc -noEmit",
-    "build-firefox": "node ./bob.mjs -d -b firefox",
-    "build-firefox-release": "node ./bob.mjs -z -s -b firefox",
-    "build-chrome": "node ./bob.mjs -d -b chrome",
-    "build-chrome-release": "node ./bob.mjs -z -s -b chrome"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/psidex/CustomBangSearch.git"
-  },
-  "keywords": [
-    "chrome",
-    "firefox",
-    "extension",
-    "addon",
-    "browser-extension",
-    "web-extension",
-    "chrome-extension",
-    "firefox-extension",
-    "firefox-addon",
-    "search",
-    "custom-search",
-    "duckduckgo",
-    "bang",
-    "bangs"
-  ],
-  "author": "psidex",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/psidex/CustomBangSearch/issues"
-  },
-  "homepage": "https://github.com/psidex/CustomBangSearch#readme",
-  "dependencies": {
-    "lucide-react": "0.503.0",
-    "lz-string": "^1.5.0",
-    "nanoid": "5.1.5",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "webextension-polyfill": "0.12.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/node": "^22.14.1",
-    "@types/react": "19.1.2",
-    "@types/react-dom": "19.1.2",
-    "@types/webextension-polyfill": "0.12.3",
-    "esbuild": "0.25.3",
-    "execa": "9.5.2",
-    "fs-extra": "11.3.0",
-    "listr2": "8.3.2",
-    "typescript": "5.8.3"
-  }
+	"name": "custombangsearch",
+	"version": "0.11.0",
+	"description": "A browser extension to use custom DuckDuckGo-like bangs directly from the address bar",
+	"main": "",
+	"scripts": {
+		"test": "",
+		"lint": "npx biome lint ./src",
+		"tsc-noemit": "npx tsc -noEmit",
+		"build-firefox": "node ./bob.mjs -d -b firefox",
+		"build-firefox-release": "node ./bob.mjs -z -s -b firefox",
+		"build-chrome": "node ./bob.mjs -d -b chrome",
+		"build-chrome-release": "node ./bob.mjs -z -s -b chrome"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/psidex/CustomBangSearch.git"
+	},
+	"keywords": [
+		"chrome",
+		"firefox",
+		"extension",
+		"addon",
+		"browser-extension",
+		"web-extension",
+		"chrome-extension",
+		"firefox-extension",
+		"firefox-addon",
+		"search",
+		"custom-search",
+		"duckduckgo",
+		"bang",
+		"bangs"
+	],
+	"author": "psidex",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/psidex/CustomBangSearch/issues"
+	},
+	"homepage": "https://github.com/psidex/CustomBangSearch#readme",
+	"dependencies": {
+		"@mantine/core": "^7.17.5",
+		"@mantine/hooks": "^7.17.5",
+		"lucide-react": "^0.503.0",
+		"lz-string": "^1.5.0",
+		"nanoid": "5.1.5",
+		"react": "19.1.0",
+		"react-dom": "19.1.0",
+		"webextension-polyfill": "0.12.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/node": "22.15.2",
+		"@types/react": "19.1.2",
+		"@types/react-dom": "19.1.2",
+		"@types/webextension-polyfill": "0.12.3",
+		"esbuild": "0.25.3",
+		"execa": "9.5.2",
+		"fs-extra": "11.3.0",
+		"listr2": "8.3.2",
+		"postcss": "^8.5.3",
+		"postcss-cli": "^11.0.1",
+		"postcss-preset-mantine": "^1.17.0",
+		"postcss-simple-vars": "^7.0.1",
+		"typescript": "5.8.3"
+	}
 }

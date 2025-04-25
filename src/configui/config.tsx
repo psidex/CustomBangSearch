@@ -1,10 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { MantineProvider, Title } from "@mantine/core";
+
+import MiscButtons from "../lib/components/MiscButtons";
+import theme from "../lib/theme";
 
 function App(): React.ReactElement {
 	return (
 		<div>
-			<h1>Config UI!</h1>
+			<Title>Config UI!</Title>
+			<MiscButtons />
 		</div>
 	);
 }
@@ -15,6 +20,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<React.StrictMode>
-		<App />
+		<MantineProvider defaultColorScheme="auto" theme={theme}>
+			<App />
+		</MantineProvider>
 	</React.StrictMode>,
 );

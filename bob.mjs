@@ -67,6 +67,19 @@ const sourceFiles = [
 	"./tsconfig.json",
 ];
 
+// What to run postcss CLI on. NOTE: This and the .html
+// <link>s will need to be updated if a new mantine css file is required
+const postcss = [
+	{
+		src: "./node_modules/@mantine/core/styles.css",
+		dst: "./build/src/configui/mantine.css",
+	},
+	{
+		src: "./node_modules/@mantine/core/styles.css",
+		dst: "./build/src/popup/mantine.css",
+	},
+];
+
 const buildPath = "./build";
 
 const {
@@ -237,6 +250,16 @@ const tasks = new Listr([
 				...opts,
 				...additions,
 			});
+		},
+	},
+	{
+		title: "Run PostCSS",
+		task: async () => {
+			const calls = [];
+			for (const { src, dst } of postcss) {
+				calls.push(execa("npx", ["postcss", src, "-o", dst]));
+			}
+			return Promise.all(calls);
 		},
 	},
 	{
