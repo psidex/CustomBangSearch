@@ -22,7 +22,7 @@
 		"*://kagi.com/*"
 	],
 	"options_ui": {
-		"page": "src/optionsui/options.html",
+		"page": "src/configui/config.html",
 		"open_in_tab": true
 	},
 	"action": {

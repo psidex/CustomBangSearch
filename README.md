@@ -33,7 +33,7 @@ If you set one of these as your browsers search engine, you can use the bangs di
 
 Bangs will also work by just using the search engines normally.
 
-## Options Page
+## Configuration Page
 
 The bang editing menu and general options are accessed using the extensions options page:
 

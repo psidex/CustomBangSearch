@@ -2,10 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 function App(): React.ReactElement {
-	// TODO: Rename to config UI
 	return (
 		<div>
-			<h1>Options UI!</h1>
+			<h1>Config UI!</h1>
 		</div>
 	);
 }

@@ -43,8 +43,8 @@ assert(
 // Files and directories to copy to the build directory.
 const buildFiles = [
 	"./images",
-	"./src/optionsui/options.css",
-	"./src/optionsui/options.html",
+	"./src/configui/config.css",
+	"./src/configui/config.html",
 	"./src/popup/popup.css",
 	"./src/popup/popup.html",
 	"./package.json",
@@ -202,7 +202,7 @@ const tasks = new Listr([
 		task: (ctx) => {
 			const scriptPaths = [
 				"./src/background/main.ts",
-				"./src/optionsui/options.tsx",
+				"./src/configui/config.tsx",
 				"./src/popup/popup.tsx",
 			];
 			const opts = {
