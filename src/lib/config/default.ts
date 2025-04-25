@@ -1,7 +1,7 @@
-import type { Config } from "./config";
+import { currentConfigVersion, type Config } from "./config";
 
 const defaultConfig: Config = {
-	version: 6,
+	version: currentConfigVersion,
 	options: {
 		trigger: "!",
 		storageMethod: "sync",

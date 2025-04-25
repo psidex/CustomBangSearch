@@ -44,7 +44,7 @@ async function initConfig(): Promise<void> {
 
 	await setBangInfoLookup(currentCfg.bangs);
 
-	// This is required if for example we've set currentCfg to the default one
+	// This is required if for example we've just set currentCfg to the default
 	return storage.storeConfig(storageMethod as string, currentCfg);
 }
 

@@ -1,3 +1,5 @@
+import defaultConfig from "./default";
+
 // Must be an integer
 export const currentConfigVersion = 6;
 
@@ -33,19 +35,4 @@ export interface Config {
 	version: number;
 	options: Options;
 	bangs: BangInfo[];
-}
-
-export function newConfig(): Config {
-	return {
-		version: currentConfigVersion,
-		options: {
-			trigger: "1",
-			storageMethod: "sync",
-			ignoredSearchDomains: [],
-			ignoreBangCase: false,
-			sortBangsAlpha: false,
-			querySeparator: "",
-		},
-		bangs: [],
-	};
 }

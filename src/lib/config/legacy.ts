@@ -6,7 +6,8 @@
 import browser from "webextension-polyfill";
 import lz from "lz-string";
 
-import { type BangInfo, type Config, newConfig } from "./config";
+import type { BangInfo, Config } from "./config";
+import defaultConfig from "./default";
 
 // Not needed but kept for posterity
 // const settingsVersion = 5;
@@ -52,7 +53,7 @@ async function findOldSettings(): Promise<Settings | null> {
 }
 
 function convertSettingsToConfig(oldSettings: Settings): Config {
-	const cfg = newConfig();
+	const cfg = defaultConfig;
 
 	cfg.options.ignoredSearchDomains = oldSettings.options.ignoredDomains || [];
 	cfg.options.ignoreBangCase = oldSettings.options.ignoreCase || false;
