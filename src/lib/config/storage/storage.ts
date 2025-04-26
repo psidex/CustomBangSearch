@@ -12,13 +12,20 @@ import debug from "../../misc";
 
 // NOTE: This should match the cases in the switch in getStorageManager
 export const permittedStorageMethods = ["sync", "local"];
+const defaultStorageMethod = "sync";
 
 // TODO: docstrings for below fns that mention the error throwing
-// TODO: Don't leave info behind in storage method thats not selected?
 
-async function getStorageManager(
-	storageMethod: string,
-): Promise<StorageManager> {
+async function getStorageManager(): Promise<StorageManager> {
+	let { storageMethod } = await browser.storage.local.get("storageMethod");
+	if (
+		storageMethod === null ||
+		storageMethod === undefined ||
+		typeof storageMethod !== "string" ||
+		!permittedStorageMethods.includes(storageMethod)
+	) {
+		storageMethod = defaultStorageMethod;
+	}
 	switch (storageMethod) {
 		case "sync":
 			return SyncStorageManager;
@@ -29,19 +36,22 @@ async function getStorageManager(
 	}
 }
 
-export async function storeConfig(
-	storageMethod: string,
-	cfg: Config,
+export async function updateStorageManagerMethod(
+	method: string,
 ): Promise<void> {
-	const storeMan = await getStorageManager(storageMethod);
+	// TODO: Clear the data from any other methods?
+	return browser.storage.local.set({ storageMethod: method });
+}
+
+export async function storeConfig(cfg: Config): Promise<void> {
+	const storeMan = await getStorageManager();
 	const compressed = compressConfigToString(cfg);
 	return storeMan.set(compressed);
 }
 
-export async function getConfig(storageMethod: string): Promise<Config> {
-	const storeMan = await getStorageManager(storageMethod);
+export async function getConfig(): Promise<Config> {
+	const storeMan = await getStorageManager();
 	const compressed = await storeMan.get();
-	debug(`getConfig compressed: ${compressed}`);
 	const decompressed = decompressConfigFromString(compressed);
 	return Promise.resolve(decompressed);
 }

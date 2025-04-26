@@ -5,22 +5,26 @@ import browser from "webextension-polyfill";
 
 import MiscButtons from "../lib/components/MiscButtons";
 import theme from "../lib/theme";
-import { buildTime, hash, version } from "../lib/esbuilddefinitions";
+import { buildTime, hash, inDev, version } from "../lib/esbuilddefinitions";
+import DevTools from "./devtools";
 
 function App(): React.ReactElement {
 	return (
 		<Stack align="center">
-			<Title style={{ textAlign: "center" }}>Custom Bang Search</Title>
+			<Title style={{ textAlign: "center", fontSize: "1.9rem" }}>
+				Custom Bang Search
+			</Title>
 			<Text title={`${hash} @ ${buildTime}`}>v{version}</Text>
 			<MiscButtons />
 			<Button
-				variant=""
+				variant="default"
 				onClick={() => {
 					browser.runtime.openOptionsPage();
 				}}
 			>
 				Options
 			</Button>
+			{inDev && <DevTools />}
 		</Stack>
 	);
 }

@@ -14,26 +14,11 @@ import { setBangInfoLookup } from "./lookup";
 import defaultConfig from "../lib/config/default";
 import debug from "../lib/misc";
 
-const defaultStorageMethod = "sync";
-
 async function initConfig(): Promise<void> {
-	let { storageMethod } = await browser.storage.local.get("storageMethod");
-	if (
-		storageMethod === null ||
-		storageMethod === undefined ||
-		typeof storageMethod !== "string" ||
-		!storage.permittedStorageMethods.includes(storageMethod)
-	) {
-		// From here onwards, we assume that the set storageMethod is fine to use
-		storageMethod = defaultStorageMethod;
-		// TODO: In the config UI, we should set this when it's updated by user
-		await browser.storage.local.set({ storageMethod: storageMethod });
-	}
-
 	let currentCfg: Config;
 
 	try {
-		currentCfg = await storage.getConfig(storageMethod as string);
+		currentCfg = await storage.getConfig();
 	} catch (error) {
 		// TODO: What to do here, can we identify what the err is - is it possible
 		// that this will erase someones config if they try to access whilst
@@ -45,7 +30,7 @@ async function initConfig(): Promise<void> {
 	await setBangInfoLookup(currentCfg.bangs);
 
 	// This is required if for example we've just set currentCfg to the default
-	return storage.storeConfig(storageMethod as string, currentCfg);
+	return storage.storeConfig(currentCfg);
 }
 
 function main(): void {

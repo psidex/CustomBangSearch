@@ -4,6 +4,7 @@ import { currentBrowser } from "../lib/esbuilddefinitions";
 import { getBangInfoLookup } from "./lookup";
 import type { BangInfo, Options } from "../lib/config/config";
 import * as storage from "../lib/config/storage/storage";
+import debug from "../lib/misc";
 
 // TODO: Support new BangInfo additions
 
@@ -171,9 +172,9 @@ export async function processRequest(
 		return Promise.resolve();
 	}
 
-	// TODO: try/catch these 2 lines?
-	const { storageMethod } = await browser.storage.local.get("storageMethod");
-	const cfg = await storage.getConfig(storageMethod as string);
+	// TODO: try/catch?
+	const cfg = await storage.getConfig();
+	debug("Request", r, "\nConfig", cfg);
 
 	if (shouldReject(cfg.options.ignoredSearchDomains, r.url)) {
 		return Promise.resolve();
