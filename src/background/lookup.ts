@@ -3,12 +3,10 @@ import browser from "webextension-polyfill";
 import type { BangInfo } from "../lib/config/config";
 
 //
-// TODO: Reword this: NOTE: It is standard behaviour to use local storage to hold
+// TODO: Update this comment to be accurate and worded correctly
+//
+// NOTE: It is standard behaviour to use local storage to hold
 // global state for web extensions
-//
-// TODO: A better name for this file
-//
-// TODO: Update comment below
 //
 // Flow:
 // - User presses save button in config edit UI
@@ -20,24 +18,34 @@ import type { BangInfo } from "../lib/config/config";
 // - What happens if the sync storage is updated on another instance
 //
 
+export type BangsLookup = Record<string, BangInfo>;
+
 const storageLocalKey = "bangInfoLookup";
 
 // TODO: This should also be called when the config is saved in the UI
 export async function setBangInfoLookup(bangs: BangInfo[]): Promise<void> {
-	const lookup: Record<string, BangInfo> = {};
+	const lookup: BangsLookup = {};
+
 	for (const bangInfo of bangs) {
 		lookup[bangInfo.keyword] = bangInfo;
 	}
+
+	// We do this twice as we need to make sure that the LUT already contains what
+	// an alias will be pointing to
+	for (const bangInfo of bangs) {
+		if (bangInfo.alias !== "") {
+			lookup[bangInfo.keyword] = lookup[bangInfo.alias];
+		}
+	}
+
 	return browser.storage.local.set({ [storageLocalKey]: lookup });
 }
 
 // Returns alookup table for { bang keyword : BangInfo }
-export async function getBangInfoLookup(): Promise<
-	Readonly<Record<string, BangInfo>>
-> {
+export async function getBangInfoLookup(): Promise<Readonly<BangsLookup>> {
 	const got = await browser.storage.local.get(storageLocalKey);
 	// TODO(future): Should be OK, but should probs null/undefined check
 	// bangsLookup, and that it matches the type
 	const bangsLookup = got[storageLocalKey];
-	return bangsLookup as Record<string, BangInfo>;
+	return bangsLookup as BangsLookup;
 }

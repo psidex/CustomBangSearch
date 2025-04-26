@@ -1,6 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Button, MantineProvider, Stack, Text, Title } from "@mantine/core";
+import {
+	Button,
+	MantineProvider,
+	Stack,
+	Text,
+	Title,
+	Tooltip,
+} from "@mantine/core";
 import browser from "webextension-polyfill";
 
 import MiscButtons from "../lib/components/MiscButtons";
@@ -14,7 +21,9 @@ function App(): React.ReactElement {
 			<Title style={{ textAlign: "center", fontSize: "1.9rem" }}>
 				Custom Bang Search
 			</Title>
-			<Text title={`${hash} @ ${buildTime}`}>v{version}</Text>
+			<Tooltip label={`${hash} @ ${buildTime}`}>
+				<Text>v{version}</Text>
+			</Tooltip>
 			<MiscButtons />
 			<Button
 				variant="default"
@@ -40,3 +49,10 @@ root.render(
 		</MantineProvider>
 	</React.StrictMode>,
 );
+
+if (inDev) {
+	// Open config page when popup is clicked, easier for testing
+	document.addEventListener("DOMContentLoaded", () => {
+		browser.runtime.openOptionsPage();
+	});
+}

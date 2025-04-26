@@ -1,9 +1,12 @@
 import React from "react";
+import { useComputedColorScheme } from "@mantine/core";
 
 export default function GitHubIcon() {
+	const computedColorScheme = useComputedColorScheme("light");
 	// https://simpleicons.org/?q=github
 	return (
 		<svg
+			style={computedColorScheme === "light" ? {} : { filter: "invert(100%)" }}
 			height={24}
 			width={24}
 			role="img"

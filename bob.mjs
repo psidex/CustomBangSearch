@@ -43,7 +43,6 @@ assert(
 // Files and directories to copy to the build directory.
 const buildFiles = [
 	"./images",
-	"./src/configui/config.css",
 	"./src/configui/config.html",
 	"./src/popup/popup.css",
 	"./src/popup/popup.html",

@@ -7,14 +7,16 @@ export interface Options {
 	// The character(s) to trigger the extension
 	trigger: string;
 	// The storage method for config
-	storageMethod: "sync" | "local"; // TODO: "url"?
+	storageMethod: "sync" | "local"; // TODO(future): "url"?
 	// Search engine domains to ignore, e.g. searx.tiekoetter.com
 	ignoredSearchDomains: string[];
 	// If true, ignore bang case
 	ignoreBangCase: boolean;
 	// Sort bang list alphabetically in configuration UI
+	// TODO: Support this in the config UI
 	sortBangsAlpha: boolean;
 	// If non-empty, this is used to split queries into multiple searches on every URL
+	// TODO: Support this in the background script(s)
 	querySeparator: string;
 }
 

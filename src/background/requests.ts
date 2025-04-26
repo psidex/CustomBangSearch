@@ -57,8 +57,12 @@ function constructRedirects(
 	queryText: string,
 ): Array<string> {
 	const redirs = [];
-	for (const url of bangInfo.urls) {
-		redirs.push(constructRedirect(url, queryText, !bangInfo.dontEncodeQuery));
+	if (queryText === "" && bangInfo.defaultUrl !== "") {
+		redirs.push(bangInfo.defaultUrl);
+	} else {
+		for (const url of bangInfo.urls) {
+			redirs.push(constructRedirect(url, queryText, !bangInfo.dontEncodeQuery));
+		}
 	}
 	return redirs;
 }
@@ -96,16 +100,16 @@ export async function getRedirects(
 
 	queryText = queryText.trim();
 
-	if (queryText.length === 0) {
-		return [];
-	}
+	// if (queryText.length === 0) {
+	// 	return [];
+	// }
 
 	// Cut the first bang we can find from the query text, it can be anywhere in
 	// the string
 	const { trigger } = opts;
 
 	// To include variables it has to be templated and all the regex special chars
-	// escaped (🤮)
+	// escaped 🤮
 	const matchTrigger = new RegExp(
 		`(^${trigger}\\S+\\s|\\s${trigger}\\S+|^${trigger}\\S+$)`,
 	);
@@ -121,22 +125,16 @@ export async function getRedirects(
 		return [];
 	}
 
-	// Get the chosen URLs from the bang keyword
-
-	// TODO: Follow aliases when accessing
 	const lookup = await getBangInfoLookup();
 
 	// Get all relevant URLs to redirect to / open.
 	const redirectionBangInfos: BangInfo[] = [];
 
 	if (opts.ignoreBangCase) {
-		const searchKey = keywordUsed.toLowerCase();
-		const asLowercase = searchKey.toLowerCase();
 		const allKeys = Object.keys(lookup).filter(
-			(key) => key.toLowerCase() === asLowercase,
+			(key) => key.toLowerCase() === keywordUsed.toLowerCase(),
 		);
 		for (const k of allKeys) {
-			// TODO: Here and below, support default Url
 			redirectionBangInfos.push(lookup[k]);
 		}
 	} else {
@@ -144,7 +142,7 @@ export async function getRedirects(
 		redirectionBangInfos.push(lookup[keywordUsed]);
 	}
 
-	if (redirectionBangInfos === undefined || redirectionBangInfos.length === 0) {
+	if (redirectionBangInfos.length === 0) {
 		return [];
 	}
 

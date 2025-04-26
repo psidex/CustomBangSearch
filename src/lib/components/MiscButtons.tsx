@@ -10,10 +10,7 @@ import GitHubIcon from "./GithubIcon";
 
 export default function MiscButtons() {
 	const { setColorScheme } = useMantineColorScheme();
-	const computedColorScheme = useComputedColorScheme("light", {
-		getInitialValueInEffect: true,
-	});
-
+	const computedColorScheme = useComputedColorScheme("light");
 	return (
 		<Flex>
 			<ActionIcon
@@ -28,6 +25,7 @@ export default function MiscButtons() {
 				}}
 				variant="default"
 				size="xl"
+				style={{ marginRight: "1em" }}
 			>
 				<GitHubIcon />
 			</ActionIcon>
