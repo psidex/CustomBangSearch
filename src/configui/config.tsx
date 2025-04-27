@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { Tabs, MantineProvider, Title, Image, Box, Group } from "@mantine/core";
-import { CircleHelp, Cog } from "lucide-react";
+import { Tabs, MantineProvider, Image, Box, Loader } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { Notifications } from "@mantine/notifications";
+import { CircleHelp, Cog } from "lucide-react";
 
-import theme from "../lib/theme";
 import BangsTabPanel from "./components/BangsTabPanel";
 import AboutTabPanel from "./components/AboutTabPanel";
 import OptionsTabPanel from "./components/OptionsTabPanel";
 import ConfigHeader from "./components/ConfigHeader";
 
+import theme from "../lib/theme";
+import defaultConfig from "../lib/config/default";
+import type { Config } from "../lib/config/config";
+import { getConfig } from "../lib/config/storage/storage";
+
 export function App() {
+	const [loading, setLoading] = useState<boolean>(true);
+	const [initialConfig, setInitialConfig] = useState<Config>(defaultConfig);
+
+	useEffect(() => {
+		// TODO: Error handling in all of these files
+		getConfig()
+			.then(setInitialConfig)
+			.then(() => setLoading(false));
+	}, []);
+
 	// TODO: Is there a better way to do this?
 	const windowIsAtLeast1200 = useMediaQuery("(min-width: 1200px)");
 	const windowIsAtLeast1600 = useMediaQuery("(min-width: 1600px)");
@@ -22,6 +37,7 @@ export function App() {
 			: windowIsAtLeast1200
 				? "80%"
 				: "100%";
+
 	return (
 		<Box style={{ width: widthPercent, margin: "auto" }}>
 			<ConfigHeader />
@@ -47,10 +63,12 @@ export function App() {
 					</Tabs.Tab>
 				</Tabs.List>
 				<Tabs.Panel value="bangs">
-					<BangsTabPanel />
+					{(loading && <Loader />) || <BangsTabPanel />}
 				</Tabs.Panel>
 				<Tabs.Panel value="options">
-					<OptionsTabPanel />
+					{(loading && <Loader />) || (
+						<OptionsTabPanel initialOptions={initialConfig.options} />
+					)}
 				</Tabs.Panel>
 				<Tabs.Panel value="about">
 					<AboutTabPanel />
@@ -67,6 +85,7 @@ const root = ReactDOM.createRoot(
 root.render(
 	<React.StrictMode>
 		<MantineProvider defaultColorScheme="auto" theme={theme}>
+			<Notifications containerWidth={300} position="top-center" />
 			<App />
 		</MantineProvider>
 	</React.StrictMode>,

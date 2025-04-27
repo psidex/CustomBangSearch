@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type ChangeEvent, useState } from "react";
 import {
 	Stack,
 	Title,
@@ -6,15 +6,101 @@ import {
 	Group,
 	Switch,
 	Input,
-	Radio,
 	SegmentedControl,
 	Code,
 	Anchor,
+	Button,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 
-export default function BangsTabPanel() {
+import {
+	allowedStorageMethodsAsArray,
+	type Options,
+	type allowedStorageMethodsAsType,
+} from "../../lib/config/config";
+import {
+	clearUnusedStorageManagers,
+	getConfig,
+	storeConfig,
+	updateStorageManagerMethod,
+} from "../../lib/config/storage/storage";
+import { Check } from "lucide-react";
+import { hostPermissionUrls } from "../../lib/esbuilddefinitions";
+
+interface Props {
+	initialOptions: Options;
+}
+
+export default function BangsTabPanel(props: Props) {
+	const [triggerText, setTriggerText] = useState<string>(
+		props.initialOptions.trigger,
+	);
+
+	const [storageMethod, setStorageMethod] =
+		useState<allowedStorageMethodsAsType>(props.initialOptions.storageMethod);
+
+	// Record<url, ignored>
+	const [ignoredDomainsList, setIgnoredDomainsList] = useState<
+		Record<string, boolean>
+	>(
+		Object.fromEntries(
+			hostPermissionUrls.map((url) => [
+				url,
+				props.initialOptions.ignoredSearchDomains.includes(url),
+			]),
+		),
+	);
+
+	const [ignoreBangCase, setIgnoreBangCase] = useState<boolean>(
+		props.initialOptions.ignoreBangCase,
+	);
+
+	const saveOptions = async () => {
+		// TODO: Catch errs, display err notif
+		const cfg = await getConfig();
+
+		cfg.options.trigger = triggerText;
+		cfg.options.storageMethod = storageMethod;
+		cfg.options.ignoredSearchDomains = Object.keys(ignoredDomainsList).filter(
+			(key) => ignoredDomainsList[key],
+		);
+		cfg.options.ignoreBangCase = ignoreBangCase;
+
+		await updateStorageManagerMethod(storageMethod);
+		await storeConfig(cfg);
+		await clearUnusedStorageManagers();
+
+		notifications.show({
+			title: "Settings saved",
+			message: "",
+			autoClose: true,
+			icon: <Check />,
+			color: "green",
+		});
+	};
+
+	const handleIgnoredSwitchChanged =
+		(label: string) => (event: ChangeEvent<HTMLInputElement>) => {
+			console.log(event);
+			// We reverse the checked because the UI is showing "enabled", but the
+			// code is dealing with disabled
+			setIgnoredDomainsList((prev) => ({
+				...prev,
+				// NOTE: Not sure why currentTarget can't be used, but this works
+				[label]: !event.target.checked,
+			}));
+		};
+
 	return (
 		<Stack>
+			<Button
+				style={{ width: "6em", margin: "1em 1em 0 1em" }}
+				onClick={saveOptions}
+				size="md"
+				variant="default"
+			>
+				Save
+			</Button>
 			<Group>
 				<Stack>
 					<Title order={3}>Trigger</Title>
@@ -23,7 +109,10 @@ export default function BangsTabPanel() {
 						<Code>!</Code>
 					</Text>
 				</Stack>
-				<Input />
+				<Input
+					value={triggerText}
+					onChange={(e) => setTriggerText(e.target.value)}
+				/>
 			</Group>
 			<Group>
 				<Stack>
@@ -45,15 +134,26 @@ export default function BangsTabPanel() {
 						</Anchor>
 					</Text>
 				</Stack>
-				<SegmentedControl data={["sync", "local"]} />
+				<SegmentedControl
+					value={storageMethod}
+					onChange={(v) => setStorageMethod(v as allowedStorageMethodsAsType)}
+					data={allowedStorageMethodsAsArray}
+				/>
 			</Group>
 			<Group>
 				<Stack>
 					<Title order={3}>Enabled Domains</Title>
 					<Text>Search engine domains that this extension will trigger on</Text>
-					<Switch label="a.com" />
-					<Switch label="b.com" />
-					<Switch label="c.com" />
+					{hostPermissionUrls.map((label) => (
+						<Switch
+							key={label}
+							label={label}
+							// We swap the checked because we are showing if it's enabled, but
+							// the bool is if its disabled
+							checked={!ignoredDomainsList[label]}
+							onChange={handleIgnoredSwitchChanged(label)}
+						/>
+					))}
 				</Stack>
 			</Group>
 			<Group>
@@ -64,26 +164,12 @@ export default function BangsTabPanel() {
 						equivalent
 					</Text>
 				</Stack>
-				<Switch />
-			</Group>
-			<Group>
-				<Stack>
-					{/* TODO: This would probably be better suited in the bangs page as a button */}
-					<Title order={3}>Sort Bangs Alphabetically</Title>
-					<Text>Sort bang list alphabetically in configuration UI</Text>
-				</Stack>
-				<Switch />
-			</Group>
-			<Group>
-				<Stack>
-					<Title order={3}>Query Separator</Title>
-					<Text>
-						If non-empty, this is used to split queries into multiple searches
-						on every URL
-					</Text>
-					<Text>CURRENTLY DOES NOTHING</Text>
-				</Stack>
-				<Input />
+				<Switch
+					checked={ignoreBangCase}
+					onChange={(e) => {
+						setIgnoreBangCase(e.currentTarget.checked);
+					}}
+				/>
 			</Group>
 		</Stack>
 	);

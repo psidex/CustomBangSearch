@@ -74,6 +74,10 @@ const postcss = [
 		dst: "./build/src/configui/mantine.css",
 	},
 	{
+		src: "./node_modules/@mantine/notifications/styles.css",
+		dst: "./build/src/configui/mantine-notifications.css",
+	},
+	{
 		src: "./node_modules/@mantine/core/styles.css",
 		dst: "./build/src/popup/mantine.css",
 	},

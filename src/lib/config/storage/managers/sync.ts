@@ -83,6 +83,9 @@ const SyncStorageManager: StorageManager = (() => {
 
 			return Promise.resolve(unchunked);
 		},
+		async clear(): Promise<void> {
+			return browser.storage.sync.clear();
+		},
 	};
 })();
 

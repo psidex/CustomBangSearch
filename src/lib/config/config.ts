@@ -3,20 +3,26 @@ import defaultConfig from "./default";
 // Must be an integer
 export const currentConfigVersion = 6;
 
+// TODO(future): "url"?
+export type allowedStorageMethodsAsType = "sync" | "local";
+
+export const allowedStorageMethodsAsArray: Array<allowedStorageMethodsAsType> =
+	["sync", "local"];
+
 export interface Options {
 	// The character(s) to trigger the extension
 	trigger: string;
 	// The storage method for config
-	storageMethod: "sync" | "local"; // TODO(future): "url"?
+	storageMethod: allowedStorageMethodsAsType;
 	// Search engine domains to ignore, e.g. searx.tiekoetter.com
 	ignoredSearchDomains: string[];
 	// If true, ignore bang case
 	ignoreBangCase: boolean;
 	// Sort bang list alphabetically in configuration UI
-	// TODO: Support this in the config UI
+	// TODO: Support this in the config UI, might not need to be a config option tbh
 	sortBangsAlpha: boolean;
 	// If non-empty, this is used to split queries into multiple searches on every URL
-	// TODO: Support this in the background script(s)
+	// TODO: Support this in the background script(s)? Or implement in later version
 	querySeparator: string;
 }
 

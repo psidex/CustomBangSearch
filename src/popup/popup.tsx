@@ -21,6 +21,7 @@ function App(): React.ReactElement {
 			<Title style={{ textAlign: "center", fontSize: "1.9rem" }}>
 				Custom Bang Search
 			</Title>
+			{/* TODO: When this is clicked on, copy build info to clipboard and maybe notify somehow? */}
 			<Tooltip label={`${hash} @ ${buildTime}`}>
 				<Text>v{version}</Text>
 			</Tooltip>

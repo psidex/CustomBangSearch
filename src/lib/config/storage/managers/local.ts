@@ -16,6 +16,9 @@ const LocalStorageManager: StorageManager = (() => {
 			}
 			return Promise.resolve(str);
 		},
+		async clear(): Promise<void> {
+			return browser.storage.local.remove(storageKey);
+		},
 	};
 })();
 

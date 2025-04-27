@@ -1,6 +1,10 @@
 import browser from "webextension-polyfill";
 
-import type { Config } from "../config";
+import {
+	allowedStorageMethodsAsArray,
+	type Config,
+	type allowedStorageMethodsAsType,
+} from "../config";
 import {
 	compressConfigToString,
 	decompressConfigFromString,
@@ -8,25 +12,30 @@ import {
 import type StorageManager from "./managers/manager";
 import SyncStorageManager from "./managers/sync";
 import LocalStorageManager from "./managers/local";
-import debug from "../../misc";
 
-// NOTE: This should match the cases in the switch in getStorageManager
-export const permittedStorageMethods = ["sync", "local"];
+// NOTE: Defaulting to sync is important because it means if someone is using a
+// new browser instance, we will auto fetch their stuff stored in sync
 const defaultStorageMethod = "sync";
 
 // TODO: docstrings for below fns that mention the error throwing
 
-async function getStorageManager(): Promise<StorageManager> {
+async function getStorageManagerMethod(): Promise<allowedStorageMethodsAsType> {
 	let { storageMethod } = await browser.storage.local.get("storageMethod");
 	if (
 		storageMethod === null ||
 		storageMethod === undefined ||
 		typeof storageMethod !== "string" ||
-		!permittedStorageMethods.includes(storageMethod)
+		!allowedStorageMethodsAsArray.includes(
+			storageMethod as allowedStorageMethodsAsType,
+		)
 	) {
 		storageMethod = defaultStorageMethod;
 	}
-	switch (storageMethod) {
+	return storageMethod as allowedStorageMethodsAsType;
+}
+
+async function getStorageManager(): Promise<StorageManager> {
+	switch (await getStorageManagerMethod()) {
 		case "sync":
 			return SyncStorageManager;
 		case "local":
@@ -41,6 +50,17 @@ export async function updateStorageManagerMethod(
 ): Promise<void> {
 	// TODO: Clear the data from any other methods?
 	return browser.storage.local.set({ storageMethod: method });
+}
+
+export async function clearUnusedStorageManagers(): Promise<void> {
+	switch (await getStorageManagerMethod()) {
+		case "sync":
+			return LocalStorageManager.clear();
+		case "local":
+			return SyncStorageManager.clear();
+		default:
+			throw new Error("unsupported storage type");
+	}
 }
 
 export async function storeConfig(cfg: Config): Promise<void> {

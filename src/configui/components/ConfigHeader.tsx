@@ -30,7 +30,7 @@ export default function ConfigHeader() {
 				</Box>
 			</Group>
 			<Text>
-				{`Storing ${storedSize}/${BROWSER_QUOTA_BYTES_PER_ITEM} bytes (${(storedSize / (BROWSER_QUOTA_BYTES_PER_ITEM / 100)).toFixed(1)}%)`}
+				{`Storing ${storedSize}/${BROWSER_QUOTA_BYTES_PER_ITEM} bytes (${(storedSize / (BROWSER_QUOTA_BYTES_PER_ITEM / 100)).toFixed(1)}%) in sync storage`}
 			</Text>
 		</Stack>
 	);

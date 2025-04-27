@@ -3,4 +3,5 @@
 export default interface StorageManager {
 	set(str: string): Promise<void>;
 	get(): Promise<string>;
+	clear(): Promise<void>;
 }
