@@ -8,14 +8,14 @@ import {
 	hostPermissions,
 } from "../lib/esbuilddefinitions";
 import { processRequest } from "./requests";
-import type { Config } from "../lib/config/config";
+import type * as config from "../lib/config/config";
 import * as storage from "../lib/config/storage/storage";
 import { setBangInfoLookup } from "./lookup";
 import defaultConfig from "../lib/config/default";
 import debug from "../lib/misc";
 
 async function initConfig(): Promise<void> {
-	let currentCfg: Config;
+	let currentCfg: config.Config;
 
 	try {
 		currentCfg = await storage.getConfig();

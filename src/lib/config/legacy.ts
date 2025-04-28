@@ -6,8 +6,10 @@
 import browser from "webextension-polyfill";
 import lz from "lz-string";
 
-import type { BangInfo, Config } from "./config";
+import type * as config from "./config";
 import defaultConfig from "./default";
+
+// TODO: For debugging, we should maybe have a function that sets an old-style settings?
 
 // Not needed but kept for posterity
 // const settingsVersion = 5;
@@ -52,19 +54,24 @@ async function findOldSettings(): Promise<Settings | null> {
 	return Promise.resolve(decompressed as Settings);
 }
 
-function convertSettingsToConfig(oldSettings: Settings): Config {
+function convertSettingsToConfig(oldSettings: Settings): config.Config {
 	const cfg = defaultConfig;
 
 	cfg.options.ignoredSearchDomains = oldSettings.options.ignoredDomains || [];
 	cfg.options.ignoreBangCase = oldSettings.options.ignoreCase || false;
-	cfg.options.sortBangsAlpha = oldSettings.options.sortByAlpha || false;
 
 	cfg.bangs = oldSettings.bangs.map(
-		(bang): BangInfo => ({
+		(bang): config.BangInfo => ({
+			id: crypto.randomUUID(),
 			keyword: bang.bang,
 			alias: "",
 			defaultUrl: "",
-			urls: bang.urls || [],
+			urls: bang.urls
+				? bang.urls.map((url) => ({
+						id: crypto.randomUUID(),
+						url: url,
+					}))
+				: [],
 			dontEncodeQuery: false,
 		}),
 	);
@@ -74,11 +81,11 @@ function convertSettingsToConfig(oldSettings: Settings): Config {
 
 // CheckForAndConvertOldSettings returns Config or null. If it returns a Config,
 // it has found an old Settings object and has converted it to the new style
-export default async function CheckForAndConvertOldSettings(): Promise<Config | null> {
+export default async function CheckForAndConvertOldSettings(): Promise<config.Config | null> {
 	const oldSettings = await findOldSettings();
 	if (oldSettings === null) {
 		return null;
 	}
-	// TODO: Remove old settings after this
+	// TODO: Remove old settings after this, and then return
 	return convertSettingsToConfig(oldSettings);
 }

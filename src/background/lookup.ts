@@ -1,6 +1,6 @@
 import browser from "webextension-polyfill";
 
-import type { BangInfo } from "../lib/config/config";
+import type * as config from "../lib/config/config";
 
 //
 // TODO: Update this comment to be accurate and worded correctly
@@ -18,12 +18,13 @@ import type { BangInfo } from "../lib/config/config";
 // - What happens if the sync storage is updated on another instance
 //
 
-export type BangsLookup = Record<string, BangInfo>;
+export type BangsLookup = Record<string, config.BangInfo>;
 
 const storageLocalKey = "bangInfoLookup";
 
-// TODO: This should also be called when the config is saved in the UI
-export async function setBangInfoLookup(bangs: BangInfo[]): Promise<void> {
+export async function setBangInfoLookup(
+	bangs: config.BangInfo[],
+): Promise<void> {
 	const lookup: BangsLookup = {};
 
 	for (const bangInfo of bangs) {

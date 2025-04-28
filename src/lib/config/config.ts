@@ -1,5 +1,3 @@
-import defaultConfig from "./default";
-
 // Must be an integer
 export const currentConfigVersion = 6;
 
@@ -18,23 +16,30 @@ export interface Options {
 	ignoredSearchDomains: string[];
 	// If true, ignore bang case
 	ignoreBangCase: boolean;
-	// Sort bang list alphabetically in configuration UI
-	// TODO: Support this in the config UI, might not need to be a config option tbh
-	sortBangsAlpha: boolean;
 	// If non-empty, this is used to split queries into multiple searches on every URL
 	// TODO: Support this in the background script(s)? Or implement in later version
 	querySeparator: string;
 }
 
+export interface UrlInfo {
+	// Hidden to the user, uniquely identifies this URL (mainly useful for the React code)
+	id: string;
+	// A URL
+	url: string;
+}
+
 export interface BangInfo {
+	// Hidden to the user, uniquely identifies this bang (mainly useful for the React code)
+	id: string;
 	// The actual bang
 	keyword: string;
 	// If set, ignore URLs and use the URLs set for the bang with this keyword
+	// TODO: It turns out this is kind of confusing in the UI, maybe this should be a list of alternative keywords? rename to alt?
 	alias: string;
 	// If the keyword is used without query, override the default location with this
 	defaultUrl: string;
 	// Associated URLs
-	urls: string[];
+	urls: Array<UrlInfo>;
 	// If true, bypass URL encoding of query string
 	dontEncodeQuery: boolean;
 }

@@ -1,6 +1,6 @@
 import lz from "lz-string";
 
-import { currentConfigVersion, type Config } from "../config";
+import * as config from "../config";
 
 function compress(str: string): string {
 	return lz.compressToUTF16(str);
@@ -10,7 +10,7 @@ function decompress(toDecompress: string): string {
 	return lz.decompressFromUTF16(toDecompress);
 }
 
-export function compressConfigToString(cfg: Config): string {
+export function compressConfigToString(cfg: config.Config): string {
 	return compress(JSON.stringify(cfg));
 }
 
@@ -22,7 +22,7 @@ export function compressConfigToString(cfg: Config): string {
  *         or the config version does not match the current.
  *
  */
-export function decompressConfigFromString(str: string): Config {
+export function decompressConfigFromString(str: string): config.Config {
 	const decompressed = decompress(str);
 	if (!decompressed) {
 		throw new Error("Failed to decompress string");
@@ -42,10 +42,10 @@ export function decompressConfigFromString(str: string): Config {
 		typeof parsed.options !== "object" ||
 		!Array.isArray(parsed.bangs) ||
 		// TODO(future): This fn will need to allow config version migration in the future
-		parsed.version !== currentConfigVersion
+		parsed.version !== config.currentConfigVersion
 	) {
 		throw new Error("The given JSON is not a valid Config");
 	}
 
-	return parsed as Config;
+	return parsed as config.Config;
 }

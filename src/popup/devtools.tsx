@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Text } from "@mantine/core";
 
-import { storeConfig } from "../lib/config/storage/storage";
+import * as storage from "../lib/config/storage/storage";
 import defaultConfig from "../lib/config/default";
 
 export default function DevTools() {
@@ -17,7 +17,7 @@ export default function DevTools() {
 			<Text style={{ color: "red" }}>Dev Tools</Text>
 			<Button
 				onClick={async () => {
-					await storeConfig(defaultConfig);
+					await storage.storeConfig(defaultConfig);
 				}}
 			>
 				Reset Config

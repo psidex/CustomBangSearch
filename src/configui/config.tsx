@@ -12,16 +12,18 @@ import ConfigHeader from "./components/ConfigHeader";
 
 import theme from "../lib/theme";
 import defaultConfig from "../lib/config/default";
-import type { Config } from "../lib/config/config";
-import { getConfig } from "../lib/config/storage/storage";
+import type * as config from "../lib/config/config";
+import * as storage from "../lib/config/storage/storage";
 
 export function App() {
 	const [loading, setLoading] = useState<boolean>(true);
-	const [initialConfig, setInitialConfig] = useState<Config>(defaultConfig);
+	const [initialConfig, setInitialConfig] =
+		useState<config.Config>(defaultConfig);
 
 	useEffect(() => {
 		// TODO: Error handling in all of these files
-		getConfig()
+		storage
+			.getConfig()
 			.then(setInitialConfig)
 			.then(() => setLoading(false));
 	}, []);
@@ -39,7 +41,7 @@ export function App() {
 				: "100%";
 
 	return (
-		<Box style={{ width: widthPercent, margin: "auto" }}>
+		<Box style={{ width: widthPercent, margin: "auto", marginBottom: "5em" }}>
 			<ConfigHeader />
 			<Tabs defaultValue="bangs">
 				<Tabs.List>
@@ -63,11 +65,19 @@ export function App() {
 					</Tabs.Tab>
 				</Tabs.List>
 				<Tabs.Panel value="bangs">
-					{(loading && <Loader />) || <BangsTabPanel />}
+					{(loading && <Loader />) || (
+						<BangsTabPanel
+							initialBangs={initialConfig.bangs}
+							setInitialConfig={setInitialConfig}
+						/>
+					)}
 				</Tabs.Panel>
 				<Tabs.Panel value="options">
 					{(loading && <Loader />) || (
-						<OptionsTabPanel initialOptions={initialConfig.options} />
+						<OptionsTabPanel
+							initialOptions={initialConfig.options}
+							setInitialConfig={setInitialConfig}
+						/>
 					)}
 				</Tabs.Panel>
 				<Tabs.Panel value="about">

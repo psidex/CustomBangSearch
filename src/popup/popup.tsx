@@ -12,7 +12,7 @@ import browser from "webextension-polyfill";
 
 import MiscButtons from "../lib/components/MiscButtons";
 import theme from "../lib/theme";
-import { buildTime, hash, inDev, version } from "../lib/esbuilddefinitions";
+import * as esbuilddefinitions from "../lib/esbuilddefinitions";
 import DevTools from "./devtools";
 
 function App(): React.ReactElement {
@@ -21,9 +21,10 @@ function App(): React.ReactElement {
 			<Title style={{ textAlign: "center", fontSize: "1.9rem" }}>
 				Custom Bang Search
 			</Title>
-			{/* TODO: When this is clicked on, copy build info to clipboard and maybe notify somehow? */}
-			<Tooltip label={`${hash} @ ${buildTime}`}>
-				<Text>v{version}</Text>
+			<Tooltip
+				label={`${esbuilddefinitions.hash} @ ${esbuilddefinitions.buildTime}`}
+			>
+				<Text>v{esbuilddefinitions.version}</Text>
 			</Tooltip>
 			<MiscButtons />
 			<Button
@@ -34,7 +35,7 @@ function App(): React.ReactElement {
 			>
 				Options
 			</Button>
-			{inDev && <DevTools />}
+			{esbuilddefinitions.inDev && <DevTools />}
 		</Stack>
 	);
 }
@@ -51,7 +52,7 @@ root.render(
 	</React.StrictMode>,
 );
 
-if (inDev) {
+if (esbuilddefinitions.inDev) {
 	// Open config page when popup is clicked, easier for testing
 	document.addEventListener("DOMContentLoaded", () => {
 		browser.runtime.openOptionsPage();

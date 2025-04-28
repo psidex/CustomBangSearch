@@ -1,5 +1,7 @@
 # DuckDuckGo Bangs
 
+TODO: This stuff
+
 ## Ready To Use
 
 This directory contains these files, extracted from DuckDuckGo's bang list, which you can download and then import into your custombangsearch settings:

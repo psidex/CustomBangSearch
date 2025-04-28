@@ -2,11 +2,9 @@ import browser, { type WebRequest } from "webextension-polyfill";
 
 import { currentBrowser } from "../lib/esbuilddefinitions";
 import { getBangInfoLookup } from "./lookup";
-import type { BangInfo, Options } from "../lib/config/config";
+import type * as config from "../lib/config/config";
 import * as storage from "../lib/config/storage/storage";
 import debug from "../lib/misc";
-
-// TODO: Support new BangInfo additions
 
 const possibleQueryParams = ["query", "eingabe", "q"];
 
@@ -53,15 +51,20 @@ function constructRedirect(
 // Runs constructRedirect on each URL in the BangInfo with the given queryText
 // and options
 function constructRedirects(
-	bangInfo: BangInfo,
+	bangInfo: config.BangInfo,
 	queryText: string,
 ): Array<string> {
 	const redirs = [];
+	// TODO: Investigate bangInfo.defaultUrl causing errs?
 	if (queryText === "" && bangInfo.defaultUrl !== "") {
 		redirs.push(bangInfo.defaultUrl);
 	} else {
-		for (const url of bangInfo.urls) {
-			redirs.push(constructRedirect(url, queryText, !bangInfo.dontEncodeQuery));
+		for (const urlInfo of bangInfo.urls) {
+			if (urlInfo.url.trim() !== "") {
+				redirs.push(
+					constructRedirect(urlInfo.url, queryText, !bangInfo.dontEncodeQuery),
+				);
+			}
 		}
 	}
 	return redirs;
@@ -74,7 +77,7 @@ function constructRedirects(
  */
 export async function getRedirects(
 	request: WebRequest.OnBeforeRequestDetailsType,
-	opts: Options,
+	opts: config.Options,
 ): Promise<string[]> {
 	const url = new URL(request.url);
 	let queryText = "";
@@ -128,7 +131,7 @@ export async function getRedirects(
 	const lookup = await getBangInfoLookup();
 
 	// Get all relevant URLs to redirect to / open.
-	const redirectionBangInfos: BangInfo[] = [];
+	const redirectionBangInfos: config.BangInfo[] = [];
 
 	if (opts.ignoreBangCase) {
 		const allKeys = Object.keys(lookup).filter(

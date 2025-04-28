@@ -21,6 +21,5 @@ export const hostPermissions = process.env
 
 // The domain name permissions that this extension requires
 // In URL format, e.g. www.google.com
-// TODO: I think this was used for the UI list for turning on & off
 export const hostPermissionUrls = process.env
 	.hostPermissionUrls as unknown as string[];

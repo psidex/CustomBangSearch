@@ -6,12 +6,36 @@ import {
 	Flex,
 } from "@mantine/core";
 import { Bug, Moon, Sun } from "lucide-react";
+import browser from "webextension-polyfill";
+
 import GitHubIcon from "./GithubIcon";
+import * as esbuilddefinitions from "../esbuilddefinitions";
+
+async function newGitHubIssueUrl(): Promise<string> {
+	const platformInfo = await browser.runtime.getPlatformInfo();
+
+	const title = "[Bug] < YOUR TITLE >";
+
+	const desc = `
+Custom Bang Search:
+- \`version\`: ${esbuilddefinitions.version}
+- \`hash\`: ${esbuilddefinitions.hash}
+- \`buildTime\`: ${esbuilddefinitions.buildTime}
+- \`currentBrowser\`: ${esbuilddefinitions.currentBrowser}
+
+Browser:
+- OS: ${platformInfo.os}
+- Arch: ${platformInfo.arch}
+
+< DESCRIBE YOUR BUG HERE, please include as much information as possible and preferably a method to reproduce >
+	`.trim();
+
+	return `https://github.com/psidex/CustomBangSearch/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(desc)}`;
+}
 
 export default function MiscButtons() {
 	const { setColorScheme } = useMantineColorScheme();
 	const computedColorScheme = useComputedColorScheme("light");
-	// TODO: Hints on hover as to what the buttons are (titles not actualy tooltips)
 	return (
 		<Flex>
 			<ActionIcon
@@ -22,6 +46,7 @@ export default function MiscButtons() {
 				size="xl"
 				aria-label="Toggle color scheme"
 				style={{ marginRight: "1em" }}
+				title="Switch colour theme"
 			>
 				{computedColorScheme === "light" ? <Moon /> : <Sun />}
 			</ActionIcon>
@@ -38,23 +63,20 @@ export default function MiscButtons() {
 				variant="default"
 				size="xl"
 				style={{ marginRight: "1em" }}
+				title="View source code"
 			>
 				<GitHubIcon />
 			</ActionIcon>
 			<ActionIcon
-				onClick={() => {
-					// TODO: Issue template
-					const w = window.open(
-						"https://github.com/psidex/CustomBangSearch/issues/new",
-						"_blank",
-					);
+				onClick={async () => {
+					const w = window.open(await newGitHubIssueUrl(), "_blank");
 					if (w) {
 						w.focus();
 					}
 				}}
 				variant="default"
 				size="xl"
-				style={{ marginRight: "1em" }}
+				title="Report a bug"
 			>
 				<Bug />
 			</ActionIcon>

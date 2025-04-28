@@ -42,9 +42,9 @@
 		"@mantine/core": "^7.17.5",
 		"@mantine/hooks": "^7.17.5",
 		"@mantine/notifications": "^7.17.5",
+		"@uidotdev/usehooks": "^2.4.1",
 		"lucide-react": "^0.503.0",
 		"lz-string": "^1.5.0",
-		"nanoid": "5.1.5",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
 		"webextension-polyfill": "0.12.0"
