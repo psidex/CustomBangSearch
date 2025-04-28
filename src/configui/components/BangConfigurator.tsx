@@ -1,8 +1,20 @@
 import React, { memo } from "react";
-import { Button, Group, Input, Stack, Switch } from "@mantine/core";
-import { Plus, Trash } from "lucide-react";
+import {
+	Button,
+	Divider,
+	Group,
+	Input,
+	Stack,
+	Switch,
+	Tooltip,
+} from "@mantine/core";
+import { CircleHelp, Plus, Trash } from "lucide-react";
 
 import type * as config from "../../lib/config/config";
+
+function isAlias(bi: config.BangInfo): boolean {
+	return bi.alias !== null;
+}
 
 export interface Props {
 	bang: config.BangInfo;
@@ -44,6 +56,10 @@ export default memo(function BangConfigurator(props: Props) {
 
 	// Remove a URL from the list
 	const handleRemoveUrl = (urlId: string) => {
+		if (bang.urls.length === 1) {
+			// Don't allow zero-length URL array
+			return;
+		}
 		const updatedBang = {
 			...bang,
 			urls: bang.urls.filter((url) => url.id !== urlId),
@@ -52,7 +68,7 @@ export default memo(function BangConfigurator(props: Props) {
 	};
 
 	return (
-		<Group style={{ alignItems: "flex-start" }}>
+		<Group style={{ alignItems: "flex-start", marginTop: "0.5em" }}>
 			<Button
 				color="red"
 				variant="light"
@@ -67,55 +83,62 @@ export default memo(function BangConfigurator(props: Props) {
 				placeholder="Bang"
 				style={{ width: "4em" }}
 			/>
-			<Input
-				value={bang.alias}
-				onChange={(e) => handleChange("alias", e.target.value)}
-				placeholder="Alias"
-				style={{ width: "4em" }}
-			/>
-			<Input
-				value={bang.defaultUrl}
-				onChange={(e) => handleChange("defaultUrl", e.target.value)}
-				placeholder="Default URL"
-				style={{ width: "15em" }}
-			/>
-			<Stack>
-				{bang.urls.map((url, i) => (
-					<Group key={url.id}>
-						<Input
-							value={url.url}
-							onChange={(e) => handleUrlChange(url.id, e.target.value)}
-							placeholder={`URL ${i + 1}`}
-							style={{ width: "15em" }}
-						/>
-						<Button
-							color="red"
-							variant="light"
-							onClick={() => handleRemoveUrl(url.id)}
-							title="Delete this URL from this bangs list"
-						>
-							<Trash />
-						</Button>
-					</Group>
-				))}
-			</Stack>
-			<Button
-				variant="light"
-				onClick={handleAddUrl}
-				style={{ alignSelf: "flex-end" }}
-				title="Add a URL to the list for this bang"
-			>
-				<Plus />
-			</Button>
-			<Switch
-				label="Don't encode query"
-				checked={bang.dontEncodeQuery}
-				onChange={(e) => handleChange("dontEncodeQuery", e.target.checked)}
-				size="sm"
-				style={{ alignSelf: "center" }}
-				// TODO: This doesn't seem to show up, maybe add a question mark / tooltip thing?
-				title="If on, the query inserted into the URL(s) wont be run through encodeURIComponent"
-			/>
+			{bang.alias !== null && (
+				<Input
+					value={bang.alias}
+					onChange={(e) => handleChange("alias", e.target.value)}
+					placeholder="Alias"
+					style={{ width: "4em" }}
+				/>
+			)}
+			{bang.alias === null && (
+				<>
+					<Input
+						value={bang.defaultUrl}
+						onChange={(e) => handleChange("defaultUrl", e.target.value)}
+						placeholder="Default URL"
+						style={{ width: "15em" }}
+					/>
+					<Stack>
+						{bang.urls.map((url, i) => (
+							<Group key={url.id}>
+								<Input
+									value={url.url}
+									onChange={(e) => handleUrlChange(url.id, e.target.value)}
+									placeholder={"Destination URL"}
+									style={{ width: "15em" }}
+								/>
+								{bang.urls.length > 1 && (
+									<Button
+										color="red"
+										variant="default"
+										onClick={() => handleRemoveUrl(url.id)}
+										title="Delete this URL from the list"
+									>
+										<Trash />
+									</Button>
+								)}
+							</Group>
+						))}
+					</Stack>
+					<Button
+						variant="light"
+						onClick={handleAddUrl}
+						style={{ alignSelf: "flex-end" }}
+						title="Add a URL to the list for this bang"
+					>
+						<Plus />
+					</Button>
+					<Divider orientation="vertical" />
+					<Switch
+						label="Don't encode query"
+						checked={bang.dontEncodeQuery}
+						onChange={(e) => handleChange("dontEncodeQuery", e.target.checked)}
+						size="sm"
+						style={{ alignSelf: "center" }}
+					/>
+				</>
+			)}
 		</Group>
 	);
 });

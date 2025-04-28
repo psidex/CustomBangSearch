@@ -6,7 +6,7 @@ import { Notifications } from "@mantine/notifications";
 import { CircleHelp, Cog } from "lucide-react";
 
 import BangsTabPanel from "./components/BangsTabPanel";
-import AboutTabPanel from "./components/AboutTabPanel";
+import HelpTabPanel from "./components/HelpTabPanel";
 import OptionsTabPanel from "./components/OptionsTabPanel";
 import ConfigHeader from "./components/ConfigHeader";
 
@@ -60,8 +60,8 @@ export function App() {
 					<Tabs.Tab value="options" leftSection={<Cog size={24} />}>
 						Options
 					</Tabs.Tab>
-					<Tabs.Tab value="about" leftSection={<CircleHelp size={24} />}>
-						About
+					<Tabs.Tab value="help" leftSection={<CircleHelp size={24} />}>
+						Help
 					</Tabs.Tab>
 				</Tabs.List>
 				<Tabs.Panel value="bangs">
@@ -80,8 +80,8 @@ export function App() {
 						/>
 					)}
 				</Tabs.Panel>
-				<Tabs.Panel value="about">
-					<AboutTabPanel />
+				<Tabs.Panel value="help">
+					<HelpTabPanel />
 				</Tabs.Panel>
 			</Tabs>
 		</Box>

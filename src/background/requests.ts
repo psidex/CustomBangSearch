@@ -55,7 +55,11 @@ function constructRedirects(
 	queryText: string,
 ): Array<string> {
 	const redirs = [];
-	// TODO: Investigate bangInfo.defaultUrl causing errs?
+	// TODO: Investigate bangInfo being undefined here, and remove this log
+	if (bangInfo === undefined) {
+		console.warn("BANGINFO UNDEFINED", bangInfo, queryText);
+	}
+
 	if (queryText === "" && bangInfo.defaultUrl !== "") {
 		redirs.push(bangInfo.defaultUrl);
 	} else {

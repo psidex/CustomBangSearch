@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, Title, Anchor, Code, Group } from "@mantine/core";
 
-export default function OptionsTabPanel() {
+export default function HelpTabPanel() {
 	return (
 		<>
-			<Title order={2}>About</Title>
+			<Title order={2}>Help</Title>
 			<Text size="md">
 				Custom Bang Search adds DuckDuckGo-style bangs to your address bar.
 			</Text>

@@ -34,7 +34,7 @@ export async function setBangInfoLookup(
 	// We do this twice as we need to make sure that the LUT already contains what
 	// an alias will be pointing to
 	for (const bangInfo of bangs) {
-		if (bangInfo.alias !== "") {
+		if (bangInfo.alias !== null) {
 			lookup[bangInfo.keyword] = lookup[bangInfo.alias];
 		}
 	}

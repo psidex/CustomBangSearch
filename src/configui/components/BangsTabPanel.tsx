@@ -3,15 +3,20 @@ import React, {
 	useEffect,
 	type Dispatch,
 	type SetStateAction,
+	useRef,
 } from "react";
-import { Button, Stack, Group } from "@mantine/core";
+import { Button, Stack, Group, Divider } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import {
+	ArrowDownAZ,
 	ArrowDownCircle,
+	ArrowUpAZ,
 	ArrowUpCircle,
 	Check,
+	CircleHelp,
 	Download,
 	FolderUp,
+	Replace,
 	RotateCcw,
 	Save,
 	SquarePlus,
@@ -19,11 +24,26 @@ import {
 import { useLocalStorage } from "@uidotdev/usehooks";
 
 import BangConfigurator from "./BangConfigurator";
-import type * as config from "../../lib/config/config";
+import * as config from "../../lib/config/config";
 import * as storage from "../../lib/config/storage/storage";
 import { setBangInfoLookup } from "../../background/lookup";
+import defaultConfig from "../../lib/config/default";
 
 const createNewBang = (): config.BangInfo => ({
+	id: crypto.randomUUID(),
+	keyword: "",
+	alias: null,
+	defaultUrl: "",
+	urls: [
+		{
+			id: crypto.randomUUID(),
+			url: "",
+		},
+	],
+	dontEncodeQuery: false,
+});
+
+const createNewAlias = (): config.BangInfo => ({
 	id: crypto.randomUUID(),
 	keyword: "",
 	alias: "",
@@ -31,6 +51,22 @@ const createNewBang = (): config.BangInfo => ({
 	urls: [],
 	dontEncodeQuery: false,
 });
+
+type sortOrders = "asc" | "desc";
+
+const sortBangInfos = (
+	bangInfos: Array<config.BangInfo>,
+	sortOrder: sortOrders,
+) => {
+	return [...bangInfos].sort((a, b) => {
+		if (a.keyword === "" && b.keyword === "") return 0;
+		if (a.keyword === "") return sortOrder === "asc" ? -1 : 1;
+		if (b.keyword === "") return sortOrder === "asc" ? 1 : -1;
+		return sortOrder === "asc"
+			? a.keyword.localeCompare(b.keyword)
+			: b.keyword.localeCompare(a.keyword);
+	});
+};
 
 interface Props {
 	initialBangs: config.BangInfo[];
@@ -42,19 +78,15 @@ export default function BangsTabPanel(props: Props) {
 
 	const [needToSave, setNeedToSave] = useState(false);
 	const [bangInfos, setBangInfos] = useState<config.BangInfo[]>(initialBangs);
-	const [sortOrder, setSortOrder] = useLocalStorage<"asc" | "desc">(
+	const [sortOrder, setSortOrder] = useLocalStorage<sortOrders>(
 		"sortOrder",
 		"asc",
 	);
 
 	useEffect(() => {
 		// Sort here so the order in either doesn't matter
-		const sortedBangInfos = [...bangInfos].sort((a, b) =>
-			a.keyword.localeCompare(b.keyword),
-		);
-		const sortedInitialBangs = [...initialBangs].sort((a, b) =>
-			a.keyword.localeCompare(b.keyword),
-		);
+		const sortedBangInfos = sortBangInfos(bangInfos, "asc");
+		const sortedInitialBangs = sortBangInfos(initialBangs, "asc");
 		setNeedToSave(
 			JSON.stringify(sortedBangInfos) !== JSON.stringify(sortedInitialBangs),
 		);
@@ -64,15 +96,7 @@ export default function BangsTabPanel(props: Props) {
 	// (or on load)
 	// biome-ignore lint/correctness/useExhaustiveDependencies: ↑
 	useEffect(() => {
-		const sortedBangs = [...bangInfos].sort((a, b) => {
-			if (a.keyword === "" && b.keyword === "") return 0;
-			if (a.keyword === "") return sortOrder === "asc" ? -1 : 1;
-			if (b.keyword === "") return sortOrder === "asc" ? 1 : -1;
-			return sortOrder === "asc"
-				? a.keyword.localeCompare(b.keyword)
-				: b.keyword.localeCompare(a.keyword);
-		});
-		setBangInfos(sortedBangs);
+		setBangInfos(sortBangInfos(bangInfos, sortOrder));
 	}, [initialBangs, sortOrder]);
 
 	const handleToggleSortOrder = () => {
@@ -94,7 +118,12 @@ export default function BangsTabPanel(props: Props) {
 	};
 
 	const handleAddBang = () => {
-		setBangInfos((prev) => [...prev, createNewBang()]);
+		// Adds to start (top) of list
+		setBangInfos((prev) => [createNewBang(), ...prev]);
+	};
+
+	const handleAddAlias = () => {
+		setBangInfos((prev) => [createNewAlias(), ...prev]);
 	};
 
 	const handleRemoveBang = (id: string) => {
@@ -122,6 +151,28 @@ export default function BangsTabPanel(props: Props) {
 		});
 	};
 
+	const resetToDefault = () => {
+		// TODO(future): Slightly weird behaviour with save btn highlighting because
+		// of the random IDs I think, should investigate just in case
+		setBangInfos(sortBangInfos(defaultConfig.bangs, sortOrder));
+	};
+
+	const importBangs = () => {};
+
+	const exportBangs = () => {
+		const exported: config.BangsExport = {
+			version: config.currentConfigVersion,
+			bangs: bangInfos,
+		};
+		const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(exported))}`;
+		// React probably doesn't like this 😬
+		const a = document.createElement("a");
+		a.setAttribute("href", dataStr);
+		a.setAttribute("download", "custombangs.json");
+		a.click(); // Blocks until user performs action.
+		a.remove();
+	};
+
 	return (
 		<Stack>
 			<Group style={{ margin: "1em 1em 0 1em" }}>
@@ -143,7 +194,15 @@ export default function BangsTabPanel(props: Props) {
 					<SquarePlus style={{ marginRight: "0.5em" }} /> Add Bang
 				</Button>
 				<Button
-					onClick={() => {}}
+					onClick={handleAddAlias}
+					size="md"
+					variant="default"
+					title="Add a new bang alias to the list"
+				>
+					<Replace style={{ marginRight: "0.5em" }} /> Add Alias
+				</Button>
+				<Button
+					onClick={importBangs}
 					size="md"
 					variant="default"
 					title="Import from an exported JSON file"
@@ -151,7 +210,7 @@ export default function BangsTabPanel(props: Props) {
 					<FolderUp style={{ marginRight: "0.5em" }} /> Import
 				</Button>
 				<Button
-					onClick={() => {}}
+					onClick={exportBangs}
 					size="md"
 					variant="default"
 					title="Export to a JSON file"
@@ -159,7 +218,7 @@ export default function BangsTabPanel(props: Props) {
 					<Download style={{ marginRight: "0.5em" }} /> Export
 				</Button>
 				<Button
-					onClick={() => {}}
+					onClick={resetToDefault}
 					size="md"
 					variant="default"
 					title="Reset your bangs to the default values"
@@ -172,16 +231,15 @@ export default function BangsTabPanel(props: Props) {
 					onClick={handleToggleSortOrder}
 					size="md"
 					variant="default"
-					title="Toggle Sort Order"
+					title="Toggle sort order"
 				>
 					{sortOrder === "asc" ? (
 						<>
-							<ArrowDownCircle style={{ marginRight: "0.5em" }} /> Sort
-							Descending
+							<ArrowDownAZ style={{ marginRight: "0.5em" }} />
 						</>
 					) : (
 						<>
-							<ArrowUpCircle style={{ marginRight: "0.5em" }} /> Sort Ascending
+							<ArrowUpAZ style={{ marginRight: "0.5em" }} />
 						</>
 					)}{" "}
 				</Button>

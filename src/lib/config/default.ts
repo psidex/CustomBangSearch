@@ -1,157 +1,292 @@
-import { currentConfigVersion, type Config } from "./config";
+import * as config from "./config";
 
-const defaultConfig: Config = {
-	version: currentConfigVersion,
+// TODO: US defaults
+
+const defaultConfig: config.Config = {
+	version: config.currentConfigVersion,
 	options: {
-		trigger: "!",
+		trigger: ",",
 		storageMethod: "sync",
 		ignoredSearchDomains: [],
 		ignoreBangCase: false,
-		sortBangsAlpha: false,
 		querySeparator: "",
 	},
 	bangs: [
 		{
+			id: crypto.randomUUID(),
 			keyword: "a",
-			alias: "",
-			defaultUrl: "",
-			urls: ["https://amazon.co.uk/s?k=%s"],
-			dontEncodeQuery: false,
-		},
-		{
-			keyword: "e",
-			alias: "",
-			defaultUrl: "",
-			urls: ["https://www.ebay.co.uk/sch/i.html?_nkw=%s"],
-			dontEncodeQuery: false,
-		},
-		{
-			keyword: "ea",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
 			urls: [
-				"https://amazon.co.uk/s?k=%s",
-				"https://www.ebay.co.uk/sch/i.html?_nkw=%s",
+				{
+					id: crypto.randomUUID(),
+					url: "https://amazon.co.uk/s?k=%s",
+				},
 			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
+			keyword: "az",
+			alias: "a",
+			defaultUrl: "",
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "",
+				},
+			],
+			dontEncodeQuery: false,
+		},
+		{
+			id: crypto.randomUUID(),
+			keyword: "e",
+			alias: null,
+			defaultUrl: "",
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.ebay.co.uk/sch/i.html?_nkw=%s",
+				},
+			],
+			dontEncodeQuery: true,
+		},
+		{
+			id: crypto.randomUUID(),
+			keyword: "ea",
+			alias: null,
+			defaultUrl: "",
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://amazon.co.uk/s?k=%s",
+				},
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.ebay.co.uk/sch/i.html?_nkw=%s",
+				},
+			],
+			dontEncodeQuery: false,
+		},
+		{
+			id: crypto.randomUUID(),
 			keyword: "et",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.etsy.com/uk/search?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.etsy.com/uk/search?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "t",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.twitch.tv/search?term=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.twitch.tv/search?term=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "y",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.youtube.com/results?search_query=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.youtube.com/results?search_query=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "av",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://amazon.co.uk/s?k=%s&i=instant-video"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://amazon.co.uk/s?k=%s&i=instant-video",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "n",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.netflix.com/search?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.netflix.com/search?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "g",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.google.com/search?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.google.com/search?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "b",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.bing.com/search?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.bing.com/search?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "d",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://duckduckgo.com/?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://duckduckgo.com/?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "q",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.qwant.com/?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.qwant.com/?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "m",
-			alias: "",
-			defaultUrl: "",
-			urls: ["https://www.google.com/maps/search/%s"],
+			alias: null,
+			defaultUrl: "https://www.google.com/maps",
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.google.com/maps/search/%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "r",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.google.com/search?q=site%3Areddit.com+%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.google.com/search?q=site%3Areddit.com+%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "git",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://github.com/search?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://github.com/search?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "mdn",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://developer.mozilla.org/en-US/search?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://developer.mozilla.org/en-US/search?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "pypi",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://pypi.org/search/?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://pypi.org/search/?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "npm",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.npmjs.com/search?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.npmjs.com/search?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "so",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://stackoverflow.com/search?q=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://stackoverflow.com/search?q=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 		{
+			id: crypto.randomUUID(),
 			keyword: "w",
-			alias: "",
+			alias: null,
 			defaultUrl: "",
-			urls: ["https://www.wolframalpha.com/input/?i=%s"],
+			urls: [
+				{
+					id: crypto.randomUUID(),
+					url: "https://www.wolframalpha.com/input/?i=%s",
+				},
+			],
 			dontEncodeQuery: false,
 		},
 	],

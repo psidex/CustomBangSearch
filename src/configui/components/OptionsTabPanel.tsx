@@ -23,6 +23,7 @@ import { Check, RotateCcw, Save } from "lucide-react";
 import * as config from "../../lib/config/config";
 import * as storage from "../../lib/config/storage/storage";
 import { hostPermissionUrls } from "../../lib/esbuilddefinitions";
+import defaultConfig from "../../lib/config/default";
 
 interface Props {
 	initialOptions: config.Options;
@@ -107,6 +108,20 @@ export default function BangsTabPanel(props: Props) {
 		});
 	};
 
+	const resetToDefault = () => {
+		setTriggerText(defaultConfig.options.trigger);
+		setStorageMethod(defaultConfig.options.storageMethod);
+		setIgnoredDomainsList(
+			Object.fromEntries(
+				hostPermissionUrls.map((url) => [
+					url,
+					defaultConfig.options.ignoredSearchDomains.includes(url),
+				]),
+			),
+		);
+		setIgnoreBangCase(defaultConfig.options.ignoreBangCase);
+	};
+
 	const handleIgnoredSwitchChanged =
 		(label: string) => (event: ChangeEvent<HTMLInputElement>) => {
 			// We reverse the checked because the UI is showing "enabled", but the
@@ -131,7 +146,7 @@ export default function BangsTabPanel(props: Props) {
 					<Save style={{ marginRight: "0.5em" }} /> Save
 				</Button>
 				<Button
-					onClick={() => {}}
+					onClick={resetToDefault}
 					size="md"
 					variant="default"
 					title="Reset your options to the default values"
@@ -197,8 +212,8 @@ export default function BangsTabPanel(props: Props) {
 					/>
 				</Group>
 				<Text>
-					For example, if active, <Code>!a</Code> and <Code>!A</Code> will be
-					equivalent
+					For example, if active, the bangs <Code>a</Code> and <Code>A</Code>{" "}
+					will be equivalent
 				</Text>
 			</Stack>
 			<Group style={{ marginTop: "1em" }}>

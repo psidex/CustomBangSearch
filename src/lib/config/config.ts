@@ -35,7 +35,7 @@ export interface BangInfo {
 	keyword: string;
 	// If set, ignore URLs and use the URLs set for the bang with this keyword
 	// TODO: It turns out this is kind of confusing in the UI, maybe this should be a list of alternative keywords? rename to alt?
-	alias: string;
+	alias: string | null;
 	// If the keyword is used without query, override the default location with this
 	defaultUrl: string;
 	// Associated URLs
@@ -49,3 +49,5 @@ export interface Config {
 	options: Options;
 	bangs: BangInfo[];
 }
+
+export type BangsExport = Omit<Config, "options">;
