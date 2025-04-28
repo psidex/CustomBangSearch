@@ -90,6 +90,8 @@ export default function BangsTabPanel(props: Props) {
 		setNeedToSave(
 			JSON.stringify(sortedBangInfos) !== JSON.stringify(sortedInitialBangs),
 		);
+		// TODO: Maybe here, warn user if bangInfos has duplicate keywords (and if
+		// ignore case is turned on, take that into account)
 	}, [bangInfos, initialBangs]);
 
 	// Use initialBangs in place of bangInfos so we only auto-sort when user saves
