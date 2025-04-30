@@ -1,5 +1,6 @@
 import * as config from "./config";
 
+// TODO: Confirm good defaults
 // TODO: US defaults?
 
 // NOTE: Don't change the first or second index, these are used in the config UI
