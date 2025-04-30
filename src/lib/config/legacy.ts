@@ -28,7 +28,7 @@ interface SettingsOptions {
 }
 
 // The updated version of this Is now referred to as "Config"
-interface Settings {
+export interface Settings {
 	version: number;
 	options: SettingsOptions;
 	bangs: StoredBangInfo[];
@@ -36,9 +36,8 @@ interface Settings {
 
 // findOldSettings returns a Settings obj if it can be found, otherwise null
 async function findOldSettings(): Promise<Settings | null> {
-	const { settings: storedSettingsStr } = await browser.storage.sync.get([
-		"settings",
-	]);
+	const { settings: storedSettingsStr } =
+		await browser.storage.sync.get("settings");
 	if (typeof storedSettingsStr !== "string") {
 		return null;
 	}
@@ -54,7 +53,7 @@ async function findOldSettings(): Promise<Settings | null> {
 	return Promise.resolve(decompressed as Settings);
 }
 
-function convertSettingsToConfig(oldSettings: Settings): config.Config {
+export function convertSettingsToConfig(oldSettings: Settings): config.Config {
 	const cfg = defaultConfig;
 
 	cfg.options.ignoredSearchDomains = oldSettings.options.ignoredDomains || [];
@@ -81,11 +80,11 @@ function convertSettingsToConfig(oldSettings: Settings): config.Config {
 
 // CheckForAndConvertOldSettings returns Config or null. If it returns a Config,
 // it has found an old Settings object and has converted it to the new style
-export default async function CheckForAndConvertOldSettings(): Promise<config.Config | null> {
+export async function CheckForAndConvertOldSettings(): Promise<config.Config | null> {
 	const oldSettings = await findOldSettings();
 	if (oldSettings === null) {
 		return null;
 	}
-	// TODO: Remove old settings after this, and then return
+	await browser.storage.sync.remove("settings");
 	return convertSettingsToConfig(oldSettings);
 }

@@ -20,9 +20,10 @@ async function initConfig(): Promise<void> {
 	try {
 		currentCfg = await storage.getConfig();
 	} catch (error) {
-		// TODO: What to do here, can we identify what the err is - is it possible
-		// that this will erase someones config if they try to access whilst
-		// offline
+		// TODO(future): What to do here, can we identify what the err is - is it
+		// possible that this will erase someones config if they try to access
+		// whilst offline? Future TODO because this is not a change in behaviour
+		// from the previous version
 		console.warn(`Failed to get config: ${error}`);
 		currentCfg = defaultConfig;
 	}

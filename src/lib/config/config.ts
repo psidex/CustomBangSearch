@@ -34,7 +34,6 @@ export interface BangInfo {
 	// The actual bang
 	keyword: string;
 	// If set, ignore URLs and use the URLs set for the bang with this keyword
-	// TODO: It turns out this is kind of confusing in the UI, maybe this should be a list of alternative keywords? rename to alt?
 	alias: string | null;
 	// If the keyword is used without query, override the default location with this
 	defaultUrl: string;
@@ -50,4 +49,41 @@ export interface Config {
 	bangs: BangInfo[];
 }
 
-export type BangsExport = Omit<Config, "options">;
+// The same as BangInfo with all the "id" fields omitted
+export interface BangInfoExport {
+	keyword: string;
+	alias: string | null;
+	defaultUrl: string;
+	urls: Array<string>;
+	dontEncodeQuery: boolean;
+}
+
+// The same as Config with all the "id" fields omitted
+export type BangsExport = {
+	version: number;
+	bangs: BangInfoExport[];
+};
+
+export function bangInfosFromExport(bangs: BangInfoExport[]): BangInfo[] {
+	return bangs.map((bang) => ({
+		id: crypto.randomUUID(),
+		keyword: bang.keyword,
+		alias: bang.alias,
+		defaultUrl: bang.defaultUrl,
+		urls: bang.urls.map((url) => ({
+			id: crypto.randomUUID(),
+			url,
+		})),
+		dontEncodeQuery: bang.dontEncodeQuery,
+	}));
+}
+
+export function bangInfosToExport(bangs: BangInfo[]): BangInfoExport[] {
+	return bangs.map((bang) => ({
+		keyword: bang.keyword,
+		alias: bang.alias,
+		defaultUrl: bang.defaultUrl,
+		urls: bang.urls.map((urlInfo) => urlInfo.url),
+		dontEncodeQuery: bang.dontEncodeQuery,
+	}));
+}

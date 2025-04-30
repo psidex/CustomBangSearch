@@ -17,13 +17,13 @@ import {
 	Anchor,
 	Button,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { Check, RotateCcw, Save } from "lucide-react";
+import { RotateCcw, Save } from "lucide-react";
 
 import * as config from "../../lib/config/config";
 import * as storage from "../../lib/config/storage/storage";
 import { hostPermissionUrls } from "../../lib/esbuilddefinitions";
 import defaultConfig from "../../lib/config/default";
+import { errorNotif, successNotif } from "../../lib/components/notifications";
 
 interface Props {
 	initialOptions: config.Options;
@@ -84,28 +84,30 @@ export default function BangsTabPanel(props: Props) {
 	]);
 
 	const saveOptions = async () => {
-		// TODO: Catch errs, display err notif
-		const cfg = await storage.getConfig();
+		let cfg: config.Config;
+		try {
+			cfg = await storage.getConfig();
 
-		cfg.options.trigger = triggerText;
-		cfg.options.storageMethod = storageMethod;
-		cfg.options.ignoredSearchDomains = ignoredDomainsListAsArray();
-		cfg.options.ignoreBangCase = ignoreBangCase;
+			cfg.options.trigger = triggerText;
+			cfg.options.storageMethod = storageMethod;
+			cfg.options.ignoredSearchDomains = ignoredDomainsListAsArray();
+			cfg.options.ignoreBangCase = ignoreBangCase;
 
-		await storage.updateStorageManagerMethod(storageMethod);
-		await storage.storeConfig(cfg);
-		await storage.clearUnusedStorageManagers();
+			await storage.updateStorageManagerMethod(storageMethod);
+			await storage.storeConfig(cfg);
+			await storage.clearUnusedStorageManagers();
+		} catch (error) {
+			errorNotif(
+				"Failed to save options",
+				error instanceof Error ? error.message : "",
+			);
+			return;
+		}
 
 		setNeedToSave(false);
 		setInitialConfig(cfg);
 
-		notifications.show({
-			title: "Settings saved",
-			message: "",
-			autoClose: true,
-			icon: <Check />,
-			color: "green",
-		});
+		successNotif("Settings saved", "");
 	};
 
 	const resetToDefault = () => {

@@ -38,7 +38,7 @@ assert(
 	"package.json and manifest.shared versions match",
 );
 
-// FIXME: Probably use path library instead of string manipulation?
+// TODO: Probably use path library instead of string manipulation?
 
 // Files and directories to copy to the build directory.
 const buildFiles = [

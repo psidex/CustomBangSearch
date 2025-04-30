@@ -1,25 +1,24 @@
 import React, {
+	useRef,
 	useState,
 	useEffect,
 	type Dispatch,
+	type ChangeEvent,
 	type SetStateAction,
-	useRef,
 } from "react";
 import { Button, Stack, Group, Divider } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import {
 	ArrowDownAZ,
-	ArrowDownCircle,
 	ArrowUpAZ,
-	ArrowUpCircle,
 	Check,
-	CircleHelp,
 	Download,
 	FolderUp,
 	Replace,
 	RotateCcw,
 	Save,
 	SquarePlus,
+	X,
 } from "lucide-react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
@@ -28,6 +27,8 @@ import * as config from "../../lib/config/config";
 import * as storage from "../../lib/config/storage/storage";
 import { setBangInfoLookup } from "../../background/lookup";
 import defaultConfig from "../../lib/config/default";
+import * as legacy from "../../lib/config/legacy";
+import { errorNotif, successNotif } from "../../lib/components/notifications";
 
 const createNewBang = (): config.BangInfo => ({
 	id: crypto.randomUUID(),
@@ -75,6 +76,8 @@ interface Props {
 
 export default function BangsTabPanel(props: Props) {
 	const { initialBangs, setInitialConfig } = props;
+
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const [needToSave, setNeedToSave] = useState(false);
 	const [bangInfos, setBangInfos] = useState<config.BangInfo[]>(initialBangs);
@@ -133,24 +136,26 @@ export default function BangsTabPanel(props: Props) {
 	};
 
 	const saveBangs = async () => {
-		// TODO: Catch errs, display err notif
-		const cfg = await storage.getConfig();
-		cfg.bangs = bangInfos;
-		await storage.storeConfig(cfg);
+		let cfg: config.Config;
+		try {
+			cfg = await storage.getConfig();
+			cfg.bangs = bangInfos;
+			await storage.storeConfig(cfg);
 
-		setNeedToSave(false);
-		setInitialConfig(cfg);
+			setNeedToSave(false);
+			setInitialConfig(cfg);
 
-		// Don't forget about the LUT!
-		setBangInfoLookup(bangInfos);
+			// Don't forget about the LUT!
+			await setBangInfoLookup(bangInfos);
+		} catch (error) {
+			errorNotif(
+				"Failed to save bangs",
+				error instanceof Error ? error.message : "",
+			);
+			return;
+		}
 
-		notifications.show({
-			title: "Settings saved",
-			message: "",
-			autoClose: true,
-			icon: <Check />,
-			color: "green",
-		});
+		successNotif("Settings saved", "");
 	};
 
 	const resetToDefault = () => {
@@ -159,12 +164,86 @@ export default function BangsTabPanel(props: Props) {
 		setBangInfos(sortBangInfos(defaultConfig.bangs, sortOrder));
 	};
 
-	const importBangs = () => {};
+	const importBangs = () => {
+		if (fileInputRef.current !== null) {
+			fileInputRef.current.click();
+		}
+	};
+
+	const fileUpload = async (
+		e: ChangeEvent<HTMLInputElement>,
+	): Promise<void> => {
+		if (e.target.files === null) {
+			return;
+		}
+
+		const file: File = e.target.files[0];
+
+		if (fileInputRef.current !== null) {
+			// Reset the selected file so that if the user imports the same file again,
+			// the change event will still fire.
+			fileInputRef.current.value = "";
+		}
+
+		// biome-ignore lint/suspicious/noExplicitAny: User controlled input
+		let uploaded: any = {};
+		try {
+			uploaded = JSON.parse(await file.text());
+		} catch (_error) {
+			errorNotif(
+				"Failed to import bangs",
+				`Could not parse ${file.name} as valid JSON`,
+			);
+			return;
+		}
+
+		// TODO(future): Better checking before asserting type
+		if (typeof uploaded.version !== "number" || uploaded.bangs === undefined) {
+			errorNotif(
+				"Failed to import bangs",
+				`Could not parse ${file.name} as valid config`,
+			);
+			return;
+		}
+
+		// Force type hinting to improve linting for fns called
+		// TODO(future): Type guards for types used here and elsewhere
+		const uploadedObj = uploaded as unknown;
+
+		let newBangInfos: config.BangInfo[] = [];
+
+		switch ((uploadedObj as { version: number }).version) {
+			case 5:
+				newBangInfos = [
+					...bangInfos,
+					...legacy.convertSettingsToConfig(uploadedObj as legacy.Settings)
+						.bangs,
+				];
+				break;
+			case 6:
+				newBangInfos = [
+					...bangInfos,
+					...config.bangInfosFromExport(
+						(uploadedObj as config.BangsExport).bangs,
+					),
+				];
+				break;
+			default:
+				errorNotif(
+					"Failed to import bangs",
+					`File ${file.name} is not from a supported version (5, 6)`,
+				);
+				return;
+		}
+
+		setBangInfos(newBangInfos);
+		successNotif("Successfully imported bangs", `${file.name}`);
+	};
 
 	const exportBangs = () => {
 		const exported: config.BangsExport = {
 			version: config.currentConfigVersion,
-			bangs: bangInfos,
+			bangs: config.bangInfosToExport(bangInfos),
 		};
 		const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(exported))}`;
 		// React probably doesn't like this 😬
@@ -219,6 +298,13 @@ export default function BangsTabPanel(props: Props) {
 				>
 					<Download style={{ marginRight: "0.5em" }} /> Export
 				</Button>
+				<input
+					ref={fileInputRef}
+					type="file"
+					accept="application/json"
+					style={{ display: "none" }}
+					onChange={fileUpload}
+				/>
 				<Button
 					onClick={resetToDefault}
 					size="md"

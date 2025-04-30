@@ -167,7 +167,6 @@ export async function getRedirects(
  * @param r The request details.
  * @returns An empty Promise.
  */
-// TODO: Check if void is returned here for an API reason
 export async function processRequest(
 	r: WebRequest.OnBeforeRequestDetailsType,
 	// biome-ignore lint/suspicious/noConfusingVoidType:
@@ -177,8 +176,15 @@ export async function processRequest(
 		return Promise.resolve();
 	}
 
-	// TODO: try/catch?
-	const cfg = await storage.getConfig();
+	let cfg: config.Config;
+	try {
+		cfg = await storage.getConfig();
+	} catch (error) {
+		// Can't get config, nothing we can do
+		console.warn("Could not get config:", error);
+		return Promise.resolve();
+	}
+
 	debug("Request", r, "\nConfig", cfg);
 
 	if (shouldReject(cfg.options.ignoredSearchDomains, r.url)) {
