@@ -1,12 +1,16 @@
 import React from "react";
-import { Box, Button, Text } from "@mantine/core";
+import { Stack, Button, Text } from "@mantine/core";
+import browser from "webextension-polyfill";
 
 import * as storage from "../lib/config/storage/storage";
 import defaultConfig from "../lib/config/default";
+import setLegacySettings from "../lib/config/legacy/debug";
 
 export default function DevTools() {
 	return (
-		<Box
+		<Stack
+			justify="center"
+			gap="md"
 			style={{
 				borderColor: "red",
 				borderWidth: "3px",
@@ -17,11 +21,19 @@ export default function DevTools() {
 			<Text style={{ color: "red" }}>Dev Tools</Text>
 			<Button
 				onClick={async () => {
-					await storage.storeConfig(defaultConfig);
+					await storage.storeConfig(defaultConfig());
 				}}
 			>
-				Reset Config
+				Reset config to default
 			</Button>
-		</Box>
+			<Button
+				onClick={async () => {
+					await browser.storage.sync.clear();
+					await setLegacySettings();
+				}}
+			>
+				Set legacy config
+			</Button>
+		</Stack>
 	);
 }

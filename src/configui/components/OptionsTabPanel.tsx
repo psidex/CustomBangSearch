@@ -17,13 +17,13 @@ import {
 	Anchor,
 	Button,
 } from "@mantine/core";
-import { RotateCcw, Save } from "lucide-react";
+import { Check, RotateCcw, Save, X } from "lucide-react";
+import { notifications } from "@mantine/notifications";
 
 import * as config from "../../lib/config/config";
 import * as storage from "../../lib/config/storage/storage";
 import { hostPermissionUrls } from "../../lib/esbuilddefinitions";
 import defaultConfig from "../../lib/config/default";
-import { errorNotif, successNotif } from "../../lib/components/notifications";
 
 interface Props {
 	initialOptions: config.Options;
@@ -84,6 +84,14 @@ export default function BangsTabPanel(props: Props) {
 	]);
 
 	const saveOptions = async () => {
+		const notifId = notifications.show({
+			title: "Saving options...",
+			message: "",
+			loading: true,
+			autoClose: false,
+			withCloseButton: false,
+		});
+
 		let cfg: config.Config;
 		try {
 			cfg = await storage.getConfig();
@@ -97,31 +105,45 @@ export default function BangsTabPanel(props: Props) {
 			await storage.storeConfig(cfg);
 			await storage.clearUnusedStorageManagers();
 		} catch (error) {
-			errorNotif(
-				"Failed to save options",
-				error instanceof Error ? error.message : "",
-			);
+			notifications.update({
+				id: notifId,
+				title: "Failed to save options",
+				message: error instanceof Error ? error.message : "",
+				autoClose: true,
+				icon: <X />,
+				color: "red",
+				loading: false,
+			});
 			return;
 		}
 
 		setNeedToSave(false);
 		setInitialConfig(cfg);
 
-		successNotif("Settings saved", "");
+		notifications.update({
+			id: notifId,
+			title: "Options saved",
+			message: "",
+			autoClose: true,
+			icon: <Check />,
+			color: "green",
+			loading: false,
+		});
 	};
 
 	const resetToDefault = () => {
-		setTriggerText(defaultConfig.options.trigger);
-		setStorageMethod(defaultConfig.options.storageMethod);
+		const defaultCfg = defaultConfig();
+		setTriggerText(defaultCfg.options.trigger);
+		setStorageMethod(defaultCfg.options.storageMethod);
 		setIgnoredDomainsList(
 			Object.fromEntries(
 				hostPermissionUrls.map((url) => [
 					url,
-					defaultConfig.options.ignoredSearchDomains.includes(url),
+					defaultCfg.options.ignoredSearchDomains.includes(url),
 				]),
 			),
 		);
-		setIgnoreBangCase(defaultConfig.options.ignoreBangCase);
+		setIgnoreBangCase(defaultCfg.options.ignoreBangCase);
 	};
 
 	const handleIgnoredSwitchChanged =

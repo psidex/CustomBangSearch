@@ -1,31 +1,20 @@
 import React, { memo } from "react";
-import {
-	Button,
-	Divider,
-	Group,
-	Input,
-	Stack,
-	Switch,
-	Tooltip,
-} from "@mantine/core";
-import { CircleHelp, Plus, Trash } from "lucide-react";
+import { Button, Divider, Group, Input, Stack, Switch } from "@mantine/core";
+import { Plus, Trash, TriangleAlert } from "lucide-react";
 
 import type * as config from "../../lib/config/config";
 
-function isAlias(bi: config.BangInfo): boolean {
-	return bi.alias !== null;
-}
-
-export interface Props {
+interface Props {
 	bang: config.BangInfo;
 	index: number;
 	onChange: (index: number, updatedBang: config.BangInfo) => void;
 	onRemove: () => void;
+	showWarning: boolean;
 }
 
 // Use memo because this is likely to be re-rendered with the same props a lot
 export default memo(function BangConfigurator(props: Props) {
-	const { bang, index, onChange, onRemove } = props;
+	const { bang, index, onChange, onRemove, showWarning } = props;
 
 	// Handle changes to input fields
 	const handleChange = (
@@ -80,7 +69,7 @@ export default memo(function BangConfigurator(props: Props) {
 			<Input
 				value={bang.keyword}
 				onChange={(e) => handleChange("keyword", e.target.value)}
-				placeholder="Bang"
+				placeholder="Keyword"
 				style={{ width: "4em" }}
 			/>
 			{bang.alias !== null && (
@@ -138,6 +127,12 @@ export default memo(function BangConfigurator(props: Props) {
 						style={{ alignSelf: "center" }}
 					/>
 				</>
+			)}
+			{showWarning && (
+				<TriangleAlert
+					style={{ alignSelf: "center" }}
+					color="rgb(253, 126, 20)"
+				/>
 			)}
 		</Group>
 	);

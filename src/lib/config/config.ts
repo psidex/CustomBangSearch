@@ -17,8 +17,8 @@ export interface Options {
 	// If true, ignore bang case
 	ignoreBangCase: boolean;
 	// If non-empty, this is used to split queries into multiple searches on every URL
-	// TODO: Support this in the background script(s)? Or implement in later version
-	querySeparator: string;
+	// TODO(future): Support this
+	// querySeparator: string;
 }
 
 export interface UrlInfo {

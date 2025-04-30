@@ -6,8 +6,7 @@ import React, {
 	type ChangeEvent,
 	type SetStateAction,
 } from "react";
-import { Button, Stack, Group, Divider } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
+import { Button, Stack, Group, Alert } from "@mantine/core";
 import {
 	ArrowDownAZ,
 	ArrowUpAZ,
@@ -18,17 +17,20 @@ import {
 	RotateCcw,
 	Save,
 	SquarePlus,
+	TriangleAlert,
 	X,
 } from "lucide-react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
-import BangConfigurator from "./BangConfigurator";
 import * as config from "../../lib/config/config";
 import * as storage from "../../lib/config/storage/storage";
 import { setBangInfoLookup } from "../../background/lookup";
 import defaultConfig from "../../lib/config/default";
-import * as legacy from "../../lib/config/legacy";
-import { errorNotif, successNotif } from "../../lib/components/notifications";
+import * as legacy from "../../lib/config/legacy/legacy";
+import { errorNotif, successNotif } from "../notifications";
+import { notifications } from "@mantine/notifications";
+
+import BangConfigurator from "./BangConfigurator";
 
 const createNewBang = (): config.BangInfo => ({
 	id: crypto.randomUUID(),
@@ -56,10 +58,10 @@ const createNewAlias = (): config.BangInfo => ({
 type sortOrders = "asc" | "desc";
 
 const sortBangInfos = (
-	bangInfos: Array<config.BangInfo>,
+	toSort: Array<config.BangInfo>,
 	sortOrder: sortOrders,
 ) => {
-	return [...bangInfos].sort((a, b) => {
+	return [...toSort].sort((a, b) => {
 		if (a.keyword === "" && b.keyword === "") return 0;
 		if (a.keyword === "") return sortOrder === "asc" ? -1 : 1;
 		if (b.keyword === "") return sortOrder === "asc" ? 1 : -1;
@@ -69,15 +71,37 @@ const sortBangInfos = (
 	});
 };
 
+function duplicateBangs(
+	bangs: config.BangInfo[],
+	ignoreCase: boolean,
+): Set<string> {
+	const seen = new Set<string>();
+	const dupes = new Set<string>();
+	for (const bang of bangs) {
+		const keyword = ignoreCase ? bang.keyword.toLowerCase() : bang.keyword;
+		if (seen.has(keyword)) {
+			dupes.add(keyword);
+		}
+		seen.add(keyword);
+	}
+	return dupes;
+}
+
 interface Props {
 	initialBangs: config.BangInfo[];
 	setInitialConfig: Dispatch<SetStateAction<config.Config>>;
+	ignoreBangCase: boolean;
 }
 
 export default function BangsTabPanel(props: Props) {
-	const { initialBangs, setInitialConfig } = props;
+	const { initialBangs, setInitialConfig, ignoreBangCase } = props;
 
 	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const [warning, setWarning] = useState<string | null>(null);
+	const [keywordsWithDuplicates, setKeywordsWithDuplicates] = useState<
+		Set<string>
+	>(new Set());
 
 	const [needToSave, setNeedToSave] = useState(false);
 	const [bangInfos, setBangInfos] = useState<config.BangInfo[]>(initialBangs);
@@ -88,14 +112,28 @@ export default function BangsTabPanel(props: Props) {
 
 	useEffect(() => {
 		// Sort here so the order in either doesn't matter
+		//
+		// NOTE: Because the default bang info IDs are generated new when the code
+		// is run, clicking "reset to default" can cause the save button to
+		// highlight even if no information visible to the user has changed
 		const sortedBangInfos = sortBangInfos(bangInfos, "asc");
 		const sortedInitialBangs = sortBangInfos(initialBangs, "asc");
+
 		setNeedToSave(
 			JSON.stringify(sortedBangInfos) !== JSON.stringify(sortedInitialBangs),
 		);
-		// TODO: Maybe here, warn user if bangInfos has duplicate keywords (and if
-		// ignore case is turned on, take that into account)
-	}, [bangInfos, initialBangs]);
+
+		const dupes = duplicateBangs(bangInfos, ignoreBangCase);
+		if (dupes.size !== 0) {
+			setWarning(
+				"You have bangs with duplicate keywords which may lead to unintended behaviour - use an alias instead",
+			);
+			setKeywordsWithDuplicates(dupes);
+		} else {
+			setWarning(null);
+			setKeywordsWithDuplicates(new Set());
+		}
+	}, [bangInfos, initialBangs, ignoreBangCase]);
 
 	// Use initialBangs in place of bangInfos so we only auto-sort when user saves
 	// (or on load)
@@ -136,11 +174,20 @@ export default function BangsTabPanel(props: Props) {
 	};
 
 	const saveBangs = async () => {
+		const notifId = notifications.show({
+			title: "Saving bangs...",
+			message: "",
+			loading: true,
+			autoClose: false,
+			withCloseButton: false,
+		});
+
 		let cfg: config.Config;
 		try {
 			cfg = await storage.getConfig();
+			const rollback = structuredClone(cfg);
 			cfg.bangs = bangInfos;
-			await storage.storeConfig(cfg);
+			await storage.storeConfigWithRollback(cfg, rollback);
 
 			setNeedToSave(false);
 			setInitialConfig(cfg);
@@ -148,20 +195,31 @@ export default function BangsTabPanel(props: Props) {
 			// Don't forget about the LUT!
 			await setBangInfoLookup(bangInfos);
 		} catch (error) {
-			errorNotif(
-				"Failed to save bangs",
-				error instanceof Error ? error.message : "",
-			);
+			notifications.update({
+				id: notifId,
+				title: "Failed to save bangs",
+				message: error instanceof Error ? error.message : "",
+				autoClose: true,
+				icon: <X />,
+				color: "red",
+				loading: false,
+			});
 			return;
 		}
 
-		successNotif("Settings saved", "");
+		notifications.update({
+			id: notifId,
+			title: "Bangs saved",
+			message: "",
+			autoClose: true,
+			icon: <Check />,
+			color: "green",
+			loading: false,
+		});
 	};
 
 	const resetToDefault = () => {
-		// TODO(future): Slightly weird behaviour with save btn highlighting because
-		// of the random IDs I think, should investigate just in case
-		setBangInfos(sortBangInfos(defaultConfig.bangs, sortOrder));
+		setBangInfos(sortBangInfos(defaultConfig().bangs, sortOrder));
 	};
 
 	const importBangs = () => {
@@ -321,16 +379,18 @@ export default function BangsTabPanel(props: Props) {
 					variant="default"
 					title="Toggle sort order"
 				>
+					Sort Order
 					{sortOrder === "asc" ? (
-						<>
-							<ArrowDownAZ style={{ marginRight: "0.5em" }} />
-						</>
+						<ArrowDownAZ style={{ margin: "0 0.5em 0 0.5em" }} />
 					) : (
-						<>
-							<ArrowUpAZ style={{ marginRight: "0.5em" }} />
-						</>
+						<ArrowUpAZ style={{ margin: "0 0.5em 0 0.5em" }} />
 					)}{" "}
 				</Button>
+				{warning !== null && (
+					<Alert variant="light" color="orange" icon={<TriangleAlert />}>
+						{warning}
+					</Alert>
+				)}
 			</Group>
 			{bangInfos.map((bang, i) => (
 				<BangConfigurator
@@ -339,6 +399,7 @@ export default function BangsTabPanel(props: Props) {
 					index={i}
 					onChange={handleBangInfoChanged}
 					onRemove={() => handleRemoveBang(bang.id)}
+					showWarning={keywordsWithDuplicates.has(bang.keyword)}
 				/>
 			))}
 		</Stack>

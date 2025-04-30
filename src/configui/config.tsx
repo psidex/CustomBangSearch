@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { Tabs, MantineProvider, Image, Box, Loader } from "@mantine/core";
+import {
+	Tabs,
+	MantineProvider,
+	Image,
+	Box,
+	Loader,
+	Text,
+	Group,
+	Alert,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
-import { CircleHelp, Cog } from "lucide-react";
+import { CircleHelp, Cog, TriangleAlert } from "lucide-react";
+import browser from "webextension-polyfill";
 
 import BangsTabPanel from "./components/BangsTabPanel";
 import HelpTabPanel from "./components/HelpTabPanel";
@@ -15,75 +25,129 @@ import defaultConfig from "../lib/config/default";
 import type * as config from "../lib/config/config";
 import * as storage from "../lib/config/storage/storage";
 
+async function waitForMainScript(timeout = 10_000): Promise<void> {
+	const start = Date.now();
+	while (Date.now() - start < timeout) {
+		const { mainScriptInitialised } = await browser.storage.local.get(
+			"mainScriptInitialised",
+		);
+		if (mainScriptInitialised) {
+			return;
+		}
+		await new Promise((resolve) => setTimeout(resolve, 100));
+	}
+	throw new Error("Timeout waiting for main script to initialise");
+}
+
 export function App() {
+	const [fatalError, setFatalError] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
-	const [initialConfig, setInitialConfig] =
-		useState<config.Config>(defaultConfig);
+	const [initialConfig, setInitialConfig] = useState<config.Config>(
+		defaultConfig(),
+	);
 
 	useEffect(() => {
-		// TODO: Error handling in all of these files
-		storage
-			.getConfig()
+		waitForMainScript()
+			.then(() => storage.getConfig())
 			.then(setInitialConfig)
-			.then(() => setLoading(false));
+			.catch((error) => {
+				setFatalError(
+					error instanceof Error ? error.message : "Error getting config",
+				);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
 	}, []);
 
-	// TODO: Is there a better way to do this?
+	// TODO(future): Is there a better way to do this?
 	const windowIsAtLeast1200 = useMediaQuery("(min-width: 1200px)");
 	const windowIsAtLeast1600 = useMediaQuery("(min-width: 1600px)");
 	const windowIsAtLeast2200 = useMediaQuery("(min-width: 2200px)");
 	const widthPercent = windowIsAtLeast2200
-		? "40%"
+		? "50%"
 		: windowIsAtLeast1600
-			? "60%"
+			? "70%"
 			: windowIsAtLeast1200
-				? "80%"
+				? "90%"
 				: "100%";
 
+	// TODO(future): Support thinner screens
+
 	return (
-		<Box style={{ width: widthPercent, margin: "auto", marginBottom: "5em" }}>
+		<Box
+			style={{
+				width: widthPercent,
+				margin: "auto",
+				marginBottom: "5em",
+			}}
+		>
 			<ConfigHeader />
-			<Tabs defaultValue="bangs">
-				<Tabs.List>
-					<Tabs.Tab
-						value="bangs"
-						leftSection={
-							<Image
-								height={24}
-								width={24}
-								src="../../images/icons/icon_28.png"
+			{(fatalError !== null && (
+				<Alert variant="light" color="red" icon={<TriangleAlert />}>
+					<Text>
+						A fatal error occurred trying to load config: {fatalError}{" "}
+					</Text>
+					<Text>Please try reloading your browser</Text>
+					<Text>
+						This could be due to use of sync storage and a slow internet
+						connection
+					</Text>
+				</Alert>
+			)) || (
+				<Tabs defaultValue="bangs">
+					<Tabs.List>
+						<Tabs.Tab
+							value="bangs"
+							leftSection={
+								<Image
+									height={24}
+									width={24}
+									src="../../images/icons/icon_28.png"
+								/>
+							}
+						>
+							Bangs
+						</Tabs.Tab>
+						<Tabs.Tab value="options" leftSection={<Cog size={24} />}>
+							Options
+						</Tabs.Tab>
+						<Tabs.Tab value="help" leftSection={<CircleHelp size={24} />}>
+							Help
+						</Tabs.Tab>
+					</Tabs.List>
+					<Tabs.Panel value="bangs">
+						{(loading && (
+							<Group>
+								<Loader style={{ margin: "2em" }} />
+								<Text>Fetching bangs...</Text>
+							</Group>
+						)) || (
+							<BangsTabPanel
+								initialBangs={initialConfig.bangs}
+								setInitialConfig={setInitialConfig}
+								ignoreBangCase={initialConfig.options.ignoreBangCase}
 							/>
-						}
-					>
-						Bangs
-					</Tabs.Tab>
-					<Tabs.Tab value="options" leftSection={<Cog size={24} />}>
-						Options
-					</Tabs.Tab>
-					<Tabs.Tab value="help" leftSection={<CircleHelp size={24} />}>
-						Help
-					</Tabs.Tab>
-				</Tabs.List>
-				<Tabs.Panel value="bangs">
-					{(loading && <Loader />) || (
-						<BangsTabPanel
-							initialBangs={initialConfig.bangs}
-							setInitialConfig={setInitialConfig}
-						/>
-					)}
-				</Tabs.Panel>
-				<Tabs.Panel value="options">
-					{(loading && <Loader />) || (
-						<OptionsTabPanel
-							initialOptions={initialConfig.options}
-							setInitialConfig={setInitialConfig}
-						/>
-					)}
-				</Tabs.Panel>
-				<Tabs.Panel value="help">
-					<HelpTabPanel />
-				</Tabs.Panel>
-			</Tabs>
+						)}
+					</Tabs.Panel>
+					<Tabs.Panel value="options">
+						{(loading && (
+							<Group>
+								<Loader style={{ margin: "2em" }} />
+								<Text>Fetching options...</Text>
+							</Group>
+						)) || (
+							<OptionsTabPanel
+								initialOptions={initialConfig.options}
+								setInitialConfig={setInitialConfig}
+							/>
+						)}
+					</Tabs.Panel>
+					<Tabs.Panel value="help">
+						<HelpTabPanel />
+					</Tabs.Panel>
+				</Tabs>
+			)}
 		</Box>
 	);
 }

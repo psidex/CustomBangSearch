@@ -7,31 +7,42 @@ import {
 	hash,
 	hostPermissions,
 } from "../lib/esbuilddefinitions";
-import { processRequest } from "./requests";
-import type * as config from "../lib/config/config";
 import * as storage from "../lib/config/storage/storage";
-import { setBangInfoLookup } from "./lookup";
 import defaultConfig from "../lib/config/default";
 import debug from "../lib/misc";
+import * as legacy from "../lib/config/legacy/legacy";
+
+import { processRequest } from "./requests";
+import { setBangInfoLookup } from "./lookup";
 
 async function initConfig(): Promise<void> {
-	let currentCfg: config.Config;
+	// We use this to force the config UI to wait for this function to run
+	await browser.storage.local.set({ mainScriptInitialised: false });
 
-	try {
-		currentCfg = await storage.getConfig();
-	} catch (error) {
-		// TODO(future): What to do here, can we identify what the err is - is it
-		// possible that this will erase someones config if they try to access
-		// whilst offline? Future TODO because this is not a change in behaviour
-		// from the previous version
-		console.warn(`Failed to get config: ${error}`);
-		currentCfg = defaultConfig;
+	// First thing is check if the user has just updated
+	let currentCfg = await legacy.checkForAndConvertOldSettings();
+
+	if (currentCfg === null) {
+		try {
+			currentCfg = await storage.getConfig();
+		} catch (error) {
+			// TODO(future): What to do here, can we identify what the err is - is it
+			// possible that this will erase someones config if they try to access
+			// whilst offline? Future TODO because this is not a change in behaviour
+			// from the previous version
+			console.warn(
+				`Failed to get config: ${error instanceof Error ? error.message : ""}`,
+			);
+			currentCfg = defaultConfig();
+		}
 	}
 
 	await setBangInfoLookup(currentCfg.bangs);
 
 	// This is required if for example we've just set currentCfg to the default
-	return storage.storeConfig(currentCfg);
+	await storage.storeConfig(currentCfg);
+
+	await browser.storage.local.set({ mainScriptInitialised: true });
 }
 
 function main(): void {

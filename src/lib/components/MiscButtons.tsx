@@ -8,8 +8,9 @@ import {
 import { Bug, Moon, Sun } from "lucide-react";
 import browser from "webextension-polyfill";
 
-import GitHubIcon from "./GithubIcon";
 import * as esbuilddefinitions from "../esbuilddefinitions";
+
+import GitHubIcon from "./GithubIcon";
 
 async function newGitHubIssueUrl(): Promise<string> {
 	const platformInfo = await browser.runtime.getPlatformInfo();

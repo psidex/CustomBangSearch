@@ -29,7 +29,9 @@ function splitIntoChunks(toChunk: string): Record<string, string> {
 				// This represents the key being an incrementing integer
 				encoder.encode(`${Object.keys(chunks).length}`).length;
 
-			if (size <= MAX_ITEM_SIZE_BYTES) {
+			// TODO(future): Why do we get item quota errors using the proper size
+			// here (hence -1000)
+			if (size <= MAX_ITEM_SIZE_BYTES - 1000) {
 				totalSize += size;
 				break;
 			}

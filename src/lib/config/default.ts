@@ -1,15 +1,17 @@
 import * as config from "./config";
 
-// TODO: US defaults
+// TODO: US defaults?
 
-const defaultConfig: config.Config = {
+// NOTE: Don't change the first or second index, these are used in the config UI
+// help tab
+
+const cfg: config.Config = {
 	version: config.currentConfigVersion,
 	options: {
-		trigger: ",",
+		trigger: "!",
 		storageMethod: "sync",
 		ignoredSearchDomains: [],
 		ignoreBangCase: false,
-		querySeparator: "",
 	},
 	bangs: [
 		{
@@ -27,7 +29,7 @@ const defaultConfig: config.Config = {
 		},
 		{
 			id: crypto.randomUUID(),
-			keyword: "az",
+			keyword: "amz",
 			alias: "a",
 			defaultUrl: "",
 			urls: [
@@ -292,4 +294,11 @@ const defaultConfig: config.Config = {
 	],
 };
 
-export default defaultConfig;
+/**
+ * Create a mutable copy of the default config.
+ *
+ * @returns A mutable copy of the default config.
+ */
+export default function defaultConfig(): config.Config {
+	return structuredClone(cfg);
+}

@@ -1,6 +1,6 @@
 # Supported Search Engines
 
-If you want a search engine added, please [raise an issue](template).
+If you want a search engine added, please [raise an issue](https://github.com/psidex/CustomBangSearch/issues/new).
 
 Feel free to submit a PR if you want to add one yourself, or if you have fixed a broken engine.
 
@@ -24,5 +24,5 @@ searx.tiekoetter.com | ✅ |
 startpage.com | ✅ |
 ecosia.org | ✅ |
 searx.be | ✅ |
-qwant.com | ❌ | Because it GETs https://api.qwant.com/v3/search/web?q= in the background, not in `main_frame`. Even if we did catch it, redirecting that doesn't redirect the actual page the user is loading.
+qwant.com | ❌ | Does not work because it GETs https://api.qwant.com/v3/search/web?q= in the background, not in `main_frame`. Even if we did catch it, redirecting that doesn't redirect the actual page the user is loading. Support could be added if there's interest.
 kagi.com | ✅ |

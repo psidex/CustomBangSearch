@@ -26,7 +26,6 @@
 		"open_in_tab": true
 	},
 	"action": {
-		"browser_style": true,
 		"default_icon": {
 			"96": "images/icons/icon_96.png",
 			"128": "images/icons/icon_128.png"

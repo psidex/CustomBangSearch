@@ -1,10 +1,11 @@
 import browser, { type WebRequest } from "webextension-polyfill";
 
 import { currentBrowser } from "../lib/esbuilddefinitions";
-import { getBangInfoLookup } from "./lookup";
 import type * as config from "../lib/config/config";
 import * as storage from "../lib/config/storage/storage";
 import debug from "../lib/misc";
+
+import { getBangInfoLookup } from "./lookup";
 
 const possibleQueryParams = ["query", "eingabe", "q"];
 
@@ -55,11 +56,6 @@ function constructRedirects(
 	queryText: string,
 ): Array<string> {
 	const redirs = [];
-	// TODO: Investigate bangInfo being undefined here, and remove this log
-	if (bangInfo === undefined) {
-		console.warn("BANGINFO UNDEFINED", bangInfo, queryText);
-	}
-
 	if (queryText === "" && bangInfo.defaultUrl !== "") {
 		redirs.push(bangInfo.defaultUrl);
 	} else {
@@ -181,7 +177,10 @@ export async function processRequest(
 		cfg = await storage.getConfig();
 	} catch (error) {
 		// Can't get config, nothing we can do
-		console.warn("Could not get config:", error);
+		console.warn(
+			"Could not get config:",
+			error instanceof Error ? error.message : "",
+		);
 		return Promise.resolve();
 	}
 

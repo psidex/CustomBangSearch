@@ -4,6 +4,7 @@ import browser from "webextension-polyfill";
 
 import MiscButtons from "../../lib/components/MiscButtons";
 import { currentBrowser } from "../../lib/esbuilddefinitions";
+import PermissionsRequester from "../../lib/components/PermissionsRequester";
 
 const BROWSER_QUOTA_BYTES_PER_ITEM =
 	// @ts-ignore: The chrome namespace will be available if this check passes
@@ -25,6 +26,7 @@ export default function ConfigHeader() {
 		<Stack style={{ padding: "1em" }}>
 			<Group style={{ justifyContent: "space-between" }}>
 				<Title>Custom Bang Search</Title>
+				<PermissionsRequester />
 				<Box>
 					<MiscButtons />
 				</Box>

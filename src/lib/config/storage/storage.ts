@@ -1,6 +1,7 @@
 import browser from "webextension-polyfill";
 
 import * as config from "../config";
+
 import * as compression from "./compression";
 import type StorageManager from "./managers/manager";
 import SyncStorageManager from "./managers/sync";
@@ -57,15 +58,32 @@ export async function clearUnusedStorageManagers(): Promise<void> {
 	}
 }
 
-export async function storeConfig(cfg: config.Config): Promise<void> {
-	const storeMan = await getStorageManager();
-	const compressed = compression.compressConfigToString(cfg);
-	return storeMan.set(compressed);
-}
-
 export async function getConfig(): Promise<config.Config> {
 	const storeMan = await getStorageManager();
 	const compressed = await storeMan.get();
 	const decompressed = compression.decompressConfigFromString(compressed);
 	return Promise.resolve(decompressed);
+}
+
+// StorageManagers are not guaranteed to be transactional, so to ensure we don't
+// store corrupt data, we need to be able to rollback to a good version
+// TODO: Docstring, mention throws err if it rolled back
+export async function storeConfigWithRollback(
+	cfg: config.Config,
+	rollback: config.Config,
+): Promise<void> {
+	const storeMan = await getStorageManager();
+	const compressed = compression.compressConfigToString(cfg);
+	try {
+		return await storeMan.set(compressed);
+	} catch (error) {
+		await storeConfig(rollback);
+		throw error;
+	}
+}
+
+export async function storeConfig(cfg: config.Config): Promise<void> {
+	const storeMan = await getStorageManager();
+	const compressed = compression.compressConfigToString(cfg);
+	return storeMan.set(compressed);
 }

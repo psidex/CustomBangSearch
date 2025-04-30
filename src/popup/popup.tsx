@@ -13,6 +13,8 @@ import browser from "webextension-polyfill";
 import MiscButtons from "../lib/components/MiscButtons";
 import theme from "../lib/theme";
 import * as esbuilddefinitions from "../lib/esbuilddefinitions";
+import PermissionsRequester from "../lib/components/PermissionsRequester";
+
 import DevTools from "./devtools";
 
 function App(): React.ReactElement {
@@ -35,6 +37,7 @@ function App(): React.ReactElement {
 			>
 				Options
 			</Button>
+			<PermissionsRequester />
 			{esbuilddefinitions.inDev && <DevTools />}
 		</Stack>
 	);
