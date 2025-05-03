@@ -117,7 +117,7 @@ function RealBangConfigurator(props: Props) {
 					value={bang.alias}
 					onChange={(e) => handleChange("alias", e.target.value)}
 					placeholder="Alias"
-					style={{ width: "4em" }}
+					style={{ width: "6em" }}
 				/>
 			)}
 			{bang.alias === null && (
