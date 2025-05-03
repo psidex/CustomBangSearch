@@ -19,7 +19,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "a",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://amazon.co.uk/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -30,7 +30,7 @@ const cfg: config.Config = {
 		},
 		{
 			id: crypto.randomUUID(),
-			keyword: "amz",
+			keyword: "az",
 			alias: "a",
 			defaultUrl: "",
 			urls: [
@@ -45,14 +45,14 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "e",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.ebay.co.uk/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
 					url: "https://www.ebay.co.uk/sch/i.html?_nkw=%s",
 				},
 			],
-			dontEncodeQuery: true,
+			dontEncodeQuery: false,
 		},
 		{
 			id: crypto.randomUUID(),
@@ -75,11 +75,11 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "et",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.etsy.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
-					url: "https://www.etsy.com/uk/search?q=%s",
+					url: "https://www.etsy.com/search?q=%s",
 				},
 			],
 			dontEncodeQuery: false,
@@ -88,7 +88,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "t",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.twitch.tv/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -101,7 +101,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "y",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.youtube.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -114,7 +114,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "av",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.amazon.co.uk/gp/video/storefront",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -127,7 +127,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "n",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.netflix.com/browse",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -140,7 +140,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "g",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.google.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -153,7 +153,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "b",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.bing.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -166,7 +166,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "d",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://duckduckgo.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -179,7 +179,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "q",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.qwant.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -205,7 +205,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "r",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.reddit.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -218,7 +218,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "git",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://github.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -231,7 +231,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "mdn",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://developer.mozilla.org/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -270,7 +270,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "so",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://stackoverflow.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),
@@ -283,7 +283,7 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "w",
 			alias: null,
-			defaultUrl: "",
+			defaultUrl: "https://www.wolframalpha.com/",
 			urls: [
 				{
 					id: crypto.randomUUID(),

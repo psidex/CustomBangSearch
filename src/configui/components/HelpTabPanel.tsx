@@ -11,12 +11,13 @@ import {
 } from "@mantine/core";
 
 import defaultConfig from "../../lib/config/default";
+import type { BangInfo } from "../../lib/config/config";
 
 import BangConfigurator from "./BangConfigurator";
 
 export default function HelpTabPanel() {
 	return (
-		<Stack style={{ marginTop: "2em" }} gap="lg">
+		<Stack style={{ marginTop: "2em", width: "70em" }} gap="lg">
 			<Stack>
 				<Title order={2}>What does this do?</Title>
 				<Text size="md">
@@ -40,12 +41,18 @@ export default function HelpTabPanel() {
 					take you to{" "}
 					<Code>https://www.youtube.com/results?search_query=jaws</Code>
 				</Text>
+			</Stack>
+
+			<Stack>
+				<Title order={2}>Configuration</Title>
 				<Text>
 					On the bang configuration page, you can configure each individual
 					bang:
 				</Text>
 				<BangConfigurator
-					bang={defaultConfig().bangs[0]}
+					bang={
+						defaultConfig().bangs.find((b) => b.keyword === "a") as BangInfo
+					}
 					index={0}
 					onChange={() => {}}
 					onRemove={() => {}}
@@ -99,7 +106,9 @@ export default function HelpTabPanel() {
 					behave exactly the same as an already existing bang:
 				</Text>
 				<BangConfigurator
-					bang={defaultConfig().bangs[1]}
+					bang={
+						defaultConfig().bangs.find((b) => b.keyword === "az") as BangInfo
+					}
 					index={0}
 					onChange={() => {}}
 					onRemove={() => {}}
