@@ -19,4 +19,3 @@ file|
 ## Create Your Own
 
 The [`generate.sh`](./generate.sh) script was used to generate the above files, feel free to edit it / use it yourself!
-ddg-top-10.json
