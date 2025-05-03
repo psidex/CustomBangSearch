@@ -42,7 +42,7 @@ assert(
 
 // Files and directories to copy to the build directory.
 const buildFiles = [
-	"./images",
+	"./images/icons",
 	"./src/configui/config.html",
 	"./src/popup/popup.css",
 	"./src/popup/popup.html",
@@ -56,12 +56,15 @@ const sourceFiles = [
 	"./docs",
 	"./images",
 	"./src",
+	"./biome.json",
 	"./bob.mjs",
 	"./LICENSE",
 	"./manifest.chrome.json",
 	"./manifest.firefox.json",
 	"./manifest.shared.json",
+	"./package-lock.json",
 	"./package.json",
+	"./postcss.config.cjs",
 	"./README.md",
 	"./tsconfig.json",
 ];
@@ -290,7 +293,7 @@ const tasks = new Listr([
 		title: "Create build zip file",
 		skip: () => !buildzip,
 		task: (ctx) => {
-			const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}.zip`;
+			const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-${ctx.gitState}.zip`;
 			return execa("7z", ["a", `-tzip ${zipName}`, `${buildPath}/*`], {
 				shell: true,
 			});
@@ -300,7 +303,7 @@ const tasks = new Listr([
 		title: "Create source zip file",
 		skip: () => !sourcezip,
 		task: (ctx) => {
-			const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-source.zip`;
+			const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-${ctx.gitState}-source.zip`;
 			return execa(
 				"7z",
 				["a", `-tzip ${zipName}`, `${sourceFiles.join(" ")}`],

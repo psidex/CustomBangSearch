@@ -9,8 +9,8 @@ TODO: Update this, update images, update store images and words, add reasons for
 [![Chrome extension rating](https://img.shields.io/chrome-web-store/rating/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 [![Chrome extension user count](https://img.shields.io/chrome-web-store/users/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 
-[![Firefox Add-On link](./images/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Chrome Web Store link](./images/chrome.png)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
+[![Firefox Add-On link](./images/promotion/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
+[![Chrome Web Store link](./images/promotion/chrome.png)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 
 A browser extension to use custom DuckDuckGo-like bangs directly from the address bar.
 
@@ -39,7 +39,7 @@ Bangs will also work by just using the search engines normally.
 
 The bang editing menu and general options are accessed using the extensions options page:
 
-![options page screenshot](./images/options-page.png)
+![options page screenshot](./images/promotion/options-page.png)
 
 All of your bangs and options are saved to the browsers sync storage, meaning if you log into your browser they will sync across to wherever else you are logged in.
 
