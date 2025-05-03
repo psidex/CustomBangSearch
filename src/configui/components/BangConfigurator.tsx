@@ -10,6 +10,7 @@ interface Props {
 	onChange: (index: number, updatedBang: config.BangInfo) => void;
 	onRemove: () => void;
 	showWarning: boolean;
+	lastInList: boolean;
 }
 
 // Memoized to prevent unnecessary re-renders
@@ -20,6 +21,7 @@ export default memo(
 		onChange,
 		onRemove,
 		showWarning,
+		lastInList,
 	}: Props) {
 		return (
 			<RealBangConfigurator
@@ -28,6 +30,7 @@ export default memo(
 				onChange={onChange}
 				onRemove={onRemove}
 				showWarning={showWarning}
+				lastInList={lastInList}
 			/>
 		);
 	},
@@ -36,13 +39,14 @@ export default memo(
 		return (
 			prevProps.bang === nextProps.bang &&
 			prevProps.index === nextProps.index &&
-			prevProps.showWarning === nextProps.showWarning
+			prevProps.showWarning === nextProps.showWarning &&
+			prevProps.lastInList === nextProps.lastInList
 		);
 	},
 );
 
 function RealBangConfigurator(props: Props) {
-	const { bang, index, onChange, onRemove, showWarning } = props;
+	const { bang, index, onChange, onRemove, showWarning, lastInList } = props;
 
 	// Handle changes to input fields
 	const handleChange = (
@@ -88,7 +92,10 @@ function RealBangConfigurator(props: Props) {
 		<Group
 			style={{
 				alignItems: "flex-start",
-				marginTop: index === 0 ? "0.5em" : "1em",
+				// NOTE: I wanted to use margin here but it doesn't play nicely with
+				// scrolling the Virtuoso window on Firefox
+				paddingTop: index === 0 ? "0.5em" : "1em",
+				paddingBottom: lastInList ? "1em" : "",
 			}}
 		>
 			<Button

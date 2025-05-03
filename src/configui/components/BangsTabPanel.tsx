@@ -5,7 +5,7 @@ import React, {
 	type Dispatch,
 	type SetStateAction,
 } from "react";
-import { Button, Stack, Group, Alert, Loader } from "@mantine/core";
+import { Button, Stack, Group, Alert } from "@mantine/core";
 import {
 	ArrowDownAZ,
 	ArrowUpAZ,
@@ -262,6 +262,7 @@ export default function BangsTabPanel(props: Props) {
 					showWarning={keywordsWithDuplicates.has(
 						ignoreBangCase ? bang.keyword.toLowerCase() : bang.keyword,
 					)}
+					lastInList={index === bangInfos.length - 1}
 				/>
 			);
 		},
@@ -342,9 +343,10 @@ export default function BangsTabPanel(props: Props) {
 				style={{ height: "100%", width: "100%", margin: "0 1em" }}
 				data={bangInfos}
 				itemContent={(index) => virtuosoRenderBang(index)}
-				overscan={50}
-				increaseViewportBy={100}
-				initialItemCount={0}
+				overscan={50} // Render this many more items than are visible
+				increaseViewportBy={200} // Expands render "window" beyond visible by this many pixels
+				initialItemCount={0} // Set to 0 so it doesn't try to render non existent items
+				defaultItemHeight={undefined} // Let it work this out
 			/>
 		</Stack>
 	);
