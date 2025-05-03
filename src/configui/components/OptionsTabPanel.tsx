@@ -158,7 +158,7 @@ export default function BangsTabPanel(props: Props) {
 		};
 
 	return (
-		<Stack style={{ marginBottom: "5em" }}>
+		<Stack style={{ marginBottom: "2em" }}>
 			<Group style={{ margin: "1em 1em 0 1em" }}>
 				<Button
 					onClick={saveOptions}

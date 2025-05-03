@@ -120,6 +120,7 @@ export function App() {
 							Help
 						</Tabs.Tab>
 					</Tabs.List>
+					{/* Style here required for internal styling to work */}
 					<Tabs.Panel value="bangs" style={{ display: "flex", height: "100%" }}>
 						{(loading && (
 							<Group style={{ alignSelf: "flex-start" }}>
@@ -134,10 +135,7 @@ export function App() {
 							/>
 						)}
 					</Tabs.Panel>
-					<Tabs.Panel
-						value="options"
-						style={{ display: "flex", height: "100%" }}
-					>
+					<Tabs.Panel value="options">
 						{(loading && (
 							<Group style={{ alignSelf: "flex-start" }}>
 								<Loader style={{ margin: "2em" }} />
@@ -150,7 +148,7 @@ export function App() {
 							/>
 						)}
 					</Tabs.Panel>
-					<Tabs.Panel value="help" style={{ display: "flex", height: "100%" }}>
+					<Tabs.Panel value="help">
 						<HelpTabPanel />
 					</Tabs.Panel>
 				</Tabs>

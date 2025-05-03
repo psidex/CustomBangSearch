@@ -103,7 +103,7 @@ function RealBangConfigurator(props: Props) {
 				value={bang.keyword}
 				onChange={(e) => handleChange("keyword", e.target.value)}
 				placeholder="Keyword"
-				style={{ width: "4em" }}
+				style={{ width: "6em" }}
 			/>
 			{bang.alias !== null && (
 				<Input
@@ -127,7 +127,7 @@ function RealBangConfigurator(props: Props) {
 								<Input
 									value={url.url}
 									onChange={(e) => handleUrlChange(url.id, e.target.value)}
-									placeholder={"Destination URL"}
+									placeholder={"URL for query"}
 									style={{ width: "20em" }}
 								/>
 								{bang.urls.length > 1 && (

@@ -1,155 +1,230 @@
 {
-  "version": 5,
+  "version": 6,
   "bangs": [
     {
-      "bang": "g",
+      "keyword": "g",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "https://www.google.com/search?q=%s"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "yt",
+      "keyword": "yt",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "https://www.youtube.com/results?search_query=%s"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "w",
-      "urls": [
-        "https://en.wikipedia.org/wiki/Special:Search?search=%s"
-      ]
-    },
-    {
-      "bang": "google",
-      "urls": [
-        "https://www.google.com/search?q=%s"
-      ]
-    },
-    {
-      "bang": "gi",
-      "urls": [
-        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
-      ]
-    },
-    {
-      "bang": "gm",
-      "urls": [
-        "https://google.com/maps/place/%s"
-      ]
-    },
-    {
-      "bang": "wikipedia",
-      "urls": [
-        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
-      ]
-    },
-    {
-      "bang": "a",
-      "urls": [
-        "https://www.amazon.com/s?k=%s"
-      ]
-    },
-    {
-      "bang": "maps",
-      "urls": [
-        "https://google.com/maps?q=%s"
-      ]
-    },
-    {
-      "bang": "r",
-      "urls": [
-        "https://www.reddit.com/search?q=%s"
-      ]
-    },
-    {
-      "bang": "m",
-      "urls": [
-        "http://maps.google.com/maps?q=%s"
-      ]
-    },
-    {
-      "bang": "imdb",
-      "urls": [
-        "http://www.imdb.com/find?s=all&q=%s"
-      ]
-    },
-    {
-      "bang": "gh",
-      "urls": [
-        "https://github.com/search?utf8=%E2%9C%93&q=%s"
-      ]
-    },
-    {
-      "bang": "gt",
-      "urls": [
-        "https://translate.google.com/#auto/en/%s"
-      ]
-    },
-    {
-      "bang": "wen",
-      "urls": [
-        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
-      ]
-    },
-    {
-      "bang": "wiki",
-      "urls": [
-        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
-      ]
-    },
-    {
-      "bang": "i",
+      "keyword": "image",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "https://duckduckgo.com/?q=%s&ia=images&iax=images"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "s",
+      "keyword": "w",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
-        "http://startpage.com/do/metasearch.pl?query=%s"
-      ]
+        "https://en.wikipedia.org/wiki/Special:Search?search=%s"
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "youtube",
+      "keyword": "wikipedia",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
-        "https://www.youtube.com/results?search_query=%s"
-      ]
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "tw",
+      "keyword": "gm",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
-        "https://twitter.com/search?q=%s"
-      ]
+        "https://google.com/maps/place/%s"
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "wt",
+      "keyword": "gi",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
-        "https://en.wiktionary.org/w/index.php?search=%s&title=Special%3ASearch&go=Go"
-      ]
+        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "b",
+      "keyword": "google",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
-        "https://www.bing.com/search?q=%s"
-      ]
+        "https://www.google.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "gmaps",
+      "keyword": "r",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.reddit.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "maps",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://google.com/maps?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "a",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "m",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "http://maps.google.com/maps?q=%s"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "sr",
+      "keyword": "imdb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.imdb.com/find?s=all&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wen",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://translate.google.com/#auto/en/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wiki",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://en.wiktionary.org/w/index.php?search=%s&title=Special%3ASearch&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gh",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://github.com/search?utf8=%E2%9C%93&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "i",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "youtube",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "s",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://startpage.com/do/metasearch.pl?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "sr",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "http://reddit.com/r/%s"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "tr",
+      "keyword": "gmaps",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
-        "http://translate.google.com/#auto/en/%s"
-      ]
+        "http://maps.google.com/maps?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "tw",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://twitter.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gn",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://news.google.com/news/search/section/q/%s"
+      ],
+      "dontEncodeQuery": false
     }
   ]
 }

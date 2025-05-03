@@ -1,7 +1,43 @@
+import browser from "webextension-polyfill";
+
 import * as config from "./config";
 
-// TODO: Confirm good defaults
-// TODO: US defaults?
+const locale = navigator.language || browser.i18n.getUILanguage();
+
+function getUrlByLocale(table: Record<string, string>): string {
+	return table[locale] || table[locale.split("-")[0]] || table.default;
+}
+
+function getAmazonUrlByLocale(): string {
+	// TODO(future): More locale support?
+	return getUrlByLocale({
+		"en-GB": "https://www.amazon.co.uk/",
+		"en-US": "https://www.amazon.com/",
+		"de-DE": "https://www.amazon.de/",
+		"fr-FR": "https://www.amazon.fr/",
+		"it-IT": "https://www.amazon.it/",
+		"es-ES": "https://www.amazon.es/",
+		"ja-JP": "https://www.amazon.co.jp/",
+		au: "https://www.amazon.com.au/",
+		ca: "https://www.amazon.ca",
+		default: "https://www.amazon.com/",
+	});
+}
+
+function getEbayUrlByLocale(): string {
+	return getUrlByLocale({
+		"en-GB": "https://www.ebay.co.uk",
+		"en-US": "https://www.ebay.com",
+		"de-DE": "https://www.ebay.de",
+		"fr-FR": "https://www.ebay.fr",
+		"it-IT": "https://www.ebay.it",
+		"es-ES": "https://www.ebay.es",
+		"ja-JP": "https://www.ebay.co.jp/",
+		au: "https://www.ebay.com.au",
+		ca: "https://www.ebay.ca",
+		default: "https://www.ebay.com",
+	});
+}
 
 // NOTE: Don't change the first or second index, these are used in the config UI
 // help tab
@@ -19,11 +55,11 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "a",
 			alias: null,
-			defaultUrl: "https://amazon.co.uk/",
+			defaultUrl: getAmazonUrlByLocale(),
 			urls: [
 				{
 					id: crypto.randomUUID(),
-					url: "https://amazon.co.uk/s?k=%s",
+					url: `${getAmazonUrlByLocale()}s?k=%s`,
 				},
 			],
 			dontEncodeQuery: false,
@@ -45,11 +81,11 @@ const cfg: config.Config = {
 			id: crypto.randomUUID(),
 			keyword: "e",
 			alias: null,
-			defaultUrl: "https://www.ebay.co.uk/",
+			defaultUrl: getEbayUrlByLocale(),
 			urls: [
 				{
 					id: crypto.randomUUID(),
-					url: "https://www.ebay.co.uk/sch/i.html?_nkw=%s",
+					url: `${getEbayUrlByLocale()}sch/i.html?_nkw=%s`,
 				},
 			],
 			dontEncodeQuery: false,

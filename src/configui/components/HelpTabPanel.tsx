@@ -17,7 +17,7 @@ import BangConfigurator from "./BangConfigurator";
 
 export default function HelpTabPanel() {
 	return (
-		<Stack style={{ marginTop: "2em", width: "70em" }} gap="lg">
+		<Stack style={{ margin: "2em 0", width: "70em" }} gap="lg">
 			<Stack>
 				<Title order={2}>What does this do?</Title>
 				<Text size="md">
@@ -117,6 +117,21 @@ export default function HelpTabPanel() {
 				<Text>
 					The first input (left) is the keyword, and the second (right) is the
 					bang to copy
+				</Text>
+			</Stack>
+
+			<Stack>
+				<Title order={2}>DuckDuckGo Bangs</Title>
+				<Text>
+					There are some JSON files{" "}
+					<Anchor
+						href="https://github.com/psidex/CustomBangSearch/blob/master/ddg/README.md"
+						target="_blank"
+					>
+						here
+					</Anchor>{" "}
+					that contain the most popular DuckDuckGo bangs, if you want to import
+					them
 				</Text>
 			</Stack>
 
