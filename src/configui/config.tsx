@@ -4,11 +4,11 @@ import {
 	Tabs,
 	MantineProvider,
 	Image,
-	Box,
 	Loader,
 	Text,
 	Group,
 	Alert,
+	Flex,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
@@ -75,11 +75,12 @@ export function App() {
 	// TODO(future): Support thinner screens
 
 	return (
-		<Box
+		<Flex
 			style={{
 				width: widthPercent,
 				margin: "auto",
-				marginBottom: "5em",
+				height: "100vh",
+				flexDirection: "column",
 			}}
 		>
 			<ConfigHeader />
@@ -95,7 +96,10 @@ export function App() {
 					</Text>
 				</Alert>
 			)) || (
-				<Tabs defaultValue="bangs">
+				<Tabs
+					defaultValue="bangs"
+					style={{ display: "flex", flexDirection: "column", height: "100%" }}
+				>
 					<Tabs.List>
 						<Tabs.Tab
 							value="bangs"
@@ -116,9 +120,9 @@ export function App() {
 							Help
 						</Tabs.Tab>
 					</Tabs.List>
-					<Tabs.Panel value="bangs">
+					<Tabs.Panel value="bangs" style={{ display: "flex", height: "100%" }}>
 						{(loading && (
-							<Group>
+							<Group style={{ alignSelf: "flex-start" }}>
 								<Loader style={{ margin: "2em" }} />
 								<Text>Fetching bangs...</Text>
 							</Group>
@@ -130,9 +134,12 @@ export function App() {
 							/>
 						)}
 					</Tabs.Panel>
-					<Tabs.Panel value="options">
+					<Tabs.Panel
+						value="options"
+						style={{ display: "flex", height: "100%" }}
+					>
 						{(loading && (
-							<Group>
+							<Group style={{ alignSelf: "flex-start" }}>
 								<Loader style={{ margin: "2em" }} />
 								<Text>Fetching options...</Text>
 							</Group>
@@ -143,12 +150,12 @@ export function App() {
 							/>
 						)}
 					</Tabs.Panel>
-					<Tabs.Panel value="help">
+					<Tabs.Panel value="help" style={{ display: "flex", height: "100%" }}>
 						<HelpTabPanel />
 					</Tabs.Panel>
 				</Tabs>
 			)}
-		</Box>
+		</Flex>
 	);
 }
 

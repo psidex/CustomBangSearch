@@ -12,8 +12,36 @@ interface Props {
 	showWarning: boolean;
 }
 
-// Use memo because this is likely to be re-rendered with the same props a lot
-export default memo(function BangConfigurator(props: Props) {
+// Memoized to prevent unnecessary re-renders
+export default memo(
+	function BangConfigurator({
+		bang,
+		index,
+		onChange,
+		onRemove,
+		showWarning,
+	}: Props) {
+		return (
+			<RealBangConfigurator
+				bang={bang}
+				index={index}
+				onChange={onChange}
+				onRemove={onRemove}
+				showWarning={showWarning}
+			/>
+		);
+	},
+	(prevProps, nextProps) => {
+		// Custom comparison to prevent unnecessary re-renders
+		return (
+			prevProps.bang === nextProps.bang &&
+			prevProps.index === nextProps.index &&
+			prevProps.showWarning === nextProps.showWarning
+		);
+	},
+);
+
+function RealBangConfigurator(props: Props) {
 	const { bang, index, onChange, onRemove, showWarning } = props;
 
 	// Handle changes to input fields
@@ -57,7 +85,12 @@ export default memo(function BangConfigurator(props: Props) {
 	};
 
 	return (
-		<Group style={{ alignItems: "flex-start", marginTop: "0.5em" }}>
+		<Group
+			style={{
+				alignItems: "flex-start",
+				marginTop: index === 0 ? "0.5em" : "1em",
+			}}
+		>
 			<Button
 				color="red"
 				variant="light"
@@ -86,16 +119,16 @@ export default memo(function BangConfigurator(props: Props) {
 						value={bang.defaultUrl}
 						onChange={(e) => handleChange("defaultUrl", e.target.value)}
 						placeholder="Default URL"
-						style={{ width: "15em" }}
+						style={{ width: "10em" }}
 					/>
-					<Stack>
+					<Stack gap="xs">
 						{bang.urls.map((url, i) => (
 							<Group key={url.id}>
 								<Input
 									value={url.url}
 									onChange={(e) => handleUrlChange(url.id, e.target.value)}
 									placeholder={"Destination URL"}
-									style={{ width: "15em" }}
+									style={{ width: "20em" }}
 								/>
 								{bang.urls.length > 1 && (
 									<Button
@@ -136,4 +169,4 @@ export default memo(function BangConfigurator(props: Props) {
 			)}
 		</Group>
 	);
-});
+}

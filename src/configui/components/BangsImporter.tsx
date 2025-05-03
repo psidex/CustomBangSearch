@@ -1,5 +1,5 @@
-import React, { type ChangeEvent, useRef } from "react";
-import { Button } from "@mantine/core";
+import React from "react";
+import { Button, FileButton } from "@mantine/core";
 import { FolderUp } from "lucide-react";
 
 import { errorNotif, successNotif } from "../notifications";
@@ -14,30 +14,9 @@ interface Props {
 export default function BangFileUploader(props: Props) {
 	const { bangInfos, setBangInfos } = props;
 
-	const fileInputRef = useRef<HTMLInputElement>(null);
-
-	const uploadButtonClicked = () => {
-		if (fileInputRef.current !== null) {
-			fileInputRef.current.click();
-		}
-	};
-
-	const handleFileChange = async (
-		e: ChangeEvent<HTMLInputElement>,
-	): Promise<void> => {
-		if (e.target.files === null) {
-			return;
-		}
-
-		const file: File = e.target.files[0];
+	const handleFileChange = async (file: File | null): Promise<void> => {
 		if (!file) {
 			return;
-		}
-
-		if (fileInputRef.current !== null) {
-			// Reset the selected file so that if the user imports the same file again,
-			// the change event will still fire.
-			fileInputRef.current.value = "";
 		}
 
 		// biome-ignore lint/suspicious/noExplicitAny: User controlled input
@@ -100,22 +79,17 @@ export default function BangFileUploader(props: Props) {
 	};
 
 	return (
-		<>
-			<Button
-				onClick={uploadButtonClicked}
-				size="md"
-				variant="default"
-				title="Import from an exported JSON file"
-			>
-				<FolderUp style={{ marginRight: "0.5em" }} /> Import
-			</Button>
-			<input
-				ref={fileInputRef}
-				type="file"
-				accept="application/json"
-				style={{ display: "none" }}
-				onChange={handleFileChange}
-			/>
-		</>
+		<FileButton onChange={handleFileChange} accept="application/json">
+			{(innerProps) => (
+				<Button
+					title="Import from an exported JSON file"
+					size="md"
+					variant="default"
+					{...innerProps}
+				>
+					<FolderUp style={{ marginRight: "0.5em" }} /> Import
+				</Button>
+			)}
+		</FileButton>
 	);
 }

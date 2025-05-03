@@ -1,10 +1,11 @@
 import React, {
 	useState,
 	useEffect,
+	useCallback,
 	type Dispatch,
 	type SetStateAction,
 } from "react";
-import { Button, Stack, Group, Alert } from "@mantine/core";
+import { Button, Stack, Group, Alert, Loader } from "@mantine/core";
 import {
 	ArrowDownAZ,
 	ArrowUpAZ,
@@ -18,7 +19,7 @@ import {
 	X,
 } from "lucide-react";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { motion, AnimatePresence } from "framer-motion";
+import { Virtuoso } from "react-virtuoso";
 
 import * as config from "../../lib/config/config";
 import * as storage from "../../lib/config/storage/storage";
@@ -59,9 +60,20 @@ const sortBangInfos = (
 	sortOrder: sortOrders,
 ) => {
 	return [...toSort].sort((a, b) => {
-		if (a.keyword === "" && b.keyword === "") return 0;
-		if (a.keyword === "") return sortOrder === "asc" ? -1 : 1;
-		if (b.keyword === "") return sortOrder === "asc" ? 1 : -1;
+		// Empty bangs are equal
+		if (a.keyword === "" && b.keyword === "") {
+			return 0;
+		}
+
+		// Empty bangs should always remain at the top
+		if (a.keyword === "") {
+			return -1;
+		}
+		if (b.keyword === "") {
+			return 1;
+		}
+
+		// Otherwise compare
 		return sortOrder === "asc"
 			? a.keyword.localeCompare(b.keyword)
 			: b.keyword.localeCompare(a.keyword);
@@ -135,14 +147,13 @@ export default function BangsTabPanel(props: Props) {
 	// Use initialBangs in the dependency array, instead of bangInfos, so that we
 	// only do this auto-sort when the user saves (or on load). bangInfo changes
 	// on user input, initialBangs changes when user presses save button
-	// biome-ignore lint/correctness/useExhaustiveDependencies: ↑
+	// biome-ignore lint/correctness/useExhaustiveDependencies:
 	useEffect(() => {
 		setBangInfosWithSort(bangInfos);
 	}, [initialBangs, sortOrder]);
 
 	const handleToggleSortOrder = () => {
-		const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
-		setSortOrder(newSortOrder);
+		setSortOrder(sortOrder === "asc" ? "desc" : "asc");
 	};
 
 	const bangInfoChanged = (index: number, updatedBang: config.BangInfo) => {
@@ -176,11 +187,18 @@ export default function BangsTabPanel(props: Props) {
 			withCloseButton: false,
 		});
 
+		// This is stupid but we need to let the notifications' style calculate
+		// before we block with the (potentially) long running code below
+		await new Promise((r) => setTimeout(r, 50));
+
 		let cfg: config.Config;
 		try {
 			cfg = await storage.getConfig();
 			const rollback = structuredClone(cfg);
 			cfg.bangs = bangInfos;
+
+			// The config in rollback will get re-stored before this call throws an
+			// error, if it needs to throw one
 			await storage.storeConfigWithRollback(cfg, rollback);
 
 			setNeedToSave(false);
@@ -230,8 +248,28 @@ export default function BangsTabPanel(props: Props) {
 		a.remove();
 	};
 
+	// Don't depend on the functions because they change every render
+	// biome-ignore lint/correctness/useExhaustiveDependencies:
+	const virtuosoRenderBang = useCallback(
+		(index: number) => {
+			const bang = bangInfos[index];
+			return (
+				<BangConfigurator
+					bang={bang}
+					index={index}
+					onChange={bangInfoChanged}
+					onRemove={() => removeBang(bang.id)}
+					showWarning={keywordsWithDuplicates.has(
+						ignoreBangCase ? bang.keyword.toLowerCase() : bang.keyword,
+					)}
+				/>
+			);
+		},
+		[bangInfos, keywordsWithDuplicates, ignoreBangCase],
+	);
+
 	return (
-		<Stack>
+		<Stack style={{ width: "100%" }}>
 			<Group style={{ margin: "1em 1em 0 1em" }}>
 				<Button
 					onClick={saveBangs}
@@ -279,12 +317,12 @@ export default function BangsTabPanel(props: Props) {
 					<RotateCcw style={{ marginRight: "0.5em" }} /> Reset to Default
 				</Button>
 			</Group>
-			<Group style={{ margin: "0 1em 0 1em" }}>
+			<Group style={{ margin: "0 1em" }}>
 				<Button
 					onClick={handleToggleSortOrder}
 					size="md"
 					variant="default"
-					title="Toggle sort order"
+					title={`Showing in ${sortOrder === "asc" ? "ascending" : "descending"} order`}
 				>
 					Sort Order
 					{sortOrder === "asc" ? (
@@ -299,25 +337,15 @@ export default function BangsTabPanel(props: Props) {
 					</Alert>
 				)}
 			</Group>
-			<AnimatePresence initial={false}>
-				{bangInfos.map((bang, i) => (
-					<motion.div
-						key={bang.id}
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 0.3 }}
-					>
-						<BangConfigurator
-							bang={bang}
-							index={i}
-							onChange={bangInfoChanged}
-							onRemove={() => removeBang(bang.id)}
-							showWarning={keywordsWithDuplicates.has(bang.keyword)}
-						/>
-					</motion.div>
-				))}
-			</AnimatePresence>
+			{/* Render the list of bang configurators using Virtuoso, so only the ones on screen are actually rendered */}
+			<Virtuoso
+				style={{ height: "100%", width: "100%", margin: "0 1em" }}
+				data={bangInfos}
+				itemContent={(index) => virtuosoRenderBang(index)}
+				overscan={50}
+				increaseViewportBy={100}
+				initialItemCount={0}
+			/>
 		</Stack>
 	);
 }
