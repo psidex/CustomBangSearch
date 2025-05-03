@@ -1,0 +1,2255 @@
+{
+  "version": 6,
+  "bangs": [
+    {
+      "keyword": "g",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "yt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "image",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "w",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Special:Search?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wikipedia",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gm",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://google.com/maps/place/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gi",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "google",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "r",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.reddit.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "maps",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://google.com/maps?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "a",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "m",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "imdb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.imdb.com/find?s=all&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wen",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://translate.google.com/#auto/en/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wiki",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://en.wiktionary.org/w/index.php?search=%s&title=Special%3ASearch&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gh",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://github.com/search?utf8=%E2%9C%93&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "i",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "youtube",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "s",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://startpage.com/do/metasearch.pl?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "sr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://reddit.com/r/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gmaps",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "tw",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://twitter.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gn",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://news.google.com/news/search/section/q/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ai",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.duckduckgo.com/?q=%s&ia=chat&bang=true "
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wikt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wiktionary.org/wiki/Special:Search?search=%s&go=Define"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "osm",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.openstreetmap.org/search?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "lse",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://linuxsecurity.expert/search/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "b",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.bing.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "aw",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wde",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://de.wikipedia.org/w/index.php?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "sp",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://startpage.com/do/metasearch.pl?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "go",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://mail.google.com/mail/u/0/#search/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gmail",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://mail.google.com/mail/#search/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "tr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://translate.google.com/#auto/en/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "e",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.ebay.com/sch/items/?_nkw=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "scholar",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://scholar.google.com/scholar?q=%s&btnG=Search&as_sdt=800000000001&as_sdtp=on"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "you",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ya",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://yandex.ru/search/?text=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "x",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://x.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gsc",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://scholar.google.com/scholar?q=%s&btnG=Search&as_sdt=800000000001&as_sdtp=on"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wa",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.wolframalpha.com/input/?i=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "reddit",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.reddit.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "map",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ebay",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.ebay.com/sch/items/?_nkw=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gde",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.de/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "fb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.facebook.com/search.php/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "deepl",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.deepl.com/translator#xx/en/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "leo",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://dict.leo.org/englisch-deutsch/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ytm",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://music.youtube.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "history",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.history.com/search?search-field=%s&x=0&y=0"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "npm",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.npmjs.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "mdn",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://developer.mozilla.org/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "naver",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://search.naver.com/search.naver?where=nexearch&sm=osd&ie={inputEncoding}&query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ig",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.instagram.com/explore/tags/%s/"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ud",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.urbandictionary.com/define.php?term=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ade",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.de/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "translate",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://translate.google.com/#auto/en/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "guk",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.google.co.uk/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gfr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.fr/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "rym",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://rateyourmusic.com/search?searchterm=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "mw",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.merriam-webster.com/dictionary/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "arch",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "aur",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://aur.archlinux.org/packages/?K=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "scry",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://scryfall.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "nixpkgs",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://nixos.org/nixos/packages.html?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "safeoff",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "/?q=%s&kp=-2"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wfr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://fr.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "osr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://old.reddit.com/r/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ddg",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://duckduckgo.com/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "amazon",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ttv",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.twitch.tv/search?term=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "steam",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://store.steampowered.com/search/?term=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "rust",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://doc.rust-lang.org/std/?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "yf",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://finance.yahoo.com/quote/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "twitch",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://twitch.tv/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "hn",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://hn.algolia.com/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "li",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.linkedin.com/search/results/all/?keywords=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "chat",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.duckduckgo.com/?q=%s&ia=chat&bang=true "
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "namu",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://namu.wiki/go/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "osrs",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://oldschool.runescape.wiki/?search=%s&title=Special%3ASearch"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wayback",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://web.archive.org/web/*/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "d",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.thefreedictionary.com/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "rt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.rottentomatoes.com/search/?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "brave",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://search.brave.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "crates",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://crates.io/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gmap",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://maps.google.com/maps?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "bi",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.bing.com/images/search?q=%s&go=&form=QBIL&qs=n"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "tvt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://tvtropes.org/pmwiki/search_result.php?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "auk",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.co.uk/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wten",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wiktionary.org/w/index.php?search=%s&button=&title=Special%3ASearch"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wiktionary",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wiktionary.org/wiki/Special:Search?search=%s&go=Define"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "mtg",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://scryfall.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "mal",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://myanimelist.net/anime.php?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "genius",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://genius.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "bgg",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://boardgamegeek.com/geeksearch.php?action=search&objecttype=boardgame&q=%s&B1=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gv",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.google.com/search?tbm=vid&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "drive",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://drive.google.com/drive/search?q=%s "
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "jisho",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://jisho.org/search/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gs",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.com/products?q=%s&sa=N&tab=pf"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "cpp",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.cppreference.com/mwiki/index.php?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "dcc",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.dict.cc/?s=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "github",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://github.com/search?q=%s&type=Everything&repo=&langOverride=&start_value=1"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "git",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://github.com/search?utf8=%E2%9C%93&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "t",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.thesaurus.com/browse/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "img",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "h",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.haskell.org/hoogle/?hoogle=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gf",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://finance.google.com/?q=%s&sa=N&tab=fe"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gj",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.co.jp/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.goodreads.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "zillow",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.zillow.com/homes/%s_rb/"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "afr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.fr/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "yandex",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://yandex.ru/yandsearch?text=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "pypi",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://pypi.org/search/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "eksi",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://eksisozluk.com/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ga",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.com.au/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gcal",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://calendar.google.com/calendar/b/0/r/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "rsub",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://reddit.com/r/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "y",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://search.yahoo.com/search?p=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "rae",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://dle.rae.es/?w=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ges",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.google.es/search?q=%s "
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "bulba",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://bulbapedia.bulbagarden.net/w/index.php?title=Special%3ASearch&search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "lb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://letterboxd.com/search/%s/"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gnews",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://news.google.com/news/search/section/q/%s/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "bing",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.bing.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wk",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://en.wikipedia.org/w/index.php?search=%s&title=Special%3ASearch&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "discogs",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.discogs.com/search?q=%s&btn=&type=all"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "tmdb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.themoviedb.org/search?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wikten",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wiktionary.org/wiki/Special:Search?search=%s&go=Define"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "rds",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.reddit.com/r/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ghk",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.com.hk/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ali",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.aliexpress.com/wholesale?SearchText=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "drs",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://docs.rs/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ored",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://old.reddit.com/search?q=%s&sort=relevance&t=all"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "yjr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://search.yahoo.co.jp/realtime/search?p=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gtw",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.com.tw/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "dpl",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.deepl.com/translator#xx/en/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "trans",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://translate.google.com/?source=osdd#auto/en/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ytb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.youtube.com/results?search_query= %s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "images",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "py",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://docs.python.org/3/search.html?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "v",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=videos&iax=videos"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "bv",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.bing.com/videos?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "yj",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://search.yahoo.co.jp/search?p=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "p",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.pinterest.com/search/pins/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "reddits",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.reddit.com/r/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ji",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://jisho.org/search/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "az",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "mail",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://mail.google.com/mail/u/0/#inbox%s:"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ain",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.in/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wkten",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://en.wiktionary.org/wiki/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ty",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.youtube.com/results?search_query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "dictcc",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.dict.cc/?s=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "na",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://search.naver.com/search.naver?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ao3",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://archiveofourown.org/works/search?utf8=%E2%9C%93&work_search%5Bquery%5D=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wi",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gdrive",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://drive.google.com/drive/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gsch",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://scholar.google.com/scholar?&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "tvtropes",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://tvtropes.org/pmwiki/search_result.php?cx=partner-pub-6610802604051523%3Aamzitfn8e7v&cof=FORID%3A10&ie=ISO-8859-1&q=%s&siteurl=tvtropes.org%2Fpmwiki%2Fpmwiki.php%2FMain%2FHomePage"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "linkedin",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.linkedin.com/search/results/all/?keywords=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "eb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.ebay.com/sch/items/?_nkw=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gscholar",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://scholar.google.com/scholar?q=%s&btnG=Search&as_sdt=800000000001&as_sdtp=on"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ede",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.ebay.de/sch/items/?_nkw=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "urban",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.urbandictionary.com/define.php?term=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "sc",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://soundcloud.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "euk",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.ebay.co.uk/sch/items/?_nkw=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "archwiki",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://wiki.archlinux.org/index.php?search=%s&title=Special%3ASearch&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "am",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.com/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "insta",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.instagram.com/explore/tags/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wes",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://es.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "python",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://docs.python.org/3/search.html?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "sro",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://old.reddit.com/r/%s/"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gimg",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "pixiv",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.pixiv.net/search.php?word=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "u",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.urbandictionary.com/define.php?term=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wbm",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://web.archive.org/web/*/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "scryfall",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://scryfall.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "n",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&iar=news&ia=news"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wnl",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://nl.wikipedia.org/w/index.php?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ais",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://archive.is/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "kym",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://knowyourmeme.com/search?utf8=%E2%9C%93&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "bang",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "/bang?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "aes",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.es/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ait",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.it/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.wordreference.com/definition/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "archive",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://archive.org/search.php?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "archpkg",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.archlinux.org/packages/?sort=&q=%s&maintainer=&flagged="
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "rold",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://old.reddit.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gbr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.com.br/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "discord",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://discordapp.com/invite/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "cargo",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://crates.io/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "nyt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://query.nytimes.com/search/sitesearch?query=%s&srchst=cse"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "metal",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.metal-archives.com/search?searchString=%s&type=band_name"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "f",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.flickr.com/search/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "pkg",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.archlinux.org/packages/?sort=&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "greddit",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://google.com/search?q=site%3Areddit.com+%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "docsrs",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://docs.rs/releases/search?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "we",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://en.wikipedia.org/wiki/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "4ch",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://4chan.org/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gen",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://genius.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "srold",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://old.reddit.com/r/%s/"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "news",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&iar=news&ia=news"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "docker",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://store.docker.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "tumblr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.tumblr.com/search/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "alt",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://alternativeto.net/SearchResult.aspx?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "camd",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://dictionary.cambridge.org/search/american-english/direct/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "lbc",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.leboncoin.fr/recherche/?text=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "walmart",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.walmart.com/search/?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gma",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://mail.google.com/mail/u/0/#search/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "protondb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.protondb.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wit",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://it.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "pcgw",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://pcgamingwiki.com/w/index.php?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "steamdb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://steamdb.info/search/?a=app&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wref",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.wordreference.com/enfr/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "dh",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://hub.docker.com/search/?q=%s&page=1&isAutomated=0&isOfficial=0&starCount=0&pullCount=0"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "pip",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://pypi.python.org/pypi?:action=search&term=%s&submit=search"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "nixpkg",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://nixos.org/nixos/packages.html?query=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "minecraft",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://minecraft.wiki?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gca",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.google.ca/search?source=hp&q=%s&meta=&aq=f&aqi=g10&aql=&oq=&gs_rfai="
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ddgi",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&iax=images&ia=images"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "hoogle",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://hoogle.haskell.org/?hoogle=%s&scope=set%3Astackage"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "php",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://secure.php.net/manual-lookup.php?pattern=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gbf",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://gbf.wiki/index.php?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "stardewvalley",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://stardewvalleywiki.com/mediawiki/index.php?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "goodreads",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.goodreads.com/search/search?search_type=books&search[query]=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "idealo",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.idealo.de/preisvergleich/MainSearchProductCategory.html?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "duden",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.duden.de/suchen/dudenonline/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ste",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://store.steampowered.com/search/?term=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "apkg",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.archlinux.org/packages/?sort=&q=%s&maintainer=&flagged="
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wikien",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://en.wikipedia.org/w/index.php?search=%s&title=Special:Search"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "startpage",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.startpage.com/do/dsearch?query=%s&cat=web&pl=opensearch"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "bangs",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/bang?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "usps",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "deb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://packages.debian.org/search?keywords=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gim",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "bbc",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.bbc.co.uk/search/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "define",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.thefreedictionary.com/%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "aca",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.ca/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wd",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.wikidata.org/w/index.php?search=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "twitter",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://twitter.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "in",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://invidio.us/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ytmusic",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://music.youtube.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "wtfr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://fr.wiktionary.org/wiki/%s "
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "gimages",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "da",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://www.deviantart.com/browse/all/?section=&global=1&q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "aj",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.amazon.co.jp/s?k=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "hltb",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://howlongtobeat.com/?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "qr",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://api.qrserver.com/v1/create-qr-code/?qzone=1&data=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "ip",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "http://whatismyipaddress.com/ip/%s"
+      ],
+      "dontEncodeQuery": false
+    }
+  ]
+}

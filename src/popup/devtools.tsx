@@ -1,23 +1,39 @@
-import React from 'react';
+import React from "react";
+import { Stack, Button, Text } from "@mantine/core";
+import browser from "webextension-polyfill";
 
-import { Button } from '@chakra-ui/react';
+import * as storage from "../lib/config/storage/storage";
+import defaultConfig from "../lib/config/default";
+import setLegacySettings from "../lib/config/legacy/debug";
 
-import browser from 'webextension-polyfill';
-
-import defaultSettings from '../lib/settings.default.json';
-import * as storage from '../lib/storage';
-
-export default function DevTools(): React.ReactElement {
-  async function resetSettings(): Promise<void> {
-    await storage.storeSettings(defaultSettings);
-  }
-  async function deleteSettings(): Promise<void> {
-    await browser.storage.sync.remove(['settings']);
-  }
-  return (
-    <>
-      <Button onClick={() => { resetSettings(); }}>Reset Stored Settings</Button>
-      <Button onClick={() => { deleteSettings(); }}>Delete Stored Settings</Button>
-    </>
-  );
+export default function DevTools() {
+	return (
+		<Stack
+			justify="center"
+			gap="md"
+			style={{
+				borderColor: "red",
+				borderWidth: "3px",
+				borderStyle: "solid",
+				padding: "10px",
+			}}
+		>
+			<Text style={{ color: "red" }}>Dev Tools</Text>
+			<Button
+				onClick={async () => {
+					await storage.storeConfig(defaultConfig());
+				}}
+			>
+				Reset config to default
+			</Button>
+			<Button
+				onClick={async () => {
+					await browser.storage.sync.clear();
+					await setLegacySettings();
+				}}
+			>
+				Set legacy config
+			</Button>
+		</Stack>
+	);
 }

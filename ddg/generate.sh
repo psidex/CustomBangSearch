@@ -1,26 +1,35 @@
 #!/bin/bash
 
+if ! command -v wget >/dev/null 2>&1; then
+  echo "Error: wget is not installed" >&2
+  exit 1
+fi
+
+if ! command -v jq >/dev/null 2>&1; then
+  echo "Error: jq is not installed" >&2
+  exit 1
+fi
+
 set -ex
 
-# List all, sorted, with the usage count in the object:
-# cat ./ddg.json \
-#   | jq -s '.[] | sort_by(.r) | reverse | [ .[] | {bang: .t, usage: .r, urls: [ .u ] } ]' \
-#   | sed -r 's/\{\{\{s\}\}\}/\%s/g' \
-#   > ddg-sorted.json
+wget https://duckduckgo.com/bang.js -O ddg.json
 
 function writeTopNBangs() {
   local count=$1
   cat ./ddg.json |
-    jq -s ".[] | sort_by(.r) | reverse | .[:$count] | { version: 5, bangs: [ .[] | {bang: .t, urls: [ .u ] } ] }" |
+    jq -s ".[] | sort_by(.r) | reverse | .[:$count] | { version: 6, bangs: [ .[] | {keyword: .t, alias: null, defaultUrl: \"\", urls: [ .u ], dontEncodeQuery: false } ] }" |
     sed -r 's/\{\{\{s\}\}\}/\%s/g' \
       >ddg-top-"$count".json
 }
 
-# Quota is usually 8192 bytes.
-writeTopNBangs 10  #  595 bytes ( 7.3% of quota)
-writeTopNBangs 25  # 1317 bytes (16.1% of quota)
-writeTopNBangs 50  # 2315 bytes (28.3% of quota)
-writeTopNBangs 100 # 4027 bytes (49.2% of quota)
-writeTopNBangs 150 # 5636 bytes (68.8% of quota)
-writeTopNBangs 200 # 7498 bytes (91.5% of quota)
-writeTopNBangs 220 # 8140 bytes (99.4% of quota)
+writeTopNBangs 10
+writeTopNBangs 25
+writeTopNBangs 50
+writeTopNBangs 100
+writeTopNBangs 150
+writeTopNBangs 200
+writeTopNBangs 250
+
+rm ddg.json
+
+echo -e "\nDone!\n"

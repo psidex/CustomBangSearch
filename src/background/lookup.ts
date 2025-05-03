@@ -1,29 +1,36 @@
-import browser from 'webextension-polyfill';
+import browser from "webextension-polyfill";
 
-import { StoredBangInfo } from '../lib/settings';
+import type * as config from "../lib/config/config";
 
-// TODO: Look into localstorage storage limits for this and other local options!
+export type BangsLookup = Record<string, config.BangInfo>;
 
-// A lookup table for { bang : [redirect urls] }.
-export type BangsLookup = { [key: string]: string[] };
+const storageLocalKey = "bangInfoLookup";
 
-function bangsLookupFromSettings(bangs: StoredBangInfo[]): BangsLookup {
-  const l: BangsLookup = {};
-  for (const sb of bangs) {
-    l[sb.bang] = sb.urls;
-  }
-  return l;
+export async function setBangInfoLookup(
+	bangs: config.BangInfo[],
+): Promise<void> {
+	const lookup: BangsLookup = {};
+
+	for (const bangInfo of bangs) {
+		lookup[bangInfo.keyword] = bangInfo;
+	}
+
+	// We do this twice as we need to make sure that the LUT already contains what
+	// an alias will be pointing to
+	for (const bangInfo of bangs) {
+		if (bangInfo.alias !== null && lookup[bangInfo.alias] !== undefined) {
+			lookup[bangInfo.keyword] = lookup[bangInfo.alias];
+		}
+	}
+
+	return browser.storage.local.set({ [storageLocalKey]: lookup });
 }
 
-export function setBangsLookup(bangs: StoredBangInfo[]): void {
-  const bangsLookup = bangsLookupFromSettings(bangs);
-  browser.storage.local.set({ bangsLookup });
-}
-
-export async function getBangsLookup(): Promise<Readonly<BangsLookup>> {
-  const { bangsLookup } = await browser.storage.local.get({
-    // Default to empty array.
-    bangsLookup: [],
-  });
-  return Promise.resolve(bangsLookup);
+// Returns a lookup table for { bang keyword : BangInfo }
+export async function getBangInfoLookup(): Promise<Readonly<BangsLookup>> {
+	const got = await browser.storage.local.get(storageLocalKey);
+	// TODO: Should be OK, but should probs null/undefined check bangsLookup, and
+	// that it matches the type
+	const bangsLookup = got[storageLocalKey];
+	return bangsLookup as BangsLookup;
 }

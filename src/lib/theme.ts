@@ -1,10 +1,7 @@
-import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
+import { createTheme } from "@mantine/core";
 
-const config: ThemeConfig = {
-  initialColorMode: 'light',
-  useSystemColorMode: true,
-};
-
-const theme = extendTheme({ config });
+const theme = createTheme({
+	fontFamily: "Roboto, sans-serif",
+});
 
 export default theme;

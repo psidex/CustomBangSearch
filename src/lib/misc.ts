@@ -1,8 +1,7 @@
-import { dev } from './esbuilddefinitions';
+import { inDev } from "./esbuilddefinitions";
 
-export default function devLog(message: string | object): void {
-  if (dev) {
-    // eslint-disable-next-line no-console
-    console.info(message);
-  }
+export default function debug(...message: Array<string | object>): void {
+	if (inDev) {
+		console.info(...message);
+	}
 }

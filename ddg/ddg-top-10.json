@@ -1,65 +1,95 @@
 {
-  "version": 5,
+  "version": 6,
   "bangs": [
     {
-      "bang": "g",
+      "keyword": "g",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "https://www.google.com/search?q=%s"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "yt",
+      "keyword": "yt",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "https://www.youtube.com/results?search_query=%s"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "w",
+      "keyword": "image",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://duckduckgo.com/?q=%s&ia=images&iax=images"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "w",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "https://en.wikipedia.org/wiki/Special:Search?search=%s"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "google",
-      "urls": [
-        "https://www.google.com/search?q=%s"
-      ]
-    },
-    {
-      "bang": "gi",
-      "urls": [
-        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
-      ]
-    },
-    {
-      "bang": "gm",
-      "urls": [
-        "https://google.com/maps/place/%s"
-      ]
-    },
-    {
-      "bang": "wikipedia",
+      "keyword": "wikipedia",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "http://en.wikipedia.org/wiki/Special:Search?search=%s&go=Go"
-      ]
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "a",
+      "keyword": "gm",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
-        "https://www.amazon.com/s?k=%s"
-      ]
+        "https://google.com/maps/place/%s"
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "maps",
+      "keyword": "gi",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
-        "https://google.com/maps?q=%s"
-      ]
+        "https://google.com/search?tbm=isch&q=%s&tbs=imgo:1"
+      ],
+      "dontEncodeQuery": false
     },
     {
-      "bang": "r",
+      "keyword": "google",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://www.google.com/search?q=%s"
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "r",
+      "alias": null,
+      "defaultUrl": "",
       "urls": [
         "https://www.reddit.com/search?q=%s"
-      ]
+      ],
+      "dontEncodeQuery": false
+    },
+    {
+      "keyword": "maps",
+      "alias": null,
+      "defaultUrl": "",
+      "urls": [
+        "https://google.com/maps?q=%s"
+      ],
+      "dontEncodeQuery": false
     }
   ]
 }

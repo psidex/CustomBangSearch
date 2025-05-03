@@ -4,11 +4,11 @@
 
 Non browser context (e.g. github):
 
-A browser extension to use custom DuckDuckGo-like bangs directly from the address bar
+A browser extension that lets you use custom DuckDuckGo-style bangs directly from the address bar
 
 Browser context (e.g. chrome store):
 
-Use custom DuckDuckGo-like bangs directly from the address bar
+Use custom DuckDuckGo-style bangs directly from the address bar
 
 ## Keywords
 

@@ -1,37 +1,56 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-
+import React from "react";
+import ReactDOM from "react-dom/client";
 import {
-  ChakraProvider, Heading, Button, Text, VStack,
-} from '@chakra-ui/react';
+	Button,
+	MantineProvider,
+	Stack,
+	Text,
+	Title,
+	Tooltip,
+} from "@mantine/core";
+import browser from "webextension-polyfill";
 
-import browser from 'webextension-polyfill';
+import MiscButtons from "../lib/components/MiscButtons";
+import theme from "../lib/theme";
+import * as esbuilddefinitions from "../lib/esbuilddefinitions";
+import PermissionsRequester from "../lib/components/PermissionsRequester";
 
-import theme from '../lib/theme';
-import MiscButtons from '../lib/components/MiscButtons';
-import PermissionsRequester from '../lib/components/PermissionsRequester';
-import { dev, version } from '../lib/esbuilddefinitions';
-
-import DevTools from './devtools';
+import DevTools from "./devtools";
 
 function App(): React.ReactElement {
-  return (
-    <VStack>
-      <Heading>Custom Bang Search</Heading>
-      <Text>{`v${version}`}</Text>
-      <MiscButtons />
-      <Button variant="outline" onClick={() => { browser.runtime.openOptionsPage(); }}>Options</Button>
-      <PermissionsRequester closeWindow />
-      {dev && <DevTools />}
-    </VStack>
-  );
+	return (
+		<Stack align="center">
+			<Title style={{ textAlign: "center", fontSize: "1.9rem" }}>
+				Custom Bang Search
+			</Title>
+			<Tooltip
+				label={`${esbuilddefinitions.gitInfo} @ ${esbuilddefinitions.buildTime}`}
+			>
+				<Text>v{esbuilddefinitions.version}</Text>
+			</Tooltip>
+			<MiscButtons />
+			<Button
+				variant="default"
+				onClick={() => {
+					browser.runtime.openOptionsPage();
+				}}
+			>
+				Options
+			</Button>
+			<PermissionsRequester />
+			{esbuilddefinitions.inDev && <DevTools />}
+		</Stack>
+	);
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(
+	document.getElementById("root") as HTMLElement,
+);
+
 root.render(
-  <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
-  </React.StrictMode>,
+	<React.StrictMode>
+		<MantineProvider defaultColorScheme="auto" theme={theme}>
+			<App />
+		</MantineProvider>
+	</React.StrictMode>,
 );

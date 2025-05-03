@@ -1,91 +1,90 @@
-import browser from 'webextension-polyfill';
+import browser from "webextension-polyfill";
 
 import {
-  dev, currentBrowser, version, hash, hostPermissions,
-} from '../lib/esbuilddefinitions';
-import { processRequest } from './requests';
-import { Settings } from '../lib/settings';
-import * as storage from '../lib/storage';
-import { setBangsLookup } from './lookup';
-import { setLocalOpts } from './localoptions';
-import defaultSettings from '../lib/settings.default.json';
-import devLog from '../lib/misc';
+	inDev,
+	currentBrowser,
+	version,
+	gitInfo,
+	hostPermissions,
+} from "../lib/esbuilddefinitions";
+import * as storage from "../lib/config/storage/storage";
+import defaultConfig from "../lib/config/default";
+import debug from "../lib/misc";
+import * as legacy from "../lib/config/legacy/legacy";
 
-function updateGlobals(settings: Settings): void {
-  setBangsLookup(settings.bangs);
-  setLocalOpts(settings.options);
-}
+import { processRequest } from "./requests";
+import { setBangInfoLookup } from "./lookup";
 
-async function setupSettings(): Promise<void> {
-  let currentSettings = await storage.getSettings();
+async function initConfig(): Promise<void> {
+	// We use this to force the config UI to wait for this function to run
+	await browser.storage.local.set({ mainScriptInitialised: false });
 
-  if (currentSettings === undefined) {
-    currentSettings = defaultSettings;
-  }
+	// First thing is check if the user has just updated
+	let currentCfg = await legacy.checkForAndConvertOldSettings();
 
-  // Technically storage.getSettings should only ever return a settings obj that
-  // complies with the current Settings type, but let's not worry about that...
-  switch (currentSettings.version) {
-    case 3: {
-      devLog('Converting settings from v3 to v5');
-      currentSettings.version = 5;
-      currentSettings.options.ignoreCase = false;
-      currentSettings.options.sortByAlpha = false;
-      break;
-    }
-    case 4: {
-      devLog('Converting settings from v4 to v5');
-      currentSettings.version = 5;
-      currentSettings.options.sortByAlpha = false;
-      break;
-    }
-    default: {
-      break;
-    }
-  }
+	if (currentCfg === null) {
+		try {
+			currentCfg = await storage.getConfig();
+		} catch (error) {
+			// TODO: What to do here, can we identify what the err is - is it possible
+			// that this will erase someones config if they try to access whilst
+			// offline? Future TODO because this is not a change in behaviour from the
+			// previous version
+			console.warn(
+				`Failed to get config: ${error instanceof Error ? error.message : ""}`,
+			);
+			currentCfg = defaultConfig();
+		}
+	}
 
-  updateGlobals(currentSettings);
+	await setBangInfoLookup(currentCfg.bangs);
 
-  // Redundant if no changes made. Only happens once per load tho, not a problem.
-  return storage.storeSettings(currentSettings);
+	// This is required if for example we've just set currentCfg to the default
+	await storage.storeConfig(currentCfg);
+
+	await browser.storage.local.set({ mainScriptInitialised: true });
 }
 
 function main(): void {
-  devLog(`Dev: ${dev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`);
+	debug(
+		`Dev: ${inDev}, Browser: ${currentBrowser}, Version: ${version}, Git: ${gitInfo}`,
+	);
 
-  // Because service workers need to set their event listeners immediately, we can't await this.
-  // FIXME: There may be a better way to do this, but for now we just hope it runs quickly!
-  setupSettings();
+	// Because service workers need to set their event listeners immediately, we
+	// can't await this.
+	// TODO: There may be a better way to do this, but for now we just hope it
+	// runs quickly!
+	initConfig();
 
-  browser.storage.sync.onChanged.addListener((changes: { settings?: { newValue: string } }) => {
-    if (changes.settings !== undefined) {
-      const newSettings = storage.decompressSettings(changes.settings.newValue);
-      if (newSettings !== null) {
-        updateGlobals(newSettings);
-      }
-    }
-  });
+	// The requestBody opt is required for handling POST situations.
+	const extraInfoSpec: browser.WebRequest.OnBeforeRequestOptions[] = [
+		"requestBody",
+	];
 
-  // The requestBody opt is required for handling POST situations.
-  const extraInfoSpec: browser.WebRequest.OnBeforeRequestOptions[] = ['requestBody'];
+	// Wrap processRequest because the types don't like an async non-blocking handler.
+	let webRequestHandler = (
+		r: browser.WebRequest.OnBeforeRequestDetailsType,
+	) => {
+		processRequest(r);
+	};
 
-  // Wrap processRequest because the types don't like an async non-blocking handler.
-  let webRequestHandler = (r: browser.WebRequest.OnBeforeRequestDetailsType) => {
-    processRequest(r);
-  };
+	if (currentBrowser === "firefox") {
+		debug("Enabling blocking webRequest listener");
+		// Add blocking spec and unwrap processRequest as it may return a blocking response.
+		extraInfoSpec.push("blocking");
+		webRequestHandler = processRequest;
+	}
 
-  if (currentBrowser === 'firefox') {
-    devLog('Enabling blocking webRequest listener');
-    // Add blocking spec and unwrap processRequest as it may return a blocking response.
-    extraInfoSpec.push('blocking');
-    webRequestHandler = processRequest;
-  }
+	browser.webRequest.onBeforeRequest.addListener(
+		webRequestHandler,
+		{ urls: hostPermissions },
+		extraInfoSpec,
+	);
 
-  browser.webRequest.onBeforeRequest.addListener(
-    webRequestHandler,
-    { urls: hostPermissions },
-    extraInfoSpec,
-  );
+	if (inDev) {
+		// Easier for testing
+		browser.runtime.openOptionsPage();
+	}
 }
 
 main();
