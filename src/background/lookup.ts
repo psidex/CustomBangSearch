@@ -29,8 +29,8 @@ export async function setBangInfoLookup(
 // Returns a lookup table for { bang keyword : BangInfo }
 export async function getBangInfoLookup(): Promise<Readonly<BangsLookup>> {
 	const got = await browser.storage.local.get(storageLocalKey);
-	// TODO(future): Should be OK, but should probs null/undefined check
-	// bangsLookup, and that it matches the type
+	// TODO: Should be OK, but should probs null/undefined check bangsLookup, and
+	// that it matches the type
 	const bangsLookup = got[storageLocalKey];
 	return bangsLookup as BangsLookup;
 }

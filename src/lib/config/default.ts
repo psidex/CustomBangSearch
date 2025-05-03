@@ -9,7 +9,7 @@ function getUrlByLocale(table: Record<string, string>): string {
 }
 
 function getAmazonUrlByLocale(): string {
-	// TODO(future): More locale support?
+	// TODO: More locale support?
 	return getUrlByLocale({
 		"en-GB": "https://www.amazon.co.uk/",
 		"en-US": "https://www.amazon.com/",

@@ -45,7 +45,7 @@ export default function BangFileUploader(props: Props) {
 		}
 
 		// Force type hinting to improve linting for fns called
-		// TODO(future): Type guards for types used here and elsewhere
+		// TODO: Type guards for types used here and elsewhere
 		const uploadedObj = uploaded as unknown;
 
 		let newBangInfos: config.BangInfo[] = [];

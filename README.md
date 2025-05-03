@@ -1,7 +1,5 @@
 # ![](./images/icons/icon_28.png) Custom Bang Search
 
-TODO: Update this, update images, update store images and words, add reasons for each permission request
-
 [![Firefox Add-On version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![Firefox Add-On rating](https://img.shields.io/amo/rating/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
 [![Firefox Add-On user count](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
@@ -9,15 +7,18 @@ TODO: Update this, update images, update store images and words, add reasons for
 [![Chrome extension rating](https://img.shields.io/chrome-web-store/rating/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 [![Chrome extension user count](https://img.shields.io/chrome-web-store/users/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 
-[![Firefox Add-On link](./images/promotion/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Chrome Web Store link](./images/promotion/chrome.png)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
+<a href="https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/">
+<img src="./images/promotion/firefox.svg" alt="Firefox Add-On link" height="60"/>
+</a>
 
-A browser extension to use custom DuckDuckGo-like bangs directly from the address bar.
+<a href="https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en">
+<img src="./images/promotion/chrome.png" alt="Chrome Web Store link" height="60"/>
+</a>
 
-## Example Searches
+A browser extension that lets you use custom DuckDuckGo-style bangs directly from the address bar
 
 ```
-!a monitor  ▶ https://www.amazon.co.uk/s?k=monitor
+!a camera   ▶ https://www.amazon.co.uk/s?k=camera
 !r G273QF   ▶ https://www.google.com/search?q=site%3Areddit.com+G273QF
 !m new york ▶ https://www.google.com/maps/search/new%20york
 !y boids    ▶ https://www.youtube.com/results?search_query=boids
@@ -29,47 +30,56 @@ A browser extension to use custom DuckDuckGo-like bangs directly from the addres
 
 ## Search Engines
 
-[These search engines are tested and officially supported](./docs/supported-engines.md).
+In order for this extension to work, it has to intercept requests made to your search engine, and check if you are trying to use a bang. For this to work, the extension has to have permissions for that host, and has to have code to support it.
+
+You can see the supported search engines [here](./docs/supported-engines.md).
 
 If you set one of these as your browsers search engine, you can use the bangs directly in the search bar.
 
 Bangs will also work by just using the search engines normally.
 
-## Configuration Page
+## Configuration
 
-The bang editing menu and general options are accessed using the extensions options page:
+You can edit your bangs and general options using the extensions options page:
 
-![options page screenshot](./images/promotion/options-page.png)
-
-All of your bangs and options are saved to the browsers sync storage, meaning if you log into your browser they will sync across to wherever else you are logged in.
-
-This storage has a strict quota, and you can see the amount of it you are using at the top of the options page.
+![options page screenshot](./images/promotion/config-page.png)
 
 ### Bangs
 
-Go to the options page to start creating custom bangs. This can be accessed through the extensions popup, or through your browsers extensions menu.
+On the bang configuration page, you can configure each individual bang:
 
-Each item in the list shows a bang, and a URL or set of URLs that will be opened when this bang is used.
+![configuring a single bang](./images/promotion/individual-bang-config.png)
 
-Pressing the "add bang" button will add a new bang to the bottom of the list, which you can then edit.
+In this extension, bang refers to the entire row.
 
-The trash buttons on the left remove whole bangs, and the buttons on the right are for URLs.
+From left to right, the configuration row allows you to:
 
-Use `%s` in the URLs to show where you want your query to be inserted, take a look at the default bangs if you need some help understanding how to format things.
+- Delete a bang
+- Edit the bangs keyword
+- Edit the bangs default URL. This is the location the bang will take you to if you dont provide a query
+- Edit the list of URLs that the bang redirects to. This can be a single URL or a list, which will open multiple tabs. Each URL should contain %s, this will be replaced by your search query when the bang is used
+- Add to / delete from the list of URLs
+- Turn query encoding off / on. This decides if Custom Bang Search runs encodeURIComponent on your query before it creates the redirect URL. If you don't know what this means, you probably want to leave it off
 
-_Some of the default URLs including Amazon, Ebay, and Etsy are UK URLs, so change those if you need to!_
+**Aliases** are also supported, these are used to assign a keyword to behave exactly the same as an already existing bang:
 
-You can also import and export your list of bangs to/from a valid JSON file.
+![configuring an alias](./images/promotion/individual-alias-config.png)
 
-If the save button is highlighted green, this means you have unsaved changes and they will not take effect until you press the save button.
+The first input (left) is the keyword, and the second (right) is the bang to copy
 
 ### Options
 
-An options *tab* exists within the options *page*, which allows you to change the behaviour of the extension.
+The options tab allows you to change the behaviour of the extension, including the trigger (traditionally `!`), the config storage method, and other things.
+
+#### Storage
+
+If you select sync storage, all of your bangs and options are saved to the browsers sync storage, meaning if you log into your browser they will sync across to wherever else you are logged in. You can also select local, and they won't sync anywhere.
+
+Sync storage has a strict quota, and you can see the amount of it you are using at the top of the options page.
 
 ### DuckDuckGo Bangs
 
-If you want to import bangs from DuckDuckGo, see [this page](./ddg/README.md).
+There are some JSON files [here](./ddg/README.md) that contain the most popular DuckDuckGo bangs, if you want to import them
 
 ## How the extension works
 
@@ -88,7 +98,7 @@ npm run build-firefox OR build-firefox-release OR build-chrome OR build-chrome-r
 
 This produces a `build` directory containing the compiled JavaScript, and if building the release version, 2 zip files in the root of the project that can be uploaded to the browser web extension stores.
 
-Non "release" builds (i.e. dev builds) are not minified, can contain debugging calls such as `console.log`, and also contain some development tools loaded into the popup &| options windows.
+Non "release" builds (i.e. dev builds) are not minified, do more logging, force the browser to open the configuration page when the browser is opened, and also contains some development tools loaded into the popup window.
 
 ### Details
 

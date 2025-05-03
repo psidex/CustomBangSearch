@@ -153,6 +153,13 @@ export default function HelpTabPanel() {
 					</Anchor>
 					.
 				</Text>
+				<Text>
+					If you set one of these as your browsers search engine, you can use
+					the bangs directly in the search bar.
+				</Text>
+				<Text>
+					Bangs will also work by just using the search engines normally.
+				</Text>
 			</Stack>
 
 			<Stack>

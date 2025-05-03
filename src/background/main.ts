@@ -26,10 +26,10 @@ async function initConfig(): Promise<void> {
 		try {
 			currentCfg = await storage.getConfig();
 		} catch (error) {
-			// TODO(future): What to do here, can we identify what the err is - is it
-			// possible that this will erase someones config if they try to access
-			// whilst offline? Future TODO because this is not a change in behaviour
-			// from the previous version
+			// TODO: What to do here, can we identify what the err is - is it possible
+			// that this will erase someones config if they try to access whilst
+			// offline? Future TODO because this is not a change in behaviour from the
+			// previous version
 			console.warn(
 				`Failed to get config: ${error instanceof Error ? error.message : ""}`,
 			);
@@ -50,8 +50,10 @@ function main(): void {
 		`Dev: ${inDev}, Browser: ${currentBrowser}, Version: ${version}, Git: ${gitInfo}`,
 	);
 
-	// Because service workers need to set their event listeners immediately, we can't await this.
-	// TODO(future): There may be a better way to do this, but for now we just hope it runs quickly!
+	// Because service workers need to set their event listeners immediately, we
+	// can't await this.
+	// TODO: There may be a better way to do this, but for now we just hope it
+	// runs quickly!
 	initConfig();
 
 	// The requestBody opt is required for handling POST situations.

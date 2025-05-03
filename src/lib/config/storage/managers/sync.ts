@@ -8,9 +8,13 @@ const MAX_ITEM_COUNT = 512;
 
 const encoder = new TextEncoder();
 
-// splitIntoChunks takes in a string which can contain any utf-16 data, and
-// returns a map of { id : data } to be stored in sync storage, taking advantage
-// of the storage size rules
+/**
+ * splitIntoChunks takes in a string which can contain any utf-16 data, and
+ * returns a map of { id : data } to be stored in sync storage, taking advantage
+ * of the storage size rules.
+ * @param toChunk The string to break up into chunks.
+ * @returns A map of { id : data } to be stored in sync storage.
+ */
 function splitIntoChunks(toChunk: string): Record<string, string> {
 	const chunks: Record<string, string> = {};
 	let totalSize = 0;
@@ -29,8 +33,8 @@ function splitIntoChunks(toChunk: string): Record<string, string> {
 				// This represents the key being an incrementing integer
 				encoder.encode(`${Object.keys(chunks).length}`).length;
 
-			// TODO(future): Why do we get item quota errors using the proper size
-			// here (hence -1000)
+			// TODO: Why do we get item quota errors using the proper size here (hence
+			// -1000)
 			if (size <= MAX_ITEM_SIZE_BYTES - 1000) {
 				totalSize += size;
 				break;
@@ -60,11 +64,11 @@ function splitIntoChunks(toChunk: string): Record<string, string> {
 	return chunks;
 }
 
-// SyncStorageManager takes ownership of the entire sync storage, do not store
-// anything else there whilst using this, it will be removed
+// SyncStorageManager is a singleton that takes ownership of the entire sync
+// storage, do not store anything else there whilst using this, it will be
+// removed. The set and get methods both throw errors.
 const SyncStorageManager: StorageManager = (() => {
 	return {
-		// TODO: Docstring including info about errors for both these fns
 		async set(str: string): Promise<void> {
 			await browser.storage.sync.clear();
 			return browser.storage.sync.set(splitIntoChunks(str));

@@ -60,7 +60,7 @@ export function App() {
 			});
 	}, []);
 
-	// TODO(future): Is there a better way to do this?
+	// TODO: Is there a better way to do this?
 	const windowIsAtLeast1200 = useMediaQuery("(min-width: 1200px)");
 	const windowIsAtLeast1600 = useMediaQuery("(min-width: 1600px)");
 	const windowIsAtLeast2200 = useMediaQuery("(min-width: 2200px)");
@@ -72,7 +72,7 @@ export function App() {
 				? "90%"
 				: "100%";
 
-	// TODO(future): Support thinner screens
+	// TODO: Support thinner screens
 
 	return (
 		<Flex
@@ -83,7 +83,7 @@ export function App() {
 				flexDirection: "column",
 			}}
 		>
-			<ConfigHeader />
+			<ConfigHeader storageMethod={initialConfig.options.storageMethod} />
 			{(fatalError !== null && (
 				<Alert variant="light" color="red" icon={<TriangleAlert />}>
 					<Text>

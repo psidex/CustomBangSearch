@@ -4,6 +4,8 @@ If you want to import DuckDuckGo's bangs into Custom Bang Search, this code and 
 
 ## Ready To Use
 
+Right-click and choose **"Save Link As…"** to download:
+
 file|
 ---|
 [ddg-top-10.json](https://github.com/psidex/CustomBangSearch/raw/master/ddg/ddg-top-10.json)|

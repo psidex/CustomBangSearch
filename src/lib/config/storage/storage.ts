@@ -11,8 +11,6 @@ import LocalStorageManager from "./managers/local";
 // new browser instance, we will auto fetch their stuff stored in sync
 const defaultStorageMethod = "sync";
 
-// TODO: docstrings for below fns that mention the error throwing
-
 async function getStorageManagerMethod(): Promise<config.allowedStorageMethodsAsType> {
 	let { storageMethod } = await browser.storage.local.get("storageMethod");
 	if (
@@ -39,14 +37,21 @@ async function getStorageManager(): Promise<StorageManager> {
 	}
 }
 
-// TODO: docstring, include that you should probably call
-// clearUnusedStorageManagers after calling this
+/**
+ * Sets the chosen storage method. It is likely that you will want to call
+ * `clearUnusedStorageManagers` after calling this
+ * @param method The chosen storage method.
+ */
 export async function updateStorageManagerMethod(
 	method: string,
 ): Promise<void> {
 	return browser.storage.local.set({ storageMethod: method });
 }
 
+/**
+ * Removes all data from all storage managers except the currently selected
+ * manager.
+ */
 export async function clearUnusedStorageManagers(): Promise<void> {
 	switch (await getStorageManagerMethod()) {
 		case "sync":
@@ -58,6 +63,11 @@ export async function clearUnusedStorageManagers(): Promise<void> {
 	}
 }
 
+/**
+ * Gets the config from the storage manager.
+ * @returns The stored config.
+ * @throws Error if storage manager or decompression fails.
+ */
 export async function getConfig(): Promise<config.Config> {
 	const storeMan = await getStorageManager();
 	const compressed = await storeMan.get();
@@ -65,9 +75,15 @@ export async function getConfig(): Promise<config.Config> {
 	return Promise.resolve(decompressed);
 }
 
-// StorageManagers are not guaranteed to be transactional, so to ensure we don't
-// store corrupt data, we need to be able to rollback to a good version
-// TODO: Docstring, mention throws err if it rolled back
+/**
+ * The same as `storeConfig`, but takes a config to rollback to if an error is
+ * encountered when trying to store the new config. StorageManagers are not
+ * guaranteed to be transactional, so to ensure we don't store corrupt data, we
+ * need to be able to rollback to a good version.
+ * @param cfg The new config to store.
+ * @param rollback The config to rollback to if an error is encountered.
+ * @throws Error if compression or storing fails.
+ */
 export async function storeConfigWithRollback(
 	cfg: config.Config,
 	rollback: config.Config,
@@ -82,6 +98,11 @@ export async function storeConfigWithRollback(
 	}
 }
 
+/**
+ * Store a config in the current storage manager.
+ * @param cfg The new config to store.
+ * @throws Error if compression or storing fails.
+ */
 export async function storeConfig(cfg: config.Config): Promise<void> {
 	const storeMan = await getStorageManager();
 	const compressed = compression.compressConfigToString(cfg);
