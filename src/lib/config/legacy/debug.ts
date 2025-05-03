@@ -14,6 +14,13 @@ const oldSettings = {
 			urls: ["https://www.google.com/search?q=%s"],
 		},
 		{
+			bang: "ea",
+			urls: [
+				"https://www.amazon.com/s?k=%s",
+				"https://www.ebay.co.uk/sch/i.html?_nkw=%s",
+			],
+		},
+		{
 			bang: "yt",
 			urls: ["https://www.youtube.com/results?search_query=%s"],
 		},

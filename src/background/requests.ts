@@ -103,10 +103,6 @@ export async function getRedirects(
 
 	queryText = queryText.trim();
 
-	// if (queryText.length === 0) {
-	// 	return [];
-	// }
-
 	// Cut the first bang we can find from the query text, it can be anywhere in
 	// the string
 	const { trigger } = opts;

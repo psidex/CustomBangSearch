@@ -73,7 +73,8 @@ export default function HelpTabPanel() {
 					<ListItem>
 						<Text>
 							Edit the bangs default URL. This is the location the bang will
-							take you to if you dont provide a query
+							take you to if you dont provide a query. If this is left blank, an
+							empty query will take you to the origin of the URL(s) in the list
 						</Text>
 					</ListItem>
 					<ListItem>
