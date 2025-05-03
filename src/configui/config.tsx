@@ -108,6 +108,8 @@ export function App() {
 									height={24}
 									width={24}
 									src="../../images/icons/icon_28.png"
+									// Stop a Mantine style overwriting it
+									style={{ height: 24, width: 24 }}
 								/>
 							}
 						>
