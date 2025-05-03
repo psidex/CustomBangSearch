@@ -173,6 +173,9 @@ const tasks = new Listr([
 		task: async (ctx) => {
 			const { stdout } = await execa("git", ["rev-parse", "HEAD"]);
 			ctx.gitHeadShortHash = stdout.slice(0, 7);
+
+			const { stdout: status } = await execa("git", ["status", "--porcelain"]);
+			ctx.gitState = status.trim() === "" ? "clean" : "dirty";
 		},
 	},
 	{
@@ -231,7 +234,8 @@ const tasks = new Listr([
 					"process.env.browser": `'${browser}'`,
 					"process.env.dev": `${dev}`,
 					"process.env.version": `'${extensionVersion}'`,
-					"process.env.hash": `'${ctx.gitHeadShortHash}'`,
+					"process.env.gitShortHash": `'${ctx.gitHeadShortHash}'`,
+					"process.env.gitState": `'${ctx.gitState}'`,
 					"process.env.buildTime": JSON.stringify(new Date()),
 					"process.env.hostPermissions": JSON.stringify(
 						ctx.manifest.host_permissions,

@@ -24,7 +24,7 @@ function App(): React.ReactElement {
 				Custom Bang Search
 			</Title>
 			<Tooltip
-				label={`${esbuilddefinitions.hash} @ ${esbuilddefinitions.buildTime}`}
+				label={`${esbuilddefinitions.gitInfo} @ ${esbuilddefinitions.buildTime}`}
 			>
 				<Text>v{esbuilddefinitions.version}</Text>
 			</Tooltip>
@@ -54,10 +54,3 @@ root.render(
 		</MantineProvider>
 	</React.StrictMode>,
 );
-
-if (esbuilddefinitions.inDev) {
-	// Open config page when popup is clicked, easier for testing
-	document.addEventListener("DOMContentLoaded", () => {
-		browser.runtime.openOptionsPage();
-	});
-}

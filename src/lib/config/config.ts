@@ -1,7 +1,7 @@
 // Must be an integer
 export const currentConfigVersion = 6;
 
-// TODO(future): "url"?
+// TODO(future): Custom sync server?
 export type allowedStorageMethodsAsType = "sync" | "local";
 
 export const allowedStorageMethodsAsArray: Array<allowedStorageMethodsAsType> =
@@ -16,8 +16,8 @@ export interface Options {
 	ignoredSearchDomains: string[];
 	// If true, ignore bang case
 	ignoreBangCase: boolean;
+	// TODO(future): Support this?
 	// If non-empty, this is used to split queries into multiple searches on every URL
-	// TODO(future): Support this
 	// querySeparator: string;
 }
 

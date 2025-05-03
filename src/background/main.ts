@@ -4,7 +4,7 @@ import {
 	inDev,
 	currentBrowser,
 	version,
-	hash,
+	gitInfo,
 	hostPermissions,
 } from "../lib/esbuilddefinitions";
 import * as storage from "../lib/config/storage/storage";
@@ -47,7 +47,7 @@ async function initConfig(): Promise<void> {
 
 function main(): void {
 	debug(
-		`Dev: ${inDev}, Browser: ${currentBrowser}, Version: ${version}, Hash: ${hash}`,
+		`Dev: ${inDev}, Browser: ${currentBrowser}, Version: ${version}, Git: ${gitInfo}`,
 	);
 
 	// Because service workers need to set their event listeners immediately, we can't await this.
@@ -78,6 +78,11 @@ function main(): void {
 		{ urls: hostPermissions },
 		extraInfoSpec,
 	);
+
+	if (inDev) {
+		// Easier for testing
+		browser.runtime.openOptionsPage();
+	}
 }
 
 main();

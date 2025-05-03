@@ -20,7 +20,7 @@ async function newGitHubIssueUrl(): Promise<string> {
 	const desc = `
 Custom Bang Search:
 - \`version\`: ${esbuilddefinitions.version}
-- \`hash\`: ${esbuilddefinitions.hash}
+- \`gitInfo\`: ${esbuilddefinitions.gitInfo}
 - \`buildTime\`: ${esbuilddefinitions.buildTime}
 - \`currentBrowser\`: ${esbuilddefinitions.currentBrowser}
 
