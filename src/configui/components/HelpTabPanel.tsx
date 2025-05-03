@@ -57,6 +57,7 @@ export default function HelpTabPanel() {
 					onChange={() => {}}
 					onRemove={() => {}}
 					showWarning={false}
+					lastInList={false}
 				/>
 				<Text>
 					In this extension, <i>bang</i> refers to the entire row.
@@ -113,6 +114,7 @@ export default function HelpTabPanel() {
 					onChange={() => {}}
 					onRemove={() => {}}
 					showWarning={false}
+					lastInList={false}
 				/>
 				<Text>
 					The first input (left) is the keyword, and the second (right) is the
