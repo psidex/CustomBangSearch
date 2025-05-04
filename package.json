@@ -43,7 +43,6 @@
 		"@mantine/hooks": "7.17.7",
 		"@mantine/notifications": "7.17.7",
 		"@uidotdev/usehooks": "^2.4.1",
-		"framer-motion": "^12.9.4",
 		"lucide-react": "0.507.0",
 		"lz-string": "^1.5.0",
 		"react": "19.1.0",
