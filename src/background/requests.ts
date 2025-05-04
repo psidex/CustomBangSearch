@@ -107,10 +107,20 @@ export async function getRedirects(
 	// the string
 	const { trigger } = opts;
 
-	// To include variables it has to be templated and all the regex special chars
-	// escaped 🤮
+	// Escape regex special characters in the string (e.g. ")" or "."). This
+	// prevents these characters from being interpreted as regex syntax. Note:
+	// RegExp.escape() would be cleaner but isn't supported in all browsers yet
+	const escapedTrigger = trigger.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+	// Build a regex pattern matching three cases:
+	// 1. Trigger at the start of a string followed by whitespace
+	// 2. Trigger after whitespace in the middle of a string
+	// 3. Trigger at the end of a string
+
+	// To include variables we use a template string, annoyingly because regex
+	// uses lots of backslashes we have to escape them all 🤮
 	const matchTrigger = new RegExp(
-		`(^${trigger}\\S+\\s|\\s${trigger}\\S+|^${trigger}\\S+$)`,
+		`(^${escapedTrigger}\\S+\\s|\\s${escapedTrigger}\\S+|^${escapedTrigger}\\S+$)`,
 	);
 
 	let keywordUsed = "";
