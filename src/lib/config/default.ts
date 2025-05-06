@@ -19,23 +19,23 @@ function getAmazonUrlByLocale(): string {
 		"es-ES": "https://www.amazon.es/",
 		"ja-JP": "https://www.amazon.co.jp/",
 		au: "https://www.amazon.com.au/",
-		ca: "https://www.amazon.ca",
+		ca: "https://www.amazon.ca/",
 		default: "https://www.amazon.com/",
 	});
 }
 
 function getEbayUrlByLocale(): string {
 	return getUrlByLocale({
-		"en-GB": "https://www.ebay.co.uk",
-		"en-US": "https://www.ebay.com",
-		"de-DE": "https://www.ebay.de",
-		"fr-FR": "https://www.ebay.fr",
-		"it-IT": "https://www.ebay.it",
-		"es-ES": "https://www.ebay.es",
+		"en-GB": "https://www.ebay.co.uk/",
+		"en-US": "https://www.ebay.com/",
+		"de-DE": "https://www.ebay.de/",
+		"fr-FR": "https://www.ebay.fr/",
+		"it-IT": "https://www.ebay.it/",
+		"es-ES": "https://www.ebay.es/",
 		"ja-JP": "https://www.ebay.co.jp/",
-		au: "https://www.ebay.com.au",
-		ca: "https://www.ebay.ca",
-		default: "https://www.ebay.com",
+		au: "https://www.ebay.com.au/",
+		ca: "https://www.ebay.ca/",
+		default: "https://www.ebay.com/",
 	});
 }
 
