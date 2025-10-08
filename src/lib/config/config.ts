@@ -14,6 +14,8 @@ export interface Options {
 	multiTrigger: string;
 	// Whether multi-trigger searches are enabled
 	enableMultiTrigger: boolean;
+	// Whether bracketed groups count as a single multi-trigger term
+	enableMultiTriggerBrackets: boolean;
 	// The storage method for config
 	storageMethod: allowedStorageMethodsAsType;
 	// Search engine domains to ignore, e.g. searx.tiekoetter.com

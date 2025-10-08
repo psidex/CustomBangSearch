@@ -45,6 +45,9 @@ export default function BangsTabPanel(props: Props) {
 	const [multiTriggerEnabled, setMultiTriggerEnabled] = useState<boolean>(
 		initialOptions.enableMultiTrigger,
 	);
+	const [multiTriggerBrackets, setMultiTriggerBrackets] = useState<boolean>(
+		initialOptions.enableMultiTriggerBrackets,
+	);
 
 	const [storageMethod, setStorageMethod] =
 		useState<config.allowedStorageMethodsAsType>(initialOptions.storageMethod);
@@ -88,6 +91,7 @@ export default function BangsTabPanel(props: Props) {
 			initialOptions.trigger !== triggerText ||
 				initialOptions.multiTrigger !== multiTriggerText ||
 				initialOptions.enableMultiTrigger !== multiTriggerEnabled ||
+				initialOptions.enableMultiTriggerBrackets !== multiTriggerBrackets ||
 				initialOptions.storageMethod !== storageMethod ||
 				initialOptions.ignoredSearchDomains.length !==
 					ignoredDomainsListAsArray().length ||
@@ -98,6 +102,7 @@ export default function BangsTabPanel(props: Props) {
 		triggerText,
 		multiTriggerText,
 		multiTriggerEnabled,
+		multiTriggerBrackets,
 		storageMethod,
 		ignoredDomainsList,
 		ignoreBangCase,
@@ -130,6 +135,7 @@ export default function BangsTabPanel(props: Props) {
 			cfg.options.trigger = triggerText;
 			cfg.options.multiTrigger = multiTriggerText;
 			cfg.options.enableMultiTrigger = multiTriggerEnabled;
+			cfg.options.enableMultiTriggerBrackets = multiTriggerBrackets;
 			cfg.options.storageMethod = storageMethod;
 			cfg.options.ignoredSearchDomains = ignoredDomainsListAsArray();
 			cfg.options.ignoreBangCase = ignoreBangCase;
@@ -169,6 +175,7 @@ export default function BangsTabPanel(props: Props) {
 		setTriggerText(defaultCfg.options.trigger);
 		setMultiTriggerText(defaultCfg.options.multiTrigger);
 		setMultiTriggerEnabled(defaultCfg.options.enableMultiTrigger);
+		setMultiTriggerBrackets(defaultCfg.options.enableMultiTriggerBrackets);
 		setStorageMethod(defaultCfg.options.storageMethod);
 		setIgnoredDomainsList(
 			Object.fromEntries(
@@ -253,6 +260,18 @@ export default function BangsTabPanel(props: Props) {
 					<Switch
 						checked={multiTriggerEnabled}
 						onChange={(e) => setMultiTriggerEnabled(e.currentTarget.checked)}
+					/>
+				</Group>
+				<Text>
+					Words inside square brackets count as a single term. Example:
+					<Code>[php date format]</Code>.
+				</Text>
+				<Group>
+					<Text>Allow bracket grouping</Text>
+					<Switch
+						checked={multiTriggerBrackets}
+						onChange={(e) => setMultiTriggerBrackets(e.currentTarget.checked)}
+						disabled={!multiTriggerEnabled}
 					/>
 				</Group>
 				{triggersAreConflicting && (

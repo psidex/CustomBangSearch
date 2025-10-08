@@ -70,6 +70,30 @@ function constructRedirects(
 	return redirs;
 }
 
+function splitMultiSearchTerms(
+	text: string,
+	allowBracketGroups: boolean,
+): string[] {
+	if (!allowBracketGroups) {
+		return text.split(/\s+/).filter((term) => term.length > 0);
+	}
+	const terms: string[] = [];
+	const regex = /\[([^\]]+)\]|(\S+)/g;
+	let match: RegExpExecArray | null = regex.exec(text);
+	while (match !== null) {
+		if (match[1] !== undefined) {
+			const term = match[1].trim();
+			if (term.length > 0) {
+				terms.push(term);
+			}
+		} else if (match[2] !== undefined) {
+			terms.push(match[2]);
+		}
+		match = regex.exec(text);
+	}
+	return terms;
+}
+
 /**
  * Given a URL, construct the associated redirects, if a bang exists in the query.
  * @param request The request details from a WebRequest event.
@@ -107,6 +131,7 @@ export async function getRedirects(
 	// the string
 	const { trigger, multiTrigger } = opts;
 	const enableMultiTrigger = opts.enableMultiTrigger ?? true;
+	const allowBracketGroups = opts.enableMultiTriggerBrackets ?? true;
 
 	const triggersToCheck = [] as Array<{
 		triggerStr: string;
@@ -194,7 +219,7 @@ export async function getRedirects(
 	const redirects = [] as Array<string>;
 
 	if (isMulti) {
-		const terms = queryText.split(/\s+/).filter((term) => term.length > 0);
+		const terms = splitMultiSearchTerms(queryText, allowBracketGroups);
 		for (const term of terms) {
 			for (const bangInfo of redirectionBangInfos) {
 				redirects.push(...constructRedirects(bangInfo, term));
