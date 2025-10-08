@@ -47,6 +47,7 @@ const cfg: config.Config = {
 	options: {
 		trigger: "!",
 		multiTrigger: "!!",
+		enableMultiTrigger: false,
 		storageMethod: "sync",
 		ignoredSearchDomains: [],
 		ignoreBangCase: false,

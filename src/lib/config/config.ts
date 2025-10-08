@@ -12,6 +12,8 @@ export interface Options {
 	trigger: string;
 	// The character(s) to trigger multi-query searches
 	multiTrigger: string;
+	// Whether multi-trigger searches are enabled
+	enableMultiTrigger: boolean;
 	// The storage method for config
 	storageMethod: allowedStorageMethodsAsType;
 	// Search engine domains to ignore, e.g. searx.tiekoetter.com

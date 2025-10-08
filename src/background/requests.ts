@@ -106,13 +106,18 @@ export async function getRedirects(
 	// Cut the first bang we can find from the query text, it can be anywhere in
 	// the string
 	const { trigger, multiTrigger } = opts;
+	const enableMultiTrigger = opts.enableMultiTrigger ?? true;
 
 	const triggersToCheck = [] as Array<{
 		triggerStr: string;
 		isMulti: boolean;
 	}>;
 
-	if (typeof multiTrigger === "string" && multiTrigger.trim() !== "") {
+	if (
+		enableMultiTrigger &&
+		typeof multiTrigger === "string" &&
+		multiTrigger.trim() !== ""
+	) {
 		triggersToCheck.push({ triggerStr: multiTrigger, isMulti: true });
 	}
 
