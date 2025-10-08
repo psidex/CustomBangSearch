@@ -70,6 +70,30 @@ function constructRedirects(
 	return redirs;
 }
 
+function splitMultiSearchTerms(
+	text: string,
+	allowBracketGroups: boolean,
+): string[] {
+	if (!allowBracketGroups) {
+		return text.split(/\s+/).filter((term) => term.length > 0);
+	}
+	const terms: string[] = [];
+	const regex = /\[([^\]]+)\]|(\S+)/g;
+	let match: RegExpExecArray | null = regex.exec(text);
+	while (match !== null) {
+		if (match[1] !== undefined) {
+			const term = match[1].trim();
+			if (term.length > 0) {
+				terms.push(term);
+			}
+		} else if (match[2] !== undefined) {
+			terms.push(match[2]);
+		}
+		match = regex.exec(text);
+	}
+	return terms;
+}
+
 /**
  * Given a URL, construct the associated redirects, if a bang exists in the query.
  * @param request The request details from a WebRequest event.
@@ -105,30 +129,66 @@ export async function getRedirects(
 
 	// Cut the first bang we can find from the query text, it can be anywhere in
 	// the string
-	const { trigger } = opts;
+	const { trigger, multiTrigger } = opts;
+	const enableMultiTrigger = opts.enableMultiTrigger ?? true;
+	const allowBracketGroups = opts.enableMultiTriggerBrackets ?? true;
 
-	// Escape regex special characters in the string (e.g. ")" or "."). This
-	// prevents these characters from being interpreted as regex syntax. Note:
-	// RegExp.escape() would be cleaner but isn't supported in all browsers yet
-	const escapedTrigger = trigger.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	const triggersToCheck = [] as Array<{
+		triggerStr: string;
+		isMulti: boolean;
+	}>;
 
-	// Build a regex pattern matching three cases:
-	// 1. Trigger at the start of a string followed by whitespace
-	// 2. Trigger after whitespace in the middle of a string
-	// 3. Trigger at the end of a string
+	if (
+		enableMultiTrigger &&
+		typeof multiTrigger === "string" &&
+		multiTrigger.trim() !== ""
+	) {
+		triggersToCheck.push({ triggerStr: multiTrigger, isMulti: true });
+	}
 
-	// To include variables we use a template string, annoyingly because regex
-	// uses lots of backslashes we have to escape them all 🤮
-	const matchTrigger = new RegExp(
-		`(^${escapedTrigger}\\S+\\s|\\s${escapedTrigger}\\S+|^${escapedTrigger}\\S+$)`,
-	);
+	if (trigger.trim() !== "") {
+		triggersToCheck.push({ triggerStr: trigger, isMulti: false });
+	}
 
 	let keywordUsed = "";
-	queryText = queryText.replace(matchTrigger, (match) => {
-		keywordUsed = match.trim().replace(trigger, "");
-		// Replace bang with zero len str
-		return "";
-	});
+	let isMulti = false;
+
+	for (const candidate of triggersToCheck) {
+		// Escape regex special characters in the string (e.g. ")" or "."). This
+		// prevents these characters from being interpreted as regex syntax. Note:
+		// RegExp.escape() would be cleaner but isn't supported in all browsers yet
+		const escapedCandidate = candidate.triggerStr.replace(
+			/[.*+?^${}()|[\]\\]/g,
+			"\\$&",
+		);
+
+		// Build a regex pattern matching three cases:
+		// 1. Trigger at the start of a string followed by whitespace
+		// 2. Trigger after whitespace in the middle of a string
+		// 3. Trigger at the end of a string
+
+		// To include variables we use a template string, annoyingly because regex
+		// uses lots of backslashes we have to escape them all 🤮
+		const matchTrigger = new RegExp(
+			`(^${escapedCandidate}\\S+\\s|\\s${escapedCandidate}\\S+|^${escapedCandidate}\\S+$)`,
+		);
+
+		let localKeyword = "";
+		const nextQueryText = queryText.replace(matchTrigger, (match) => {
+			localKeyword = match
+				.trim()
+				.slice(candidate.triggerStr.length)
+				.split(/\s+/)[0];
+			return "";
+		});
+
+		if (localKeyword.length > 0) {
+			keywordUsed = localKeyword;
+			queryText = nextQueryText.trim();
+			isMulti = candidate.isMulti;
+			break;
+		}
+	}
 
 	if (keywordUsed.length === 0) {
 		return [];
@@ -156,9 +216,19 @@ export async function getRedirects(
 	}
 
 	// Construct the URL(s) to redirect the user to.
-	const redirects: Array<string> = [];
-	for (const bangInfo of redirectionBangInfos) {
-		redirects.push(...constructRedirects(bangInfo, queryText));
+	const redirects = [] as Array<string>;
+
+	if (isMulti) {
+		const terms = splitMultiSearchTerms(queryText, allowBracketGroups);
+		for (const term of terms) {
+			for (const bangInfo of redirectionBangInfos) {
+				redirects.push(...constructRedirects(bangInfo, term));
+			}
+		}
+	} else {
+		for (const bangInfo of redirectionBangInfos) {
+			redirects.push(...constructRedirects(bangInfo, queryText));
+		}
 	}
 
 	return redirects;

@@ -46,6 +46,9 @@ const cfg: config.Config = {
 	version: config.currentConfigVersion,
 	options: {
 		trigger: "!",
+		multiTrigger: "!!",
+		enableMultiTrigger: false,
+		enableMultiTriggerBrackets: true,
 		storageMethod: "sync",
 		ignoredSearchDomains: [],
 		ignoreBangCase: false,

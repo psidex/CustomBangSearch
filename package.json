@@ -6,6 +6,7 @@
 	"scripts": {
 		"test": "",
 		"lint": "npx biome lint ./src",
+		"lint:fix": "npx biome lint ./src --fix",
 		"tsc-noemit": "npx tsc -noEmit",
 		"build-firefox": "node ./bob.mjs -d -b firefox",
 		"build-firefox-release": "node ./bob.mjs -z -s -b firefox",

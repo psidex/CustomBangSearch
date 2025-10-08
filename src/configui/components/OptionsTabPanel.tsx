@@ -3,6 +3,7 @@ import React, {
 	type Dispatch,
 	type SetStateAction,
 	useEffect,
+	useMemo,
 	useState,
 } from "react";
 import {
@@ -38,6 +39,15 @@ export default function BangsTabPanel(props: Props) {
 	const [triggerText, setTriggerText] = useState<string>(
 		initialOptions.trigger,
 	);
+	const [multiTriggerText, setMultiTriggerText] = useState<string>(
+		initialOptions.multiTrigger,
+	);
+	const [multiTriggerEnabled, setMultiTriggerEnabled] = useState<boolean>(
+		initialOptions.enableMultiTrigger,
+	);
+	const [multiTriggerBrackets, setMultiTriggerBrackets] = useState<boolean>(
+		initialOptions.enableMultiTriggerBrackets,
+	);
 
 	const [storageMethod, setStorageMethod] =
 		useState<config.allowedStorageMethodsAsType>(initialOptions.storageMethod);
@@ -58,6 +68,15 @@ export default function BangsTabPanel(props: Props) {
 		initialOptions.ignoreBangCase,
 	);
 
+	const triggersAreConflicting = useMemo(() => {
+		if (!multiTriggerEnabled) {
+			return false;
+		}
+		const trigger = triggerText.trim();
+		const multiTrigger = multiTriggerText.trim();
+		return trigger !== "" && multiTrigger !== "" && trigger === multiTrigger;
+	}, [multiTriggerEnabled, multiTriggerText, triggerText]);
+
 	function ignoredDomainsListAsArray(): Array<string> {
 		return Object.keys(ignoredDomainsList).filter(
 			(key) => ignoredDomainsList[key],
@@ -70,6 +89,9 @@ export default function BangsTabPanel(props: Props) {
 	useEffect(() => {
 		setNeedToSave(
 			initialOptions.trigger !== triggerText ||
+				initialOptions.multiTrigger !== multiTriggerText ||
+				initialOptions.enableMultiTrigger !== multiTriggerEnabled ||
+				initialOptions.enableMultiTriggerBrackets !== multiTriggerBrackets ||
 				initialOptions.storageMethod !== storageMethod ||
 				initialOptions.ignoredSearchDomains.length !==
 					ignoredDomainsListAsArray().length ||
@@ -78,12 +100,26 @@ export default function BangsTabPanel(props: Props) {
 	}, [
 		initialOptions,
 		triggerText,
+		multiTriggerText,
+		multiTriggerEnabled,
+		multiTriggerBrackets,
 		storageMethod,
 		ignoredDomainsList,
 		ignoreBangCase,
 	]);
 
 	const saveOptions = async () => {
+		if (triggersAreConflicting) {
+			notifications.show({
+				title: "Failed to save options",
+				message: "Multi trigger must be different to the standard trigger",
+				autoClose: true,
+				icon: <X />,
+				color: "red",
+			});
+			return;
+		}
+
 		const notifId = notifications.show({
 			title: "Saving options...",
 			message: "",
@@ -97,6 +133,9 @@ export default function BangsTabPanel(props: Props) {
 			cfg = await storage.getConfig();
 
 			cfg.options.trigger = triggerText;
+			cfg.options.multiTrigger = multiTriggerText;
+			cfg.options.enableMultiTrigger = multiTriggerEnabled;
+			cfg.options.enableMultiTriggerBrackets = multiTriggerBrackets;
 			cfg.options.storageMethod = storageMethod;
 			cfg.options.ignoredSearchDomains = ignoredDomainsListAsArray();
 			cfg.options.ignoreBangCase = ignoreBangCase;
@@ -134,6 +173,9 @@ export default function BangsTabPanel(props: Props) {
 	const resetToDefault = () => {
 		const defaultCfg = defaultConfig();
 		setTriggerText(defaultCfg.options.trigger);
+		setMultiTriggerText(defaultCfg.options.multiTrigger);
+		setMultiTriggerEnabled(defaultCfg.options.enableMultiTrigger);
+		setMultiTriggerBrackets(defaultCfg.options.enableMultiTriggerBrackets);
 		setStorageMethod(defaultCfg.options.storageMethod);
 		setIgnoredDomainsList(
 			Object.fromEntries(
@@ -196,6 +238,47 @@ export default function BangsTabPanel(props: Props) {
 						bang
 					</Anchor>
 				</Text>
+			</Stack>
+			<Stack style={{ marginTop: "1em" }}>
+				<Group>
+					<Title order={3}>Multi Trigger</Title>
+					<Input
+						size="md"
+						value={multiTriggerText}
+						onChange={(e) => setMultiTriggerText(e.target.value)}
+						placeholder="!!"
+						error={triggersAreConflicting}
+						disabled={!multiTriggerEnabled}
+					/>
+				</Group>
+				<Text>
+					The character(s) to trigger multiple searches at once. Each remaining
+					word will be used as an individual query
+				</Text>
+				<Group>
+					<Text>Enable Multi Trigger</Text>
+					<Switch
+						checked={multiTriggerEnabled}
+						onChange={(e) => setMultiTriggerEnabled(e.currentTarget.checked)}
+					/>
+				</Group>
+				<Text>
+					Words inside square brackets count as a single term. Example:
+					<Code>[php date format]</Code>.
+				</Text>
+				<Group>
+					<Text>Allow bracket grouping</Text>
+					<Switch
+						checked={multiTriggerBrackets}
+						onChange={(e) => setMultiTriggerBrackets(e.currentTarget.checked)}
+						disabled={!multiTriggerEnabled}
+					/>
+				</Group>
+				{triggersAreConflicting && (
+					<Text color="red">
+						Multi trigger must be different to the standard trigger
+					</Text>
+				)}
 			</Stack>
 			<Stack style={{ marginTop: "1em" }}>
 				<Group>
