@@ -10,6 +10,8 @@ export const allowedStorageMethodsAsArray: Array<allowedStorageMethodsAsType> =
 export interface Options {
 	// The character(s) to trigger the extension
 	trigger: string;
+	// The character(s) to trigger multi-query searches
+	multiTrigger: string;
 	// The storage method for config
 	storageMethod: allowedStorageMethodsAsType;
 	// Search engine domains to ignore, e.g. searx.tiekoetter.com
