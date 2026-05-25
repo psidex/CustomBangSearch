@@ -60,7 +60,7 @@
 		"execa": "9.6.1",
 		"fs-extra": "11.3.4",
 		"listr2": "10.2.1",
-		"postcss": "^8.5.8",
+		"postcss": "^8.5.15",
 		"postcss-cli": "^11.0.1",
 		"postcss-preset-mantine": "^1.18.0",
 		"postcss-simple-vars": "^7.0.1",
