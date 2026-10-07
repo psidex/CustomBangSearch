@@ -1,7 +1,6 @@
-import React from "react";
-
 import { notifications } from "@mantine/notifications";
 import { Check, X } from "lucide-react";
+import React from "react";
 
 export function successNotif(title: string, message: string): void {
 	notifications.show({

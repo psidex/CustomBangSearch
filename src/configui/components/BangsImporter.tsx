@@ -1,10 +1,9 @@
-import React from "react";
 import { Button, FileButton } from "@mantine/core";
 import { FolderUp } from "lucide-react";
-
-import { errorNotif, successNotif } from "../notifications";
+import React from "react";
 import * as config from "../../lib/config/config";
 import * as legacy from "../../lib/config/legacy/legacy";
+import { errorNotif, successNotif } from "../notifications";
 
 interface Props {
 	bangInfos: config.BangInfo[];

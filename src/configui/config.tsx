@@ -1,29 +1,27 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom/client";
 import {
-	Tabs,
-	MantineProvider,
-	Image,
-	Loader,
-	Text,
-	Group,
 	Alert,
 	Flex,
+	Group,
+	Image,
+	Loader,
+	MantineProvider,
+	Tabs,
+	Text,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import { CircleHelp, Cog, TriangleAlert } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom/client";
 import browser from "webextension-polyfill";
-
+import type * as config from "../lib/config/config";
+import defaultConfig from "../lib/config/default";
+import * as storage from "../lib/config/storage/storage";
+import theme from "../lib/theme";
 import BangsTabPanel from "./components/BangsTabPanel";
+import ConfigHeader from "./components/ConfigHeader";
 import HelpTabPanel from "./components/HelpTabPanel";
 import OptionsTabPanel from "./components/OptionsTabPanel";
-import ConfigHeader from "./components/ConfigHeader";
-
-import theme from "../lib/theme";
-import defaultConfig from "../lib/config/default";
-import type * as config from "../lib/config/config";
-import * as storage from "../lib/config/storage/storage";
 
 async function waitForMainScript(timeout = 10_000): Promise<void> {
 	const start = Date.now();

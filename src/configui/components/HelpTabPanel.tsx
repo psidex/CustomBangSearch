@@ -1,17 +1,16 @@
-import React from "react";
 import {
-	Stack,
-	Text,
-	Title,
 	Anchor,
 	Code,
 	Group,
 	List,
 	ListItem,
+	Stack,
+	Text,
+	Title,
 } from "@mantine/core";
-
-import defaultConfig from "../../lib/config/default";
+import React from "react";
 import type { BangInfo } from "../../lib/config/config";
+import defaultConfig from "../../lib/config/default";
 
 import BangConfigurator from "./BangConfigurator";
 
@@ -21,7 +20,7 @@ export default function HelpTabPanel() {
 			<Stack>
 				<Title order={2}>What does this do?</Title>
 				<Text size="md">
-					Custom Bang Search adds fully customisable{" "}
+					Custom Quick Search adds fully customisable{" "}
 					<Anchor href="https://duckduckgo.com/bangs" target="_blank">
 						DuckDuckGo-style bangs
 					</Anchor>{" "}
@@ -90,7 +89,7 @@ export default function HelpTabPanel() {
 					</ListItem>
 					<ListItem>
 						<Text>
-							Turn query encoding off / on. This decides if Custom Bang Search
+							Turn query encoding off / on. This decides if Custom Quick Search
 							runs{" "}
 							<Anchor
 								href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent"
@@ -128,7 +127,7 @@ export default function HelpTabPanel() {
 				<Text>
 					There are some JSON files{" "}
 					<Anchor
-						href="https://github.com/psidex/CustomBangSearch/blob/master/ddg/README.md"
+						href="https://github.com/psidex/CustomQuickSearch/blob/master/ddg/README.md"
 						target="_blank"
 					>
 						here
@@ -149,7 +148,7 @@ export default function HelpTabPanel() {
 				<Text size="md">
 					You can see the supported search engines{" "}
 					<Anchor
-						href="https://github.com/psidex/CustomBangSearch/blob/master/docs/supported-engines.md"
+						href="https://github.com/psidex/CustomQuickSearch/blob/master/docs/supported-engines.md"
 						target="_blank"
 					>
 						here

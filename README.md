@@ -1,17 +1,17 @@
-# ![](./images/icons/icon_28.png) Custom Bang Search
+# ![](./images/icons/icon_28.png) Custom Quick Search
 
-[![Firefox Add-On version](https://img.shields.io/amo/v/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Firefox Add-On rating](https://img.shields.io/amo/rating/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Firefox Add-On user count](https://img.shields.io/amo/users/custombangsearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/)
-[![Chrome extension version](https://img.shields.io/chrome-web-store/v/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
-[![Chrome extension rating](https://img.shields.io/chrome-web-store/rating/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
-[![Chrome extension user count](https://img.shields.io/chrome-web-store/users/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
+[![Firefox Add-On version](https://img.shields.io/amo/v/customquicksearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/customquicksearch/)
+[![Firefox Add-On rating](https://img.shields.io/amo/rating/customquicksearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/customquicksearch/)
+[![Firefox Add-On user count](https://img.shields.io/amo/users/customquicksearch?colorA=35383d)](https://addons.mozilla.org/en-US/firefox/addon/customquicksearch/)
+[![Chrome extension version](https://img.shields.io/chrome-web-store/v/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-quick-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
+[![Chrome extension rating](https://img.shields.io/chrome-web-store/rating/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-quick-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
+[![Chrome extension user count](https://img.shields.io/chrome-web-store/users/oobpkmpnffeacpnfbbepbdlhbfdejhpg?colorA=35383d)](https://chrome.google.com/webstore/detail/custom-quick-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en)
 
-<a href="https://addons.mozilla.org/en-US/firefox/addon/custombangsearch/">
+<a href="https://addons.mozilla.org/en-US/firefox/addon/customquicksearch/">
 <img src="./images/promotion/firefox.svg" alt="Firefox Add-On link" height="60"/>
 </a>
 
-<a href="https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en">
+<a href="https://chrome.google.com/webstore/detail/custom-quick-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg?hl=en">
 <img src="./images/promotion/chrome.png" alt="Chrome Web Store link" height="60"/>
 </a>
 
@@ -59,7 +59,7 @@ From left to right, the configuration row allows you to:
 - Edit the bangs default URL. This is the location the bang will take you to if you dont provide a query
 - Edit the list of URLs that the bang redirects to. This can be a single URL or a list, which will open multiple tabs. Each URL should contain %s, this will be replaced by your search query when the bang is used
 - Add to / delete from the list of URLs
-- Turn query encoding off / on. This decides if Custom Bang Search runs encodeURIComponent on your query before it creates the redirect URL. If you don't know what this means, you probably want to leave it off
+- Turn query encoding off / on. This decides if Custom Quick Search runs encodeURIComponent on your query before it creates the redirect URL. If you don't know what this means, you probably want to leave it off
 
 **Aliases** are also supported, these are used to assign a keyword to behave exactly the same as an already existing bang:
 
@@ -83,15 +83,15 @@ There are some JSON files [here](./ddg/README.md) that contain the most popular 
 
 ## How the extension works
 
-CBS uses the `webRequest.onBeforeRequest` event listener to listen for requests to the supported search engines, and if a bang is found, sends the user to the chosen URL with the query inserted, using the `tabs.update` API.
+CQS uses the `webRequest.onBeforeRequest` event listener to listen for requests to the supported search engines, and if a bang is found, sends the user to the chosen URL with the query inserted, using the `tabs.update` API.
 
 ## Development
 
 ### Building
 
 ```bash
-git clone https://github.com/psidex/CustomBangSearch.git
-cd CustomBangSearch
+git clone https://github.com/psidex/CustomQuickSearch.git
+cd CustomQuickSearch
 npm install
 npm run build-firefox OR build-firefox-release OR build-chrome OR build-chrome-release
 ```

@@ -1,7 +1,7 @@
 {
-	"name": "custombangsearch",
-	"version": "0.11.4",
-	"description": "A browser extension that lets you use custom DuckDuckGo-style bangs directly from the address bar",
+	"name": "customquicksearch",
+	"version": "0.12.0",
+	"description": "Use custom DuckDuckGo-style bangs directly from the address bar",
 	"main": "",
 	"scripts": {
 		"test": "",
@@ -14,7 +14,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/psidex/CustomBangSearch.git"
+		"url": "https://github.com/psidex/CustomQuickSearch.git"
 	},
 	"keywords": [
 		"chrome",
@@ -30,14 +30,17 @@
 		"custom-search",
 		"duckduckgo",
 		"bang",
-		"bangs"
+		"bangs",
+		"quick",
+		"search",
+		"quicksearch"
 	],
 	"author": "psidex",
 	"license": "GPL-3.0",
 	"bugs": {
-		"url": "https://github.com/psidex/CustomBangSearch/issues"
+		"url": "https://github.com/psidex/CustomQuickSearch/issues"
 	},
-	"homepage": "https://github.com/psidex/CustomBangSearch#readme",
+	"homepage": "https://github.com/psidex/CustomQuickSearch#readme",
 	"dependencies": {
 		"@mantine/core": "9.6.3",
 		"@mantine/hooks": "9.6.3",

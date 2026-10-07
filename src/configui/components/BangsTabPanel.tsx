@@ -1,11 +1,6 @@
-import React, {
-	useState,
-	useEffect,
-	useCallback,
-	type Dispatch,
-	type SetStateAction,
-} from "react";
-import { Button, Stack, Group, Alert } from "@mantine/core";
+import { Alert, Button, Group, Stack } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import {
 	ArrowDownAZ,
 	ArrowUpAZ,
@@ -18,14 +13,18 @@ import {
 	TriangleAlert,
 	X,
 } from "lucide-react";
-import { useLocalStorage } from "@uidotdev/usehooks";
+import React, {
+	type Dispatch,
+	type SetStateAction,
+	useCallback,
+	useEffect,
+	useState,
+} from "react";
 import { Virtuoso } from "react-virtuoso";
-
-import * as config from "../../lib/config/config";
-import * as storage from "../../lib/config/storage/storage";
 import { setBangInfoLookup } from "../../background/lookup";
+import * as config from "../../lib/config/config";
 import defaultConfig from "../../lib/config/default";
-import { notifications } from "@mantine/notifications";
+import * as storage from "../../lib/config/storage/storage";
 
 import BangConfigurator from "./BangConfigurator";
 import BangFileUploader from "./BangsImporter";
@@ -242,7 +241,7 @@ export default function BangsTabPanel(props: Props) {
 		// React probably doesn't like this 😬
 		const a = document.createElement("a");
 		a.setAttribute("href", dataStr);
-		a.setAttribute("download", "custombangs.json");
+		a.setAttribute("download", "customquicksearch.json");
 		a.click(); // Blocks until user performs action.
 		a.remove();
 	};

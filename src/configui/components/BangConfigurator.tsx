@@ -1,6 +1,6 @@
-import React, { memo } from "react";
 import { Button, Divider, Group, Input, Stack, Switch } from "@mantine/core";
 import { Plus, Trash, TriangleAlert } from "lucide-react";
+import React, { memo } from "react";
 
 import type * as config from "../../lib/config/config";
 

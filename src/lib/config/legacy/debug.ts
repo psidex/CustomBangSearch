@@ -1,5 +1,5 @@
-import browser from "webextension-polyfill";
 import lz from "lz-string";
+import browser from "webextension-polyfill";
 
 const oldSettings = {
 	version: 5,

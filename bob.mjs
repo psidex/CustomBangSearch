@@ -293,7 +293,7 @@ const tasks = new Listr([
 		title: "Create build zip file",
 		skip: () => !buildzip,
 		task: (ctx) => {
-			const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-${ctx.gitState}.zip`;
+			const zipName = `customquicksearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-${ctx.gitState}.zip`;
 			return execa("7z", ["a", `-tzip ${zipName}`, `${buildPath}/*`], {
 				shell: true,
 			});
@@ -303,7 +303,7 @@ const tasks = new Listr([
 		title: "Create source zip file",
 		skip: () => !sourcezip,
 		task: (ctx) => {
-			const zipName = `custombangsearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-${ctx.gitState}-source.zip`;
+			const zipName = `customquicksearch-${browser}-${extensionVersion}-${ctx.gitHeadShortHash}-${ctx.gitState}-source.zip`;
 			return execa(
 				"7z",
 				["a", `-tzip ${zipName}`, `${sourceFiles.join(" ")}`],

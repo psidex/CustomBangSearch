@@ -1,3 +1,17 @@
+import {
+	Anchor,
+	Button,
+	Code,
+	Group,
+	Input,
+	SegmentedControl,
+	Stack,
+	Switch,
+	Text,
+	Title,
+} from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { Check, RotateCcw, Save, X } from "lucide-react";
 import React, {
 	type ChangeEvent,
 	type Dispatch,
@@ -5,25 +19,11 @@ import React, {
 	useEffect,
 	useState,
 } from "react";
-import {
-	Stack,
-	Title,
-	Text,
-	Group,
-	Switch,
-	Input,
-	SegmentedControl,
-	Code,
-	Anchor,
-	Button,
-} from "@mantine/core";
-import { Check, RotateCcw, Save, X } from "lucide-react";
-import { notifications } from "@mantine/notifications";
 
 import * as config from "../../lib/config/config";
+import defaultConfig from "../../lib/config/default";
 import * as storage from "../../lib/config/storage/storage";
 import { hostPermissionUrls } from "../../lib/esbuilddefinitions";
-import defaultConfig from "../../lib/config/default";
 
 interface Props {
 	initialOptions: config.Options;

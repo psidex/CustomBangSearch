@@ -1,10 +1,9 @@
+import { Button, Stack, Text } from "@mantine/core";
 import React from "react";
-import { Stack, Button, Text } from "@mantine/core";
 import browser from "webextension-polyfill";
-
-import * as storage from "../lib/config/storage/storage";
 import defaultConfig from "../lib/config/default";
 import setLegacySettings from "../lib/config/legacy/debug";
+import * as storage from "../lib/config/storage/storage";
 
 export default function DevTools() {
 	return (

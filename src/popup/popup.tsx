@@ -1,5 +1,3 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
 import {
 	Button,
 	MantineProvider,
@@ -8,12 +6,14 @@ import {
 	Title,
 	Tooltip,
 } from "@mantine/core";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import browser from "webextension-polyfill";
 
 import MiscButtons from "../lib/components/MiscButtons";
-import theme from "../lib/theme";
-import * as esbuilddefinitions from "../lib/esbuilddefinitions";
 import PermissionsRequester from "../lib/components/PermissionsRequester";
+import * as esbuilddefinitions from "../lib/esbuilddefinitions";
+import theme from "../lib/theme";
 
 import DevTools from "./devtools";
 
@@ -21,7 +21,7 @@ function App(): React.ReactElement {
 	return (
 		<Stack align="center">
 			<Title style={{ textAlign: "center", fontSize: "1.9rem" }}>
-				Custom Bang Search
+				Custom Quick Search
 			</Title>
 			<Tooltip
 				label={`${esbuilddefinitions.gitInfo} @ ${esbuilddefinitions.buildTime}`}

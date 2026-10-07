@@ -1,17 +1,17 @@
 /** biome-ignore-all lint/suspicious/noTsIgnore: needed for browser stuff */
 
+import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import { Title, Box, Group, Text, Stack } from "@mantine/core";
 import browser from "webextension-polyfill";
 
 import MiscButtons from "../../lib/components/MiscButtons";
-import { currentBrowser } from "../../lib/esbuilddefinitions";
 import PermissionsRequester from "../../lib/components/PermissionsRequester";
 import type { allowedStorageMethodsAsType } from "../../lib/config/config";
+import { currentBrowser } from "../../lib/esbuilddefinitions";
 
 const BROWSER_QUOTA_BYTES_PER_ITEM =
 	// @ts-ignore: The chrome namespace will be available if this check passes
-		currentBrowser === "chrome" ? chrome.storage.sync.QUOTA_BYTES : 102400;
+	currentBrowser === "chrome" ? chrome.storage.sync.QUOTA_BYTES : 102400;
 
 interface Props {
 	storageMethod: allowedStorageMethodsAsType;
@@ -51,7 +51,7 @@ export default function ConfigHeader(props: Props) {
 	return (
 		<Stack style={{ padding: "1em" }}>
 			<Group style={{ justifyContent: "space-between" }}>
-				<Title>Custom Bang Search</Title>
+				<Title>Custom Quick Search</Title>
 				<PermissionsRequester />
 				<Box>
 					<MiscButtons />

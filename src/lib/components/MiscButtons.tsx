@@ -18,7 +18,7 @@ async function newGitHubIssueUrl(): Promise<string> {
 	const title = "[Bug] < YOUR TITLE >";
 
 	const desc = `
-Custom Bang Search:
+Custom Quick Search:
 - \`version\`: ${esbuilddefinitions.version}
 - \`gitInfo\`: ${esbuilddefinitions.gitInfo}
 - \`buildTime\`: ${esbuilddefinitions.buildTime}
@@ -31,7 +31,7 @@ Browser:
 < DESCRIBE YOUR BUG HERE, please include as much information as possible and preferably a method to reproduce >
 	`.trim();
 
-	return `https://github.com/psidex/CustomBangSearch/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(desc)}`;
+	return `https://github.com/psidex/CustomQuickSearch/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(desc)}`;
 }
 
 export default function MiscButtons() {
@@ -54,7 +54,7 @@ export default function MiscButtons() {
 			<ActionIcon
 				onClick={() => {
 					const w = window.open(
-						"https://github.com/psidex/CustomBangSearch",
+						"https://github.com/psidex/CustomQuickSearch",
 						"_blank",
 					);
 					if (w) {

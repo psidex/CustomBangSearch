@@ -3,9 +3,9 @@ import browser from "webextension-polyfill";
 import * as config from "../config";
 
 import * as compression from "./compression";
+import LocalStorageManager from "./managers/local";
 import type StorageManager from "./managers/manager";
 import SyncStorageManager from "./managers/sync";
-import LocalStorageManager from "./managers/local";
 
 // NOTE: Defaulting to sync is important because it means if someone is using a
 // new browser instance, we will auto fetch their stuff stored in sync

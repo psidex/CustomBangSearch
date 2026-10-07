@@ -3,8 +3,8 @@
 // It is assumed that no one has settings older than version 5 (I hope)
 //
 
-import browser from "webextension-polyfill";
 import lz from "lz-string";
+import browser from "webextension-polyfill";
 
 import type * as config from "../config";
 import defaultConfig from "../default";
