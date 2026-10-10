@@ -13,13 +13,12 @@
  *
  */
 
-import { parseArgs } from "node:util";
 import assert from "node:assert";
-
-import { execa } from "execa";
-import { Listr } from "listr2";
-import fs from "fs-extra";
+import { parseArgs } from "node:util";
 import * as esbuild from "esbuild";
+import { execa } from "execa";
+import fs from "fs-extra";
+import { Listr } from "listr2";
 
 const manifestShared = JSON.parse(
 	fs.readFileSync("./manifest.shared.json", "utf8"),
@@ -69,20 +68,17 @@ const sourceFiles = [
 	"./tsconfig.json",
 ];
 
-// What to run postcss CLI on. NOTE: This and the .html
-// <link>s will need to be updated if a new mantine css file is required
+// What to run postcss CLI on, the output is written to the first dst and copied
+// to the rest. NOTE: This and the .html <link>s will need to be updated if a
+// new mantine css file is required
 const postcss = [
 	{
 		src: "./node_modules/@mantine/core/styles.css",
-		dst: "./build/src/configui/mantine.css",
+		dsts: ["./build/src/configui/mantine.css", "./build/src/popup/mantine.css"],
 	},
 	{
 		src: "./node_modules/@mantine/notifications/styles.css",
-		dst: "./build/src/configui/mantine-notifications.css",
-	},
-	{
-		src: "./node_modules/@mantine/core/styles.css",
-		dst: "./build/src/popup/mantine.css",
+		dsts: ["./build/src/configui/mantine-notifications.css"],
 	},
 ];
 
@@ -162,8 +158,7 @@ const tasks = new Listr([
 			new Listr([
 				{
 					title: "rm",
-					skip: async () => !(await fs.existsSync(buildPath)),
-					task: () => fs.rm(buildPath, { recursive: true }),
+					task: () => fs.rm(buildPath, { recursive: true, force: true }),
 				},
 				{
 					title: "mkdir",
@@ -174,8 +169,8 @@ const tasks = new Listr([
 	{
 		title: "Get Git info",
 		task: async (ctx) => {
-			const { stdout } = await execa("git", ["rev-parse", "HEAD"]);
-			ctx.gitHeadShortHash = stdout.slice(0, 7);
+			const { stdout } = await execa("git", ["rev-parse", "--short=7", "HEAD"]);
+			ctx.gitHeadShortHash = stdout;
 
 			const { stdout: status } = await execa("git", ["status", "--porcelain"]);
 			ctx.gitState = status.trim() === "" ? "clean" : "dirty";
@@ -227,18 +222,18 @@ const tasks = new Listr([
 				"./src/configui/config.tsx",
 				"./src/popup/popup.tsx",
 			];
-			const opts = {
+			return esbuild.build({
 				entryPoints: scriptPaths,
 				outdir: `${buildPath}/src`,
 				bundle: true,
+				minify: !dev,
 				logLevel: "error",
 				platform: "browser",
 				define: {
 					"process.env.browser": `'${browser}'`,
 					"process.env.dev": `${dev}`,
 					"process.env.version": `'${extensionVersion}'`,
-					"process.env.gitShortHash": `'${ctx.gitHeadShortHash}'`,
-					"process.env.gitState": `'${ctx.gitState}'`,
+					"process.env.gitInfo": `'${ctx.gitHeadShortHash} (${ctx.gitState})'`,
 					"process.env.buildTime": JSON.stringify(new Date()),
 					"process.env.hostPermissions": JSON.stringify(
 						ctx.manifest.host_permissions,
@@ -247,18 +242,6 @@ const tasks = new Listr([
 						ctx.hostPermissionUrls,
 					),
 				},
-			};
-
-			let additions = {};
-			if (!dev) {
-				additions = {
-					minify: true,
-				};
-			}
-
-			return esbuild.build({
-				...opts,
-				...additions,
 			});
 		},
 	},
@@ -266,8 +249,13 @@ const tasks = new Listr([
 		title: "Run PostCSS",
 		task: async () => {
 			const calls = [];
-			for (const { src, dst } of postcss) {
-				calls.push(execa("npx", ["postcss", src, "-o", dst]));
+			for (const { src, dsts } of postcss) {
+				const [dst, ...copyDsts] = dsts;
+				calls.push(
+					execa("npx", ["postcss", src, "-o", dst]).then(() =>
+						Promise.all(copyDsts.map((copyDst) => fs.copy(dst, copyDst))),
+					),
+				);
 			}
 			return Promise.all(calls);
 		},

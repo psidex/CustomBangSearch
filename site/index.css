@@ -1,0 +1,120 @@
+* {
+  color: #8f8f8f;
+}
+
+body {
+  background-color: #101010;
+  margin: auto;
+  width: 75vw;
+
+  text-align: center;
+  font-family: segoe ui, Helvetica, Arial, sans-serif;
+  word-wrap: break-word;
+}
+
+@media only screen and (max-width: 1000px) {
+  body {
+    width: 100vw;
+  }
+}
+
+h1 {
+  font-size: 3em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title img {
+  height: 3em;
+  width: 3em;
+  padding-right: 1em;
+}
+
+.demo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2em 0;
+}
+
+.demo-container>* {
+  margin: 0 10px;
+  padding: 0;
+}
+
+.demo-search,
+.demo-result {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-color: #35363A;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 20px;
+  width: 10em;
+  padding: 0.65em;
+  background-color: #202124;
+}
+
+.demo-search img,
+.demo-result img {
+  padding: 0;
+  margin: 0 0.5em 0 0;
+  height: 1em;
+  width: 1em;
+}
+
+.demo-search p,
+.demo-result p {
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
+.demo-container>img {
+  filter: invert(100%);
+}
+
+.downloads-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2em 0;
+}
+
+.downloads-container>div {
+  margin: 0 1em;
+}
+
+.download {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.download a img {
+  vertical-align: middle
+}
+
+#github-dl {
+  height: 45px;
+  padding: 5px 10px;
+  border: solid 1px;
+  border-radius: 5px;
+}
+
+#github-dl img {
+  padding: 0;
+  margin: 0 0.5em 0 0;
+  height: 24px;
+  width: 24px;
+  filter: invert(100%);
+}

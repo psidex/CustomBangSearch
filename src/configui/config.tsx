@@ -1,5 +1,6 @@
 import {
 	Alert,
+	Button,
 	Flex,
 	Group,
 	Image,
@@ -10,18 +11,20 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
-import { CircleHelp, Cog, TriangleAlert } from "lucide-react";
+import { CircleHelp, Cog, RotateCcw, TriangleAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import browser from "webextension-polyfill";
 import type * as config from "../lib/config/config";
 import defaultConfig from "../lib/config/default";
+import { NewerConfigVersionError } from "../lib/config/migrations";
 import * as storage from "../lib/config/storage/storage";
 import theme from "../lib/theme";
-import BangsTabPanel from "./components/BangsTabPanel";
 import ConfigHeader from "./components/ConfigHeader";
 import HelpTabPanel from "./components/HelpTabPanel";
 import OptionsTabPanel from "./components/OptionsTabPanel";
+import QuickSearchesTabPanel from "./components/QuickSearchesTabPanel";
+import { errorNotif, successNotif } from "./notifications";
 
 async function waitForMainScript(timeout = 10_000): Promise<void> {
 	const start = Date.now();
@@ -37,20 +40,91 @@ async function waitForMainScript(timeout = 10_000): Promise<void> {
 	throw new Error("Timeout waiting for main script to initialise");
 }
 
+function Loading({ what }: { what: string }) {
+	return (
+		<Group style={{ alignSelf: "flex-start" }}>
+			<Loader style={{ margin: "2em" }} />
+			<Text>Fetching {what}...</Text>
+		</Group>
+	);
+}
+
 export function App() {
-	const [fatalError, setFatalError] = useState<string | null>(null);
+	const [fatalError, setFatalError] = useState<Error | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [initialConfig, setInitialConfig] = useState<config.Config>(
 		defaultConfig(),
 	);
 
+	const [configResetError, setConfigResetError] = useState<string | null>(null);
+
+	const dismissConfigResetError = () => {
+		setConfigResetError(null);
+		browser.storage.local.remove(storage.configResetErrorKey);
+	};
+
+	const [resetting, setResetting] = useState<boolean>(false);
+
+	const resetConfigToDefault = async () => {
+		if (
+			!window.confirm(
+				"This will permanently delete your saved quick searches and options. Continue?",
+			)
+		) {
+			return;
+		}
+		setResetting(true);
+		try {
+			await storage.storeConfig(defaultConfig());
+			// Get the config back so options.storageMethod is set correctly
+			setInitialConfig(await storage.getConfig());
+			setFatalError(null);
+			successNotif("Config reset", "Your config has been reset to the default");
+		} catch (error) {
+			errorNotif(
+				"Failed to reset config",
+				error instanceof Error ? error.message : "",
+			);
+		} finally {
+			setResetting(false);
+		}
+	};
+
+	// Advanced mode is a display preference, so it is saved as soon as it is
+	// toggled, without saving any other unsaved changes
+	const setAdvancedMode = async (advancedMode: boolean) => {
+		try {
+			const cfg = await storage.getConfig();
+			const rollback = structuredClone(cfg);
+			cfg.options.advancedMode = advancedMode;
+			await storage.storeConfigWithRollback(cfg, rollback);
+			// Only update advancedMode, so the quick searches aren't re-sorted
+			setInitialConfig((prev) => ({
+				...prev,
+				options: { ...prev.options, advancedMode },
+			}));
+		} catch (error) {
+			errorNotif(
+				"Failed to save advanced mode",
+				error instanceof Error ? error.message : "",
+			);
+		}
+	};
+
 	useEffect(() => {
 		waitForMainScript()
+			.then(async () => {
+				const { [storage.configResetErrorKey]: resetError } =
+					await browser.storage.local.get(storage.configResetErrorKey);
+				if (typeof resetError === "string") {
+					setConfigResetError(resetError);
+				}
+			})
 			.then(() => storage.getConfig())
 			.then(setInitialConfig)
 			.catch((error) => {
 				setFatalError(
-					error instanceof Error ? error.message : "Error getting config",
+					error instanceof Error ? error : new Error("Error getting config"),
 				);
 			})
 			.finally(() => {
@@ -82,25 +156,69 @@ export function App() {
 			}}
 		>
 			<ConfigHeader storageMethod={initialConfig.options.storageMethod} />
-			{(fatalError !== null && (
-				<Alert variant="light" color="red" icon={<TriangleAlert />}>
+			{configResetError !== null && (
+				<Alert
+					variant="light"
+					color="orange"
+					icon={<TriangleAlert />}
+					// Stop the flex column shrinking it, which cuts off its bottom padding
+					style={{ flexShrink: 0 }}
+					title={
+						<Group justify="space-between" style={{ flex: 1 }}>
+							Your config has been reset
+							<Button
+								variant="filled"
+								color="orange"
+								size="compact-sm"
+								onClick={dismissConfigResetError}
+							>
+								DISMISS
+							</Button>
+						</Group>
+					}
+				>
 					<Text>
-						A fatal error occurred trying to load config: {fatalError}{" "}
+						Your saved quick searches and options could not be read, so they
+						have been reset to the defaults.
 					</Text>
-					<Text>Please try reloading your browser</Text>
 					<Text>
-						This could be due to use of sync storage and a slow internet
-						connection
+						If you have an exported JSON file, you can import it on the Quick
+						Searches tab.
 					</Text>
+					<Text>Error: {configResetError}</Text>
 				</Alert>
-			)) || (
+			)}
+			{fatalError !== null ? (
+				<Alert variant="light" color="red" icon={<TriangleAlert />}>
+					<Text>A fatal error occurred trying to load config: </Text>{" "}
+					<Text>{fatalError.message}</Text>
+					{!(fatalError instanceof NewerConfigVersionError) && (
+						<>
+							<Text>Please try reloading your browser</Text>
+							<Text>
+								This could be due to use of sync storage and a slow internet
+								connection
+							</Text>
+						</>
+					)}
+					<Button
+						mt="md"
+						color="red"
+						leftSection={<RotateCcw size={18} />}
+						loading={resetting}
+						onClick={resetConfigToDefault}
+					>
+						Reset config to default
+					</Button>
+				</Alert>
+			) : (
 				<Tabs
-					defaultValue="bangs"
+					defaultValue="quickSearches"
 					style={{ display: "flex", flexDirection: "column", height: "100%" }}
 				>
 					<Tabs.List>
 						<Tabs.Tab
-							value="bangs"
+							value="quickSearches"
 							leftSection={
 								<Image
 									height={24}
@@ -111,7 +229,7 @@ export function App() {
 								/>
 							}
 						>
-							Bangs
+							Quick Searches
 						</Tabs.Tab>
 						<Tabs.Tab value="options" leftSection={<Cog size={24} />}>
 							Options
@@ -121,27 +239,26 @@ export function App() {
 						</Tabs.Tab>
 					</Tabs.List>
 					{/* Style here required for internal styling to work */}
-					<Tabs.Panel value="bangs" style={{ display: "flex", height: "100%" }}>
-						{(loading && (
-							<Group style={{ alignSelf: "flex-start" }}>
-								<Loader style={{ margin: "2em" }} />
-								<Text>Fetching bangs...</Text>
-							</Group>
-						)) || (
-							<BangsTabPanel
-								initialBangs={initialConfig.bangs}
+					<Tabs.Panel
+						value="quickSearches"
+						style={{ display: "flex", height: "100%" }}
+					>
+						{loading ? (
+							<Loading what="quick searches" />
+						) : (
+							<QuickSearchesTabPanel
+								initialQuickSearches={initialConfig.quickSearches}
 								setInitialConfig={setInitialConfig}
-								ignoreBangCase={initialConfig.options.ignoreBangCase}
+								ignoreKeywordCase={initialConfig.options.ignoreKeywordCase}
+								advancedMode={initialConfig.options.advancedMode}
+								setAdvancedMode={setAdvancedMode}
 							/>
 						)}
 					</Tabs.Panel>
 					<Tabs.Panel value="options">
-						{(loading && (
-							<Group style={{ alignSelf: "flex-start" }}>
-								<Loader style={{ margin: "2em" }} />
-								<Text>Fetching options...</Text>
-							</Group>
-						)) || (
+						{loading ? (
+							<Loading what="options" />
+						) : (
 							<OptionsTabPanel
 								initialOptions={initialConfig.options}
 								setInitialConfig={setInitialConfig}

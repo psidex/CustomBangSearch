@@ -11,14 +11,9 @@ export const currentBrowser = process.env.browser as string;
 // The current version of the extension, should match package & manifest
 export const version = process.env.version as string;
 
-// The short hash of the most recent git commit
-export const gitShortHash = process.env.gitShortHash as string;
-
-// The dirty/clean state of the repo when this was built
-export const gitState = process.env.gitState as string;
-
-// All git info
-export const gitInfo = `${gitShortHash} (${gitState})`;
+// The short hash of the most recent git commit, and the dirty/clean state of
+// the repo when this was built
+export const gitInfo = process.env.gitInfo as string;
 
 // The time at which this code is compiled
 export const buildTime = process.env.buildTime as string;

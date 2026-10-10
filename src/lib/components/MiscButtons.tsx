@@ -1,11 +1,11 @@
-import React from "react";
 import {
 	ActionIcon,
-	useMantineColorScheme,
-	useComputedColorScheme,
 	Flex,
+	useComputedColorScheme,
+	useMantineColorScheme,
 } from "@mantine/core";
 import { Bug, Moon, Sun } from "lucide-react";
+import React from "react";
 import browser from "webextension-polyfill";
 
 import * as esbuilddefinitions from "../esbuilddefinitions";
@@ -52,15 +52,9 @@ export default function MiscButtons() {
 				{computedColorScheme === "light" ? <Moon /> : <Sun />}
 			</ActionIcon>
 			<ActionIcon
-				onClick={() => {
-					const w = window.open(
-						"https://github.com/psidex/CustomQuickSearch",
-						"_blank",
-					);
-					if (w) {
-						w.focus();
-					}
-				}}
+				onClick={() =>
+					window.open("https://github.com/psidex/CustomQuickSearch", "_blank")
+				}
 				variant="default"
 				size="xl"
 				style={{ marginRight: "1em" }}
@@ -69,12 +63,7 @@ export default function MiscButtons() {
 				<GitHubIcon />
 			</ActionIcon>
 			<ActionIcon
-				onClick={async () => {
-					const w = window.open(await newGitHubIssueUrl(), "_blank");
-					if (w) {
-						w.focus();
-					}
-				}}
+				onClick={async () => window.open(await newGitHubIssueUrl(), "_blank")}
 				variant="default"
 				size="xl"
 				title="Report a bug"

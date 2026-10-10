@@ -1,5 +1,5 @@
-import React from "react";
 import { useComputedColorScheme } from "@mantine/core";
+import React from "react";
 
 export default function GitHubIcon() {
 	const computedColorScheme = useComputedColorScheme("light");

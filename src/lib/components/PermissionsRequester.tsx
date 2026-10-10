@@ -1,6 +1,6 @@
+import { Button } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
-import { Button } from "@mantine/core";
 
 import { hostPermissions } from "../esbuilddefinitions";
 

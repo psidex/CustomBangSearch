@@ -1,12 +1,12 @@
 {
 	"name": "customquicksearch",
 	"version": "0.12.0",
-	"description": "Use custom DuckDuckGo-style bangs directly from the address bar",
+	"description": "Use custom DuckDuckGo-style quick searches directly from the address bar",
 	"main": "",
 	"scripts": {
-		"test": "",
-		"lint": "npx biome lint ./src",
-		"tsc-noemit": "npx tsc -noEmit",
+		"test": "esbuild \"src/**/*.test.ts\" --bundle --platform=node --outdir=.test-build --log-level=warning && node --test \".test-build/**/*.test.js\"",
+		"lint": "biome lint ./src",
+		"tsc-noemit": "tsc -noEmit",
 		"build-firefox": "node ./bob.mjs -d -b firefox",
 		"build-firefox-release": "node ./bob.mjs -z -s -b firefox",
 		"build-chrome": "node ./bob.mjs -d -b chrome",
@@ -32,7 +32,6 @@
 		"bang",
 		"bangs",
 		"quick",
-		"search",
 		"quicksearch"
 	],
 	"author": "psidex",

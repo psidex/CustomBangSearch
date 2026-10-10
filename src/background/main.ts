@@ -1,48 +1,83 @@
 import browser from "webextension-polyfill";
 
+import type { Config } from "../lib/config/config";
+import defaultConfig from "../lib/config/default";
+import { NewerConfigVersionError } from "../lib/config/migrations";
+import { getConfigProblem } from "../lib/config/problems";
+import * as storage from "../lib/config/storage/storage";
 import {
-	inDev,
 	currentBrowser,
-	version,
 	gitInfo,
 	hostPermissions,
+	inDev,
+	version,
 } from "../lib/esbuilddefinitions";
-import * as storage from "../lib/config/storage/storage";
-import defaultConfig from "../lib/config/default";
 import debug from "../lib/misc";
-import * as legacy from "../lib/config/legacy/legacy";
-
 import { processRequest } from "./requests";
-import { setBangInfoLookup } from "./lookup";
 
 async function initConfig(): Promise<void> {
-	// We use this to force the config UI to wait for this function to run
 	await browser.storage.local.set({ mainScriptInitialised: false });
+	try {
+		await loadConfig();
+		// Remove lookup tables stored by older versions
+		await browser.storage.local.remove(["quickSearchLookup", "bangInfoLookup"]);
+	} finally {
+		// Even if loading failed, the config UI can now try to get the config and
+		// show the user any error
+		await browser.storage.local.set({ mainScriptInitialised: true });
+	}
+}
 
-	// First thing is check if the user has just updated
-	let currentCfg = await legacy.checkForAndConvertOldSettings();
+// Checks the stored config can be read, migrating it or resetting it to the
+// default if required
+async function loadConfig(): Promise<void> {
+	let currentCfg: Config;
+	let needToStore: boolean;
 
-	if (currentCfg === null) {
-		try {
-			currentCfg = await storage.getConfig();
-		} catch (error) {
-			// TODO: What to do here, can we identify what the err is - is it possible
-			// that this will erase someones config if they try to access whilst
-			// offline? Future TODO because this is not a change in behaviour from the
-			// previous version
-			console.warn(
-				`Failed to get config: ${error instanceof Error ? error.message : ""}`,
-			);
-			currentCfg = defaultConfig();
+	try {
+		// This also migrates configs from older versions
+		({ cfg: currentCfg, migrated: needToStore } =
+			await storage.getConfigAndIfMigrated());
+	} catch (error) {
+		const message = error instanceof Error ? error.message : "Unknown error";
+		console.warn(`Failed to get config: ${message}`);
+
+		if (error instanceof NewerConfigVersionError) {
+			// The config was synced from a newer version of the extension, don't
+			// overwrite it. The config UI will show the error to the user
+			return;
 		}
+
+		// TODO: What to do here, can we identify what the err is - is it possible
+		// that this will erase someones config if they try to access whilst
+		// offline? Future TODO because this is not a change in behaviour from the
+		// previous version
+		if (!(await storage.isConfigEmpty())) {
+			// Something was stored but it couldn't be read, so tell the user it has
+			// been reset. Nothing is stored on a fresh install, which isn't an error
+			await browser.storage.local.set({
+				[storage.configResetErrorKey]: message,
+			});
+			if (!inDev) {
+				browser.runtime.openOptionsPage();
+			}
+		}
+
+		currentCfg = defaultConfig();
+		needToStore = true;
 	}
 
-	await setBangInfoLookup(currentCfg.bangs);
+	if (needToStore) {
+		await storage.storeConfig(currentCfg);
+	}
+}
 
-	// This is required if for example we've just set currentCfg to the default
-	await storage.storeConfig(currentCfg);
-
-	await browser.storage.local.set({ mainScriptInitialised: true });
+// Shows a red badge on the toolbar icon if there is a problem with the config,
+// so the user knows to open the popup
+async function updateBadge(): Promise<void> {
+	const problem = await getConfigProblem();
+	await browser.action.setBadgeBackgroundColor({ color: "#e03131" });
+	await browser.action.setBadgeText({ text: problem === null ? "" : "!" });
 }
 
 function main(): void {
@@ -54,14 +89,30 @@ function main(): void {
 	// can't await this.
 	// TODO: There may be a better way to do this, but for now we just hope it
 	// runs quickly!
-	initConfig();
+	initConfig()
+		.catch((error) => {
+			console.error("Failed to initialise config:", error);
+		})
+		.then(updateBadge)
+		.catch((error) => {
+			console.error("Failed to update badge:", error);
+		});
+
+	// The config or reset error can change, e.g. when the config is reset or the
+	// reset error is dismissed in the config UI
+	browser.storage.onChanged.addListener(() => {
+		updateBadge().catch((error) => {
+			console.error("Failed to update badge:", error);
+		});
+	});
 
 	// The requestBody opt is required for handling POST situations.
 	const extraInfoSpec: browser.WebRequest.OnBeforeRequestOptions[] = [
 		"requestBody",
 	];
 
-	// Wrap processRequest because the types don't like an async non-blocking handler.
+	// Only firefox can use an async non-blocking handler, Chrome requires us to
+	// call `update` on the tab instead.
 	let webRequestHandler = (
 		r: browser.WebRequest.OnBeforeRequestDetailsType,
 	) => {
@@ -75,9 +126,12 @@ function main(): void {
 		webRequestHandler = processRequest;
 	}
 
+	// Only allowing main_frame means we only handle top-level navigations.
+	// Subresource requests (e.g. XHR) must not trigger redirects or open tabs.
+
 	browser.webRequest.onBeforeRequest.addListener(
 		webRequestHandler,
-		{ urls: hostPermissions },
+		{ types: ["main_frame"], urls: hostPermissions },
 		extraInfoSpec,
 	);
 

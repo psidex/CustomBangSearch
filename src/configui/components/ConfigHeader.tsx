@@ -7,11 +7,7 @@ import browser from "webextension-polyfill";
 import MiscButtons from "../../lib/components/MiscButtons";
 import PermissionsRequester from "../../lib/components/PermissionsRequester";
 import type { allowedStorageMethodsAsType } from "../../lib/config/config";
-import { currentBrowser } from "../../lib/esbuilddefinitions";
-
-const BROWSER_QUOTA_BYTES_PER_ITEM =
-	// @ts-ignore: The chrome namespace will be available if this check passes
-	currentBrowser === "chrome" ? chrome.storage.sync.QUOTA_BYTES : 102400;
+import { MAX_TOTAL_SIZE_BYTES } from "../../lib/config/storage/managers/chunks";
 
 interface Props {
 	storageMethod: allowedStorageMethodsAsType;
@@ -20,31 +16,20 @@ interface Props {
 export default function ConfigHeader(props: Props) {
 	const { storageMethod } = props;
 
-	const [storedSizeSync, setStoredSizeSync] = useState<number>(0);
-	const [storedSizeLocal, setStoredSizeLocal] = useState<number>(0);
+	const [storedSize, setStoredSize] = useState<number>(0);
 
 	useEffect(() => {
+		const area = browser.storage[storageMethod];
 		const updateSize = () => {
-			browser.storage.sync.getBytesInUse().then(setStoredSizeSync);
+			// @ts-ignore: getBytesInUse is not in the type for local storage, but
+			// is implemented in some browsers
+			area.getBytesInUse?.().then(setStoredSize);
 		};
+		setStoredSize(0);
 		updateSize();
-		browser.storage.sync.onChanged.addListener(updateSize);
-		return () => browser.storage.sync.onChanged.removeListener(updateSize);
-	}, []);
-
-	useEffect(() => {
-		const updateSize = () => {
-			// @ts-ignore: getBytesInUse is not in the type, but is implemented in
-			// some browsers
-			if (browser.storage.local.getBytesInUse) {
-				// @ts-ignore: We check if the func exists first!
-				browser.storage.local.getBytesInUse().then(setStoredSizeLocal);
-			}
-		};
-		updateSize();
-		browser.storage.local.onChanged.addListener(updateSize);
-		return () => browser.storage.local.onChanged.removeListener(updateSize);
-	}, []);
+		area.onChanged.addListener(updateSize);
+		return () => area.onChanged.removeListener(updateSize);
+	}, [storageMethod]);
 
 	// TODO: Use nicely formatted text for the byte numbers
 
@@ -58,14 +43,11 @@ export default function ConfigHeader(props: Props) {
 				</Box>
 			</Group>
 			<Text>
-				{storageMethod === "sync" &&
-					`Using ${(storedSizeSync / (BROWSER_QUOTA_BYTES_PER_ITEM / 100)).toFixed(1)}% (${storedSizeSync}/${BROWSER_QUOTA_BYTES_PER_ITEM} bytes) of sync storage`}
-				{storageMethod === "local" &&
-					storedSizeLocal > 0 &&
-					`Using ${storedSizeLocal} bytes of local storage`}
-				{storageMethod === "local" &&
-					storedSizeLocal === 0 &&
-					"Using local storage"}
+				{storageMethod === "sync"
+					? `Using ${(storedSize / (MAX_TOTAL_SIZE_BYTES / 100)).toFixed(1)}% (${storedSize}/${MAX_TOTAL_SIZE_BYTES} bytes) of sync storage`
+					: storedSize > 0
+						? `Using ${storedSize} bytes of local storage`
+						: "Using local storage"}
 			</Text>
 		</Stack>
 	);

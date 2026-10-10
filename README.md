@@ -15,7 +15,7 @@
 <img src="./images/promotion/chrome.png" alt="Chrome Web Store link" height="60"/>
 </a>
 
-A browser extension that lets you use custom DuckDuckGo-style bangs directly from the address bar
+A browser extension that lets you use custom DuckDuckGo-style quick searches directly from the address bar
 
 ```
 !a camera   ▶ https://www.amazon.co.uk/s?k=camera
@@ -30,42 +30,42 @@ A browser extension that lets you use custom DuckDuckGo-style bangs directly fro
 
 ## Search Engines
 
-In order for this extension to work, it has to intercept requests made to your search engine, and check if you are trying to use a bang. For this to work, the extension has to have permissions for that host, and has to have code to support it.
+In order for this extension to work, it has to intercept requests made to your search engine, and check if you are trying to use a quick search. For this to work, the extension has to have permissions for that host, and has to have code to support it.
 
 You can see the supported search engines [here](./docs/supported-engines.md).
 
-If you set one of these as your browsers search engine, you can use the bangs directly in the search bar.
+If you set one of these as your browsers search engine, you can use your quick searches directly in the search bar.
 
-Bangs will also work by just using the search engines normally.
+Quick searches will also work by just using the search engines normally.
 
 ## Configuration
 
-You can edit your bangs and general options using the extensions options page:
+You can edit your quick searches and general options using the extensions options page:
 
 ![options page screenshot](./images/promotion/config-page.png)
 
-### Bangs
+### Quick Searches
 
-On the bang configuration page, you can configure each individual bang:
+On the quick search configuration page, you can configure each individual quick search:
 
-![configuring a single bang](./images/promotion/individual-bang-config.png)
+![configuring a single quick search](./images/promotion/individual-quick-search-config.png)
 
-In this extension, bang refers to the entire row.
+In this extension, quick search refers to the entire row.
 
 From left to right, the configuration row allows you to:
 
-- Delete a bang
-- Edit the bangs keyword
-- Edit the bangs default URL. This is the location the bang will take you to if you dont provide a query
-- Edit the list of URLs that the bang redirects to. This can be a single URL or a list, which will open multiple tabs. Each URL should contain %s, this will be replaced by your search query when the bang is used
+- Delete a quick search
+- Edit the quick search's keyword
+- Edit the quick search's default URL. This is the location the quick search will take you to if you dont provide a query
+- Edit the list of URLs that the quick search redirects to. This can be a single URL or a list, which will open multiple tabs. Each URL should contain %s, this will be replaced by your search query when the quick search is used
 - Add to / delete from the list of URLs
 - Turn query encoding off / on. This decides if Custom Quick Search runs encodeURIComponent on your query before it creates the redirect URL. If you don't know what this means, you probably want to leave it off
 
-**Aliases** are also supported, these are used to assign a keyword to behave exactly the same as an already existing bang:
+**Aliases** are also supported, these are used to assign a keyword to behave exactly the same as an already existing quick search:
 
 ![configuring an alias](./images/promotion/individual-alias-config.png)
 
-The first input (left) is the keyword, and the second (right) is the bang to copy
+The first input (left) is the keyword, and the second (right) is the keyword of the quick search to copy
 
 ### Options
 
@@ -73,17 +73,13 @@ The options tab allows you to change the behaviour of the extension, including t
 
 #### Storage
 
-If you select sync storage, all of your bangs and options are saved to the browsers sync storage, meaning if you log into your browser they will sync across to wherever else you are logged in. You can also select local, and they won't sync anywhere.
+If you select sync storage, all of your quick searches and options are saved to the browsers sync storage, meaning if you log into your browser they will sync across to wherever else you are logged in. You can also select local, and they won't sync anywhere.
 
 Sync storage has a strict quota, and you can see the amount of it you are using at the top of the options page.
 
-### DuckDuckGo Bangs
-
-There are some JSON files [here](./ddg/README.md) that contain the most popular DuckDuckGo bangs, if you want to import them
-
 ## How the extension works
 
-CQS uses the `webRequest.onBeforeRequest` event listener to listen for requests to the supported search engines, and if a bang is found, sends the user to the chosen URL with the query inserted, using the `tabs.update` API.
+CQS uses the `webRequest.onBeforeRequest` event listener to listen for requests to the supported search engines, and if a quick search is found, sends the user to the chosen URL with the query inserted, using the `tabs.update` API.
 
 ## Development
 

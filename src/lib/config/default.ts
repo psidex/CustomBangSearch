@@ -39,8 +39,11 @@ function getEbayUrlByLocale(): string {
 	});
 }
 
-// NOTE: Don't change the first or second index, these are used in the config UI
-// help tab
+const amazonUrl = getAmazonUrlByLocale();
+const ebayUrl = getEbayUrlByLocale();
+
+// NOTE: Don't remove or rename the "a" and "az" quick searches, the config UI
+// help tab looks them up by keyword
 
 const cfg: config.Config = {
 	version: config.currentConfigVersion,
@@ -48,286 +51,66 @@ const cfg: config.Config = {
 		trigger: "!",
 		storageMethod: "sync",
 		ignoredSearchDomains: [],
-		ignoreBangCase: false,
+		ignoreKeywordCase: false,
+		advancedMode: false,
 	},
-	bangs: [
-		{
-			id: crypto.randomUUID(),
-			keyword: "a",
-			alias: null,
-			defaultUrl: getAmazonUrlByLocale(),
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: `${getAmazonUrlByLocale()}s?k=%s`,
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "az",
-			alias: "a",
-			defaultUrl: "",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "e",
-			alias: null,
-			defaultUrl: getEbayUrlByLocale(),
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: `${getEbayUrlByLocale()}sch/i.html?_nkw=%s`,
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "ea",
-			alias: null,
-			defaultUrl: "",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://amazon.co.uk/s?k=%s",
-				},
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.ebay.co.uk/sch/i.html?_nkw=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "et",
-			alias: null,
-			defaultUrl: "https://www.etsy.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.etsy.com/search?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "t",
-			alias: null,
-			defaultUrl: "https://www.twitch.tv/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.twitch.tv/search?term=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "y",
-			alias: null,
-			defaultUrl: "https://www.youtube.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.youtube.com/results?search_query=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "av",
-			alias: null,
-			defaultUrl: "https://www.amazon.co.uk/gp/video/storefront",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://amazon.co.uk/s?k=%s&i=instant-video",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "n",
-			alias: null,
-			defaultUrl: "https://www.netflix.com/browse",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.netflix.com/search?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "g",
-			alias: null,
-			defaultUrl: "https://www.google.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.google.com/search?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "b",
-			alias: null,
-			defaultUrl: "https://www.bing.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.bing.com/search?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "d",
-			alias: null,
-			defaultUrl: "https://duckduckgo.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://duckduckgo.com/?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "q",
-			alias: null,
-			defaultUrl: "https://www.qwant.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.qwant.com/?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "m",
-			alias: null,
-			defaultUrl: "https://www.google.com/maps",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.google.com/maps/search/%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "r",
-			alias: null,
-			defaultUrl: "https://www.reddit.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.google.com/search?q=site%3Areddit.com+%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "git",
-			alias: null,
-			defaultUrl: "https://github.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://github.com/search?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "mdn",
-			alias: null,
-			defaultUrl: "https://developer.mozilla.org/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://developer.mozilla.org/en-US/search?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "pypi",
-			alias: null,
-			defaultUrl: "",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://pypi.org/search/?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "npm",
-			alias: null,
-			defaultUrl: "",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.npmjs.com/search?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "so",
-			alias: null,
-			defaultUrl: "https://stackoverflow.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://stackoverflow.com/search?q=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			keyword: "w",
-			alias: null,
-			defaultUrl: "https://www.wolframalpha.com/",
-			urls: [
-				{
-					id: crypto.randomUUID(),
-					url: "https://www.wolframalpha.com/input/?i=%s",
-				},
-			],
-			dontEncodeQuery: false,
-		},
+	quickSearches: [
+		config.newQuickSearch("a", amazonUrl, [`${amazonUrl}s?k=%s`]),
+		config.newQuickSearch("az", "", [""], "a"),
+		config.newQuickSearch("e", ebayUrl, [`${ebayUrl}sch/i.html?_nkw=%s`]),
+		config.newQuickSearch("ea", "", [
+			"https://amazon.co.uk/s?k=%s",
+			"https://www.ebay.co.uk/sch/i.html?_nkw=%s",
+		]),
+		config.newQuickSearch("et", "https://www.etsy.com/", [
+			"https://www.etsy.com/search?q=%s",
+		]),
+		config.newQuickSearch("t", "https://www.twitch.tv/", [
+			"https://www.twitch.tv/search?term=%s",
+		]),
+		config.newQuickSearch("y", "https://www.youtube.com/", [
+			"https://www.youtube.com/results?search_query=%s",
+		]),
+		config.newQuickSearch(
+			"av",
+			"https://www.amazon.co.uk/gp/video/storefront",
+			["https://amazon.co.uk/s?k=%s&i=instant-video"],
+		),
+		config.newQuickSearch("n", "https://www.netflix.com/browse", [
+			"https://www.netflix.com/search?q=%s",
+		]),
+		config.newQuickSearch("g", "https://www.google.com/", [
+			"https://www.google.com/search?q=%s",
+		]),
+		config.newQuickSearch("b", "https://www.bing.com/", [
+			"https://www.bing.com/search?q=%s",
+		]),
+		config.newQuickSearch("d", "https://duckduckgo.com/", [
+			"https://duckduckgo.com/?q=%s",
+		]),
+		config.newQuickSearch("q", "https://www.qwant.com/", [
+			"https://www.qwant.com/?q=%s",
+		]),
+		config.newQuickSearch("m", "https://www.google.com/maps", [
+			"https://www.google.com/maps/search/%s",
+		]),
+		config.newQuickSearch("r", "https://www.reddit.com/", [
+			"https://www.google.com/search?q=site%3Areddit.com+%s",
+		]),
+		config.newQuickSearch("git", "https://github.com/", [
+			"https://github.com/search?q=%s",
+		]),
+		config.newQuickSearch("mdn", "https://developer.mozilla.org/", [
+			"https://developer.mozilla.org/en-US/search?q=%s",
+		]),
+		config.newQuickSearch("pypi", "", ["https://pypi.org/search/?q=%s"]),
+		config.newQuickSearch("npm", "", ["https://www.npmjs.com/search?q=%s"]),
+		config.newQuickSearch("so", "https://stackoverflow.com/", [
+			"https://stackoverflow.com/search?q=%s",
+		]),
+		config.newQuickSearch("w", "https://www.wolframalpha.com/", [
+			"https://www.wolframalpha.com/input/?i=%s",
+		]),
 	],
 };
 

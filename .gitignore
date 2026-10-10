@@ -2,8 +2,8 @@
 src/**/*.js
 ddg/ddg.json
 
-site/
 build/
+.test-build/
 meta/
 web-ext-artifacts/
 

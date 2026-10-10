@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="A browser extension to use custom DuckDuckGo-like bangs directly from the address bar." />
+    <meta name="keywords" content="chrome, firefox, extension, addon, browser-extension, web-extension, chrome-extension, firefox-extension, firefox-addon, search, custom-search, duckduckgo, bang, bangs" />
+    <meta name="author" content="github.com/psidex" />
+
+    <meta property="og:title" content="Custom Quick Search" />
+    <meta property="og:description" content="A browser extension to use custom DuckDuckGo-like bangs directly from the address bar." />
+    <meta property="og:url" content="https://quicksear.ch/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_GB" />
+    <!-- <meta property="og:image" content="https://simonj.dev/img/banner.jpg" /> -->
+
+    <link rel="stylesheet" href="./index.css">
+
+    <title>Custom Quick Search</title>
+  </head>
+
+  <body>
+    <div class="title">
+      <img src="./img/icon_96.png" />
+      <h1>Custom Quick Search</h1>
+    </div>
+    <div>
+      <h2>A browser extension to use custom DuckDuckGo-like bangs directly from the address bar</h2>
+    </div>
+
+    <div class="downloads-container">
+      <div id="firefox-dl" class="download">
+        <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/custombangsearch/"><img src="./img/firefox-addon-store.png" /></a>
+      </div>
+      <div id="chrome-dl" class="download">
+        <a target="_blank" href="https://chrome.google.com/webstore/detail/custom-bang-search/oobpkmpnffeacpnfbbepbdlhbfdejhpg"><img src="./img/chrome-web-store.png" /></a>
+      </div>
+      <div id="github-dl" class="download">
+        <img src="./img/github-icon.svg" />
+        <a target="_blank" href="">GitHub Release</a>
+      </div>
+    </div>
+
+    <div class="demo-container">
+      <div class="demo-search">
+        <img src="./img/google-search-icon.svg" />
+        <p>!y Computerphile</p>
+      </div>
+      <img src="./img/arrow-right.svg" />
+      <div class="demo-result">
+        <img src="./img/youtube.ico" />
+        <p>Computerphile</p>
+      </div>
+    </div>
+    <div class="demo-container">
+      <div class="demo-search">
+        <img src="./img/google-search-icon.svg" />
+        <p>!m New York</p>
+      </div>
+      <img src="./img/arrow-right.svg" />
+      <div class="demo-result">
+        <img src="./img/maps.ico" />
+        <p>New York</p>
+      </div>
+    </div>
+
+    <script src="./js/main.js"></script>
+  </body>
+
+</html>

@@ -1,6 +1,5 @@
 import {
 	Anchor,
-	Button,
 	Code,
 	Group,
 	Input,
@@ -10,182 +9,136 @@ import {
 	Text,
 	Title,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { Check, RotateCcw, Save, X } from "lucide-react";
-import React, {
-	type ChangeEvent,
-	type Dispatch,
-	type SetStateAction,
-	useEffect,
-	useState,
-} from "react";
+import { RotateCcw, Save } from "lucide-react";
+import React, { type ReactNode, useState } from "react";
 
 import * as config from "../../lib/config/config";
 import defaultConfig from "../../lib/config/default";
 import * as storage from "../../lib/config/storage/storage";
 import { hostPermissionUrls } from "../../lib/esbuilddefinitions";
+import { saveWithNotif } from "../notifications";
+import ToolbarButton from "./ToolbarButton";
 
 interface Props {
 	initialOptions: config.Options;
-	setInitialConfig: Dispatch<SetStateAction<config.Config>>;
+	setInitialConfig: (cfg: config.Config) => void;
 }
 
-export default function BangsTabPanel(props: Props) {
+// A titled option, with its control next to the title and its description
+// (children) below
+function Setting(props: {
+	title: string;
+	control: ReactNode;
+	children: ReactNode;
+}) {
+	return (
+		<Stack style={{ marginTop: "1em" }}>
+			<Group>
+				<Title order={3}>{props.title}</Title>
+				{props.control}
+			</Group>
+			{props.children}
+		</Stack>
+	);
+}
+
+// Only the domains this extension has permissions for are shown, and saved,
+// kept in the same order as hostPermissionUrls
+function onlyShownDomains(options: config.Options): config.Options {
+	return {
+		...options,
+		ignoredSearchDomains: hostPermissionUrls.filter((url) =>
+			options.ignoredSearchDomains.includes(url),
+		),
+	};
+}
+
+export default function OptionsTabPanel(props: Props) {
 	const { initialOptions, setInitialConfig } = props;
 
-	const [needToSave, setNeedToSave] = useState(false);
-
-	const [triggerText, setTriggerText] = useState<string>(
-		initialOptions.trigger,
+	const [options, setOptions] = useState(() =>
+		onlyShownDomains(initialOptions),
 	);
 
-	const [storageMethod, setStorageMethod] =
-		useState<config.allowedStorageMethodsAsType>(initialOptions.storageMethod);
-
-	// Record<url, ignored>
-	const [ignoredDomainsList, setIgnoredDomainsList] = useState<
-		Record<string, boolean>
-	>(
-		Object.fromEntries(
-			hostPermissionUrls.map((url) => [
-				url,
-				initialOptions.ignoredSearchDomains.includes(url),
-			]),
-		),
-	);
-
-	const [ignoreBangCase, setIgnoreBangCase] = useState<boolean>(
-		initialOptions.ignoreBangCase,
-	);
-
-	function ignoredDomainsListAsArray(): Array<string> {
-		return Object.keys(ignoredDomainsList).filter(
-			(key) => ignoredDomainsList[key],
-		);
-	}
-
-	// The vaule of the variable ignoredDomainsListAsArray does not indicate if we
-	// have something to save or not, dont include in effect deps
-	useEffect(() => {
-		setNeedToSave(
-			initialOptions.trigger !== triggerText ||
-				initialOptions.storageMethod !== storageMethod ||
-				initialOptions.ignoredSearchDomains.length !==
-					ignoredDomainsListAsArray().length ||
-				initialOptions.ignoreBangCase !== ignoreBangCase,
-		);
-	}, [
-		initialOptions,
-		triggerText,
-		storageMethod,
-		ignoredDomainsList,
-		ignoreBangCase,
-	]);
-
-	const saveOptions = async () => {
-		const notifId = notifications.show({
-			title: "Saving options...",
-			message: "",
-			loading: true,
-			autoClose: false,
-			withCloseButton: false,
-		});
-
-		let cfg: config.Config;
-		try {
-			cfg = await storage.getConfig();
-
-			cfg.options.trigger = triggerText;
-			cfg.options.storageMethod = storageMethod;
-			cfg.options.ignoredSearchDomains = ignoredDomainsListAsArray();
-			cfg.options.ignoreBangCase = ignoreBangCase;
-
-			await storage.updateStorageManagerMethod(storageMethod);
-			await storage.storeConfig(cfg);
-			await storage.clearUnusedStorageManagers();
-		} catch (error) {
-			notifications.update({
-				id: notifId,
-				title: "Failed to save options",
-				message: error instanceof Error ? error.message : "",
-				autoClose: true,
-				icon: <X />,
-				color: "red",
-				loading: false,
-			});
-			return;
-		}
-
-		setNeedToSave(false);
-		setInitialConfig(cfg);
-
-		notifications.update({
-			id: notifId,
-			title: "Options saved",
-			message: "",
-			autoClose: true,
-			icon: <Check />,
-			color: "green",
-			loading: false,
-		});
+	const setOption = <K extends keyof config.Options>(
+		key: K,
+		value: config.Options[K],
+	) => {
+		setOptions((prev) => ({ ...prev, [key]: value }));
 	};
+
+	const setDomainEnabled = (domain: string, enabled: boolean) => {
+		setOptions((prev) =>
+			onlyShownDomains({
+				...prev,
+				ignoredSearchDomains: enabled
+					? prev.ignoredSearchDomains.filter((url) => url !== domain)
+					: [...prev.ignoredSearchDomains, domain],
+			}),
+		);
+	};
+
+	const needToSave =
+		initialOptions.trigger !== options.trigger ||
+		initialOptions.storageMethod !== options.storageMethod ||
+		initialOptions.ignoredSearchDomains.length !==
+			options.ignoredSearchDomains.length ||
+		options.ignoredSearchDomains.some(
+			(domain) => !initialOptions.ignoredSearchDomains.includes(domain),
+		) ||
+		initialOptions.ignoreKeywordCase !== options.ignoreKeywordCase;
+
+	const saveOptions = () =>
+		saveWithNotif("options", async () => {
+			// An empty trigger would make the first word of every search a keyword,
+			// and the trigger is matched up to the next whitespace
+			if (options.trigger === "" || /\s/.test(options.trigger)) {
+				throw new Error("The trigger must not be empty or contain spaces");
+			}
+
+			const cfg = await storage.getConfig();
+			const rollback = structuredClone(cfg);
+			// Advanced mode is toggled and saved on the quick searches tab, so don't
+			// overwrite it with the value from when this tab was loaded
+			const { advancedMode: _, ...editedOptions } = options;
+			cfg.options = { ...cfg.options, ...editedOptions };
+
+			await storage.storeConfigAndStorageMethod(cfg, rollback);
+
+			setInitialConfig(cfg);
+		});
 
 	const resetToDefault = () => {
-		const defaultCfg = defaultConfig();
-		setTriggerText(defaultCfg.options.trigger);
-		setStorageMethod(defaultCfg.options.storageMethod);
-		setIgnoredDomainsList(
-			Object.fromEntries(
-				hostPermissionUrls.map((url) => [
-					url,
-					defaultCfg.options.ignoredSearchDomains.includes(url),
-				]),
-			),
-		);
-		setIgnoreBangCase(defaultCfg.options.ignoreBangCase);
+		setOptions(onlyShownDomains(defaultConfig().options));
 	};
-
-	const handleIgnoredSwitchChanged =
-		(label: string) => (event: ChangeEvent<HTMLInputElement>) => {
-			// We reverse the checked because the UI is showing "enabled", but the
-			// code is dealing with disabled
-			setIgnoredDomainsList((prev) => ({
-				...prev,
-				// NOTE: Not sure why currentTarget can't be used, but this works
-				[label]: !event.target.checked,
-			}));
-		};
 
 	return (
 		<Stack style={{ marginBottom: "2em" }}>
 			<Group style={{ margin: "1em 1em 0 1em" }}>
-				<Button
-					onClick={saveOptions}
-					size="md"
-					variant={needToSave ? "filled" : "default"}
-					color={needToSave ? "green" : ""}
+				<ToolbarButton
+					icon={Save}
+					label="Save"
 					title="Save changes"
-				>
-					<Save style={{ marginRight: "0.5em" }} /> Save
-				</Button>
-				<Button
-					onClick={resetToDefault}
-					size="md"
-					variant="default"
+					onClick={saveOptions}
+					highlight={needToSave}
+				/>
+				<ToolbarButton
+					icon={RotateCcw}
+					label="Reset to Default"
 					title="Reset your options to the default values"
-				>
-					<RotateCcw style={{ marginRight: "0.5em" }} /> Reset to Default
-				</Button>
+					onClick={resetToDefault}
+				/>
 			</Group>
-			<Stack style={{ marginTop: "1em" }}>
-				<Group>
-					<Title order={3}>Trigger</Title>
+			<Setting
+				title="Trigger"
+				control={
 					<Input
 						size="md"
-						value={triggerText}
-						onChange={(e) => setTriggerText(e.target.value)}
+						value={options.trigger}
+						onChange={(e) => setOption("trigger", e.target.value)}
 					/>
-				</Group>
+				}
+			>
 				<Text>
 					The character(s) to trigger the extension, traditionally a{" "}
 					<Anchor
@@ -195,20 +148,24 @@ export default function BangsTabPanel(props: Props) {
 						bang
 					</Anchor>
 				</Text>
-			</Stack>
-			<Stack style={{ marginTop: "1em" }}>
-				<Group>
-					<Title order={3}>Storage Method</Title>
+			</Setting>
+			<Setting
+				title="Storage Method"
+				control={
 					<SegmentedControl
-						value={storageMethod}
+						value={options.storageMethod}
 						onChange={(v) =>
-							setStorageMethod(v as config.allowedStorageMethodsAsType)
+							setOption(
+								"storageMethod",
+								v as config.allowedStorageMethodsAsType,
+							)
 						}
-						data={config.allowedStorageMethodsAsArray}
+						data={[...config.allowedStorageMethodsAsArray]}
 					/>
-				</Group>
+				}
+			>
 				<Text w={350}>
-					The storage method for config, <Code>sync</Code> uses your browsers{" "}
+					The storage method for config, <Code>sync</Code> uses your browser's{" "}
 					<Anchor
 						href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync"
 						target="_blank"
@@ -223,34 +180,35 @@ export default function BangsTabPanel(props: Props) {
 						local storage
 					</Anchor>
 				</Text>
-			</Stack>
-			<Stack style={{ marginTop: "1em" }}>
-				<Group>
-					<Title order={3}>Case Insensitive Bangs</Title>
+			</Setting>
+			<Setting
+				title="Case Insensitive Keywords"
+				control={
 					<Switch
-						checked={ignoreBangCase}
-						onChange={(e) => {
-							setIgnoreBangCase(e.currentTarget.checked);
-						}}
+						checked={options.ignoreKeywordCase}
+						onChange={(e) =>
+							setOption("ignoreKeywordCase", e.currentTarget.checked)
+						}
 					/>
-				</Group>
+				}
+			>
 				<Text>
-					For example, if active, the bangs <Code>a</Code> and <Code>A</Code>{" "}
+					For example, if active, the keywords <Code>a</Code> and <Code>A</Code>{" "}
 					will be equivalent
 				</Text>
-			</Stack>
+			</Setting>
 			<Group style={{ marginTop: "1em" }}>
 				<Stack>
 					<Title order={3}>Enabled Domains</Title>
 					<Text>Search engine domains that this extension will trigger on</Text>
-					{hostPermissionUrls.map((label) => (
+					{hostPermissionUrls.map((domain) => (
 						<Switch
-							key={label}
-							label={label}
-							// We swap the checked because we are showing if it's enabled, but
-							// the bool is if its disabled
-							checked={!ignoredDomainsList[label]}
-							onChange={handleIgnoredSwitchChanged(label)}
+							key={domain}
+							label={domain}
+							checked={!options.ignoredSearchDomains.includes(domain)}
+							onChange={(e) =>
+								setDomainEnabled(domain, e.currentTarget.checked)
+							}
 						/>
 					))}
 				</Stack>

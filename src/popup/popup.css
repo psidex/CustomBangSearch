@@ -4,3 +4,16 @@ body {
   max-width: 350px;
   padding: 1rem;
 }
+
+.devtools {
+  align-self: stretch;
+  border: 2px solid red;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.devtools-status {
+  overflow-wrap: anywhere;
+  max-height: 6rem;
+  overflow-y: auto;
+}
